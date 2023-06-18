@@ -2,12 +2,6 @@
   "name": "test-hedera",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
   "devDependencies": {
     "@types/chai": "^4.2.15",
     "@types/mocha": "^8.2.2",
@@ -27,12 +21,15 @@
     "@hashgraph/sdk": "^2.25.0",
     "@openzeppelin/contracts": "^4.8.3",
     "abi-decoder": "^2.4.0",
-    "axios": "^1.4.0",
     "dotenv": "^16.0.3",
-    "next": "13.4.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
     "solc": "^0.8.20",
     "web3": "^1.10.0"
-  }
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

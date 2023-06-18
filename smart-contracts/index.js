@@ -40,30 +40,8 @@ const operatorId = AccountId.fromString(process.env.ACCOUNT_ID);
 const client = Client.forTestnet().setOperator(operatorId, operatorKey).setMaxQueryPayment(new Hbar(2));
 const maxTransactionFee = new Hbar(20);
 
-async function createFungibleToken() {
-    const ourToken = await new TokenCreateTransaction()
-	.setTokenName("CARD")
-	.setTokenSymbol("C")
-	.setTokenType(TokenType.FungibleCommon)
-	.setDecimals(0)
-	.setInitialSupply(100000000)
-	.setTreasuryAccountId(operatorId)
-	.setAdminKey(operatorKey)
-	.setSupplyKey(operatorKey)
-		.freezeWith(client)
-		.sign(operatorKey)
-
-	const sumbitNFTToken = await ourToken.execute(client)
-	const tokenCreateReceipt = await sumbitNFTToken.getReceipt(client)
-	const tokenId = tokenCreateReceipt.tokenId
-	const tokenIdSolidity = tokenId.toSolidityAddress()
-
-	console.log("Token Id: ", tokenId.toString())
-	console.log("As a sol address: ", tokenIdSolidity)
-}
-
 async function createCollection(name, symbol) {
-    const ourToken = await new TokenCreateTransaction()
+    const collection = await new TokenCreateTransaction()
 	.setTokenName(name)
 	.setTokenSymbol(symbol)
 	.setTokenType(TokenType.NonFungibleUnique)
@@ -74,7 +52,7 @@ async function createCollection(name, symbol) {
 		.freezeWith(client)
 		.sign(operatorKey)
 
-	const sumbitNFTToken = await ourToken.execute(client)
+	const sumbitNFTToken = await collection.execute(client)
 	const tokenCreateReceipt = await sumbitNFTToken.getReceipt(client)
 	const tokenId = tokenCreateReceipt.tokenId
 	const tokenIdSolidity = tokenId.toSolidityAddress()
