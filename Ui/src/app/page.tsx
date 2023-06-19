@@ -1,9 +1,13 @@
-import Image from "next/image";
+import LandingPageCard from "./components/LandingPageCard";
+import LoginCard from "./components/LoginCard";
+import CreateAccountCard from "./components/CreateAccountCard";
 
 export default function Home() {
+  const isLogin = false;
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-2xl font-bold">Black Pass</h1>
+    <main className="h-screen">
+      {isLogin ? <LandingPageCard /> : <LoginCard />}
     </main>
   );
 }
