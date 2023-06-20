@@ -1,0 +1,16 @@
+{
+"name": "Black Pass Card",
+"description": "This NFN acts as a Debit card, where you can claim your tokens once they become available for you.",
+"image": "https://ipfs.io/ipfs/QmQwuzCMK3kuSe8DX8pALfANJyzHzqnc5KYM9YP2XTfwPB",
+"animation_url": "https://ipfs.io/ipfs/QmQiyqWN7rkDUJ7SRjUnfDy1F7KfNFEpfVtJyPExrkbBob",
+"dna": "5797317f73c6ad1534f3f272fb604143a2e3ad4d",
+"edition": 1,
+"date": 1644828328513,
+"external_url": "https://zoolabs.io",
+"attributes": [
+    {
+    "trait_type": "Balance",
+    "value": "1000"
+    }
+]
+}
