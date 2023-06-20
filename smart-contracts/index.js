@@ -29,10 +29,36 @@ const {
 	TokenWipeTransaction,
 	AccountInfoQuery,
 	TokenMintTransaction,
+	AccountAllowanceApproveTransaction
 } = require("@hashgraph/sdk");
 const fs = require("fs");
 
 // 0.0.48638650      0000000000000000000000000000000002e62aba
+const videoIpfs = 'https://ipfs.io/ipfs/QmQiyqWN7rkDUJ7SRjUnfDy1F7KfNFEpfVtJyPExrkbBob'
+const gifIpfs = "https://ipfs.io/ipfs/QmQwuzCMK3kuSe8DX8pALfANJyzHzqnc5KYM9YP2XTfwPB"
+const metadataJson = {
+	"name": "Black Pass Card",
+	"description": "This NFN acts as a Debit card, where you can claim your tokens once they become available for you.",
+	"image": "ipfs://QmdTTgVdasHUrwfBLhidowmEnRFAve6eEvSKZjLHDtvS9n/Base.gif",
+	"animation_url": "ipfs://QmZu9LVsMYzdSpw1VmfjH4jkKS1zvqMz2yodHg8AQFmkaP/base.mp4",
+	"dna": "5797317f73c6ad1534f3f272fb604143a2e3ad4d",
+	"edition": 1,
+	"date": 1644828328513,
+	"external_url": "https://zoolabs.io",
+	"attributes": [
+	  {
+		"trait_type": "Egg Type",
+		"value": "Base"
+	  },
+	  {
+		"display_type": "number",
+		"trait_type": "Number",
+		"value": 1,
+		"max_value": 1440
+	  }
+	]
+}
+const metadataIpfs = 'https://ipfs.io/ipfs/QmS2WUcyBfconmbKjF1vBxBQabTvUchfuzYTnRVXKDAPLN'
 
 
 const operatorKey = PrivateKey.fromString(process.env.PRIVATE_KEY);
@@ -102,6 +128,23 @@ async function associateToken(tokenId) {
 	}
 }
 
+export async function ftAllowanceFcn(
+	tId,
+	owner,
+	spender,
+	allowBal,
+	pvKey,
+	client
+   ) {
+	const allowanceTx = new AccountAllowanceApproveTransaction()
+	  .approveTokenAllowance(tokenId, owner, spender, allowBal)
+	  .freezeWith(client);
+	const allowanceSign = await allowanceTx.sign(pvKey);
+	const allowanceSubmit = await allowanceSign.execute(client);
+	const allowanceRx = await allowanceSubmit.getReceipt(client);
+	return allowanceRx;
+   }
+
 async function getBalance(accountId, tokenId) {
 	let balanceCheckTx = await new AccountBalanceQuery().setAccountId(accountId).execute(client);
 	console.log(balanceCheckTx.tokens._map.get(tokenId.toString()).toString())
@@ -134,7 +177,7 @@ async function transferNFT(accountId, privateKey, tokenId, recipientAccountId) {
 	} catch (error) {
 	  console.error('Error transferring NFT token:', error);
 	}
-  }
+}
 
 async function stake(duration) {
 	const accountId = operatorId
