@@ -1,5 +1,3 @@
-Certainly! Here's a README documentation for the provided smart contract code:
-
 ## Project Name: Black Pass Program
 
 This is a projecte Black Pass program, which involves Soulbound Hedera NFTs with modifiable traits and the ability to claim RVV tokens. The contract allows users to create player profiles, claim loyalty passes, and interact with NFTs and collections.
