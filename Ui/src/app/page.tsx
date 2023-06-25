@@ -7,7 +7,7 @@ export default function Home() {
 
   return (
     <main className="h-screen">
-      {isLogin ? <LandingPageCard /> : <LoginCard />}
+      {isLogin ? <LandingPageCard /> : <CreateAccountCard />}
     </main>
   );
 }

@@ -18,5 +18,13 @@
 
 body {
   color: rgb(var(--foreground-rgb));
+  background-image: url(./assets/bg-image.png);
   background-color: #010101;
+  background-size: "cover";
+  background-repeat: "no-repeat";
+  background-position: "center";
+  position: "absolute";
+}
+.showDrawer {
+  top: 9%;
 }

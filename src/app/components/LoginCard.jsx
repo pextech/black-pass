@@ -1,10 +1,25 @@
+'use client'
+
 import React from "react";
 import ConnectWalletButton from "./ConnectWalletButton";
+import { ethers } from "ethers";
 
 const LoginCard = () => {
+  const connectWallet = () => {
+    if (window.ethereum) {
+      window.ethereum
+        .request({ method: "eth_requestAccounts" })
+        .then((result) => {
+          accountAddress(result[0]);
+        });
+    } else {
+      alert("Please Install Metamask");
+    }
+  };
+
   return (
     <div className="flex justify-center items-center">
-      <div className="bg-[#0e0e10] p-12 rounded-xl flex-col justify-center flex items-center mt-10 w-[550px] max-w-full">
+      <div className="bg-[#0e0e10] p-12 rounded-xl flex-col justify-center flex items-center my-10 md:mb-0 md:w-[550px] w-[320px] max-w-full">
         <h1 className="font-bold text-[22px] text-center mb-4">
           Redeem Black Pass
         </h1>
@@ -47,7 +62,7 @@ const LoginCard = () => {
         </div>
 
         <div className="flex justify-center my-5">
-          <ConnectWalletButton btnTitle="Connect Wallet" />
+          <ConnectWalletButton btnTitle="Connect Wallet" handleClick={connectWallet} />
         </div>
       </div>
     </div>
