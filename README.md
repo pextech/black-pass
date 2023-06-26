@@ -47,3 +47,69 @@ This is a projecte Black Pass program, which involves Soulbound Hedera NFTs with
 ### Contributing
 
 Contributions to this project are welcome. If you encounter any issues or have suggestions
+# NFT Marketplace Loyalty Program
+
+Welcome to the Astra Nova Black Pass Program! This program aims to reward loyal users of our NFT marketplace by providing incentives and benefits based on their engagement and transactions. This document serves as a guide to understand the loyalty program's features, installation, and usage.
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+
+## Features
+
+- Loyalty Points: Users can redeem their loyalty points for every NFT purchase made on the marketplace.
+- Tiered Rewards: Different tiers with increasing benefits based on the user's loyalty points.
+- Exclusive Access: Loyalty program members gain early access to limited edition NFT drops and special promotions.
+- Discounted Fees: Lower transaction fees for loyalty program members.
+- Special Badges: Users receive special badges displayed on their profiles based on their loyalty program status.
+
+## Installation
+
+To integrate the loyalty program into your NFT marketplace, follow these steps:
+
+1. Clone the repository:
+
+git clone git@github.com:Astra-Nova/Black-pass.git
+
+2. Navigate to the black-pass directory:
+
+npm install
+
+3. Start the loyalty program service:
+
+npm run dev
+
+
+## Contribution
+
+Contributions are welcome! To contribute to the Black Pass Program, follow these steps:
+
+1. Fork the repository.
+
+2. Create a new branch for your feature or bug fix.
+
+3. Make the necessary changes and commit them.
+
+4. Push the changes to your forked repository.
+
+5. Submit a pull request to the main repository.
+
+We appreciate your contributions to making our Black Pass program even better!
+
+## License
+
+This project is licensed under the MIT License.
+
+## Contact
+
+If you have any questions or feedback regarding the Astra Nova Black Pass Program, feel free to contact us:
+
+Email: loyalty@nftmarketplace.com
+Discord: NFT Marketplace Community
+Twitter: @NFTMarketplace
+We're excited to have you as part of our loyalty program and look forward to providing you with an enhanced NFT marketplace experience!
