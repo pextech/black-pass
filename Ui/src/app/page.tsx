@@ -3,21 +3,25 @@
 import LandingPageCard from "./components/LandingPageCard";
 import LoginCard from "./components/LoginCard";
 import CreateAccountCard from "./components/CreateAccountCard";
-import { useRouter } from 'next/navigation'
 import { HashConnect } from "hashconnect";
 import { useState, useEffect } from "react";
 import {db} from './firebase.config'
 import {collection, getDocs} from 'firebase/firestore';
+import {logIn, logOut} from '../redux/features/authSlice'
+import { useDispatch } from "react-redux";
+import { useAppSelector } from '../redux/store'
 
 export default function Home() {
 
   const [accountId, setAccountId] = useState('')
-  const [isLogin, setIsLogin] = useState(false);
   const [accountIsAvailable, setAccountIsAvailable] = useState(false);
   const [username, setUsername] = useState('')
-  const router = useRouter()
   const [users, setUsers] = useState([])
   const userCollectionRef = collection(db, "users")
+
+  const dispatch = useDispatch()
+  const isLogin = useAppSelector((state) => state.authReducer.value.isLogin) 
+
 
   //initialize hashconnect
 const hashConnect = new HashConnect(true);
@@ -29,14 +33,17 @@ let appMetaData = {
     icon: "https://absolute.url/to/icon.png",
   };
 
-  const searchAccount = (accountId, users) => {
-    for (let i=0; i < users.length; i++) {
-        if (users[i].accountId === accountId) {
-         setUsername(users[i].username)
-         setAccountIsAvailable(true)
-        }
-    }
-  }
+
+  useEffect(() => {
+    const foundUserAccount = users.find(user => {
+      if(user.accountId === accountId){
+        setAccountIsAvailable(true)
+        setUsername(user.username)
+      }else {
+        return null
+      }
+    })
+  },[])
 
   useEffect(() => {
     const getUser = async () => {
@@ -45,12 +52,12 @@ let appMetaData = {
     }
 
     getUser()
-    searchAccount(accountId, users)
 },[])
 
 
 console.log(users)
-console.log(accountIsAvailable)
+console.log(isLogin, "login status")
+console.log(accountIsAvailable, "is account available?")
 
   const useHashConnect = async () => {
 
@@ -62,16 +69,17 @@ console.log(accountIsAvailable)
   
     hashConnect.pairingEvent.once((pairingData) => {
       setAccountId(pairingData.accountIds[0])
-      setIsLogin(true)
+      dispatch(logIn(true))
     })
 
-    let topic = initData.topic
+    // let topic = initData.topic
 
-    let disconnect = hashConnect.disconnect(topic)
+    // let disconnect = hashConnect.disconnect(topic)
     
-    console.log(initData.topic, "this is init data with topic")
-    return {initData, disconnect};
+    // console.log(topic, "this is init data with topic")
+    return initData;
   }
+
   
   console.log(accountId, "this is account Id")
 
@@ -81,7 +89,7 @@ console.log(accountIsAvailable)
       isLogin && !accountIsAvailable ? <CreateAccountCard accountId={accountId} /> 
       : isLogin && accountIsAvailable ? <LandingPageCard username={username} /> 
       : <LoginCard handleConnect={useHashConnect} />}
-      {/* {isLogin ? <LandingPageCard username={username} /> : <LoginCard handleConnect={useHashConnect} />} */}
     </main>
   );
+
 }
