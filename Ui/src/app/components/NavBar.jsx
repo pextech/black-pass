@@ -11,7 +11,6 @@ const NavBar = () => {
   const [connButtonText, setConnButtonText] = useState('Connect Wallet');
   const [isActiveDrawer, setActiveDrawer] = useState(false);
 
-  console.log(isActiveDrawer)
   const handleToggle = () => {
     setActiveDrawer(!isActiveDrawer);
   };
@@ -20,6 +19,7 @@ const NavBar = () => {
      await UseHashConnect()
      setConnButtonText("Wallet Connected")
   }
+
 
 
   return (

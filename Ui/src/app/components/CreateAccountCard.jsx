@@ -8,7 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation'
 
-const CreateAccountCard = () => {
+const CreateAccountCard = ({accountId}) => {
 
   // const [accountData, setAccountData] = useState({
   //   username: "",
@@ -24,7 +24,7 @@ const CreateAccountCard = () => {
   
 
   const createUser = async () => {
-    await addDoc(userCollectionRef, {username: username, email: email })
+    await addDoc(userCollectionRef, {username: username, email: email, accountId: accountId })
     setIsLoading(true)
     toastSuccess()
     router.push('/black-pass')
