@@ -26,7 +26,7 @@ const LandingPageCard = ({username}) => {
         <Image className="w-[60%]" src={BlackPassImg} width={350} height={350} alt="NFT" priority />
 
         <div className="my-6">
-          <ConnectWalletButton btnTitle="Redeem Black Pass" />
+          <ConnectWalletButton btnTitle="Redeem Black Pass" handleClick={()=>{alert('hi')}} />
         </div>
       </div>
     </div>
