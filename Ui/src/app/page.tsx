@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import {db} from './firebase.config'
 import {collection, getDocs} from 'firebase/firestore';
 
-import { useHashConnectContext } from "./context/hashConnect";
+import {useHashConnectContext} from './context/useHashConnect';
 
 export default function Home() {
 
@@ -17,7 +17,7 @@ export default function Home() {
   const [users, setUsers] = useState([])
 
   const { connectToExtension, status, pairingData } = useHashConnectContext();
-  const accountId = pairingData?.accountIds[0]
+  const accountId = pairingData?.accountIds[0] || ""
 
   const userCollectionRef = collection(db, "users")
 
@@ -29,14 +29,14 @@ export default function Home() {
   useEffect(() => {
     const getUser = async () => {
       const data = await getDocs(userCollectionRef)
-      setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id})))
+      setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id || ''})));
     }
 
     getUser()
     searchUserByAccountId(users, accountId) 
-},[])
+},[userCollectionRef, users, accountId])
 
-function searchUserByAccountId(users, accountId) {
+function searchUserByAccountId(users: any, accountId: string) {
   for (let i = 0; i < users.length; i++) {
     if (users[i].accountId === accountId) {
       setAccountIsAvailable(true)
@@ -46,7 +46,7 @@ function searchUserByAccountId(users, accountId) {
   return null; // User not found
 }
 
-
+console.log(pairingData)
 
   return (
     <main className="h-screen">

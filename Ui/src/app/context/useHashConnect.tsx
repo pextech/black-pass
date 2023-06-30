@@ -1,11 +1,12 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { HashConnect} from "hashconnect";
+import { createContext, useContext, PropsWithChildren, useEffect, useState } from "react";
+import { HashConnect, HashConnectTypes} from "hashconnect";
 import { HashConnectConnectionState } from "hashconnect/dist/types";
+import { HashConnectContent } from "./hashConnect";
 
 
-const HashConnectContext = createContext({
+const HashConnectContext = createContext<HashConnectContent>({
     hcData: {},
     topic: '',
     setTopic: () => { },
@@ -14,26 +15,25 @@ const HashConnectContext = createContext({
     availableExtension: null,
     hashconnect: null,
     status: HashConnectConnectionState.Disconnected,
-    sendTransaction: () => { },
     connectToExtension: () => { },
     clearPairings: () => { },
-    disconnect: () => { },
+    disconnect: () => { }
 });
 
 const hashconnect = new HashConnect(true);
 
-export default function HashConnectProvider({ children }) {
+export default function HashConnectProvider({ children }: PropsWithChildren) {
 
-    const [hcData, setHcData] = useState(hashconnect.hcData);
+    const [hcData, setHcData] = useState<object>(hashconnect.hcData);
     const [topic, setTopic] = useState('');
     const [pairingString, setPairingString] = useState("");
-    const [pairingData, setPairingData] = useState(null);
-    const [availableExtension, setAvailableExtension] = useState({
+    const [pairingData, setPairingData] = useState<HashConnectTypes.SavedPairingData | null>(null);
+    const [availableExtension, setAvailableExtension] = useState<HashConnectTypes.WalletMetadata>({
         name: "",
         description: "",
         icon: ""
     });
-    const appMetadata = {
+    const appMetadata: HashConnectTypes.AppMetadata = {
         name: "dApp Example",
         description: "An example hedera dApp",
         icon: "https://www.hashpack.app/img/logo.svg",
@@ -105,7 +105,7 @@ export default function HashConnectProvider({ children }) {
     }
     
     const disconnect = () => {
-        hashconnect.disconnect(pairingData.topic)
+        hashconnect.disconnect(pairingData!.topic)
         setPairingData(null);
         console.log("got disconnected")
     }
@@ -127,11 +127,11 @@ export default function HashConnectProvider({ children }) {
         status,
         connectToExtension,
         clearPairings,
-        disconnect,
+        disconnect
     }}>
         {children}
     </HashConnectContext.Provider>
-}
+};
 
 export function useHashConnectContext() {
     return useContext(HashConnectContext);

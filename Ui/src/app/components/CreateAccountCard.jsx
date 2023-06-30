@@ -27,7 +27,7 @@ const CreateAccountCard = ({accountId}) => {
     await addDoc(userCollectionRef, {username: username, email: email, accountId: accountId })
     setIsLoading(true)
     toastSuccess()
-    router.push('/')
+    router.push('/black-pass')
   }
   
 

@@ -2,7 +2,7 @@ import NavBar from "./components/NavBar";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import {ReduxProvider} from '../redux/provider'
-import HashConnectProvider from './context/hashConnect'
+import HashConnectProvider from './context/useHashConnect'
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -6,7 +6,7 @@ import ConnectWalletButton from "./ConnectWalletButton";
 import { RxHamburgerMenu } from "react-icons/rx";
 import UseHashConnect from '../connectWallet/UseHashConnect'
 import { useAppSelector } from '../../redux/store'
-import { useHashConnectContext } from "../context/hashConnect";
+import { useHashConnectContext } from "../context/useHashConnect";
 
 const NavBar = () => {
 
