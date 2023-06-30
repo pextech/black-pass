@@ -7,6 +7,7 @@ import {db} from '../firebase.config'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation'
+import { playerCreator } from '../service/HederaServices'
 
 const CreateAccountCard = ({accountId}) => {
 
@@ -24,7 +25,8 @@ const CreateAccountCard = ({accountId}) => {
   
 
   const createUser = async () => {
-    await addDoc(userCollectionRef, {username: username, email: email, accountId: accountId })
+    const playerId = await playerCreator(accountId)
+    await addDoc(userCollectionRef, {username: username, email: email, accountId: accountId, playerId })
     setIsLoading(true)
     toastSuccess()
     router.push('/black-pass')

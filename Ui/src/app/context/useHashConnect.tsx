@@ -9,7 +9,11 @@ import { HashConnectContent } from "./hashConnect";
 const HashConnectContext = createContext<HashConnectContent>({
     hcData: {},
     topic: '',
+    provider: '',
+    userClient: '',
+    setProvider: () => { },
     setTopic: () => { },
+    setUserClient: () => { },
     pairingString: "",
     pairingData: null,
     availableExtension: null,
@@ -33,6 +37,10 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
         description: "",
         icon: ""
     });
+    const [provider, setProvider] = useState<any>();
+    const [userClient, setUserClient] = useState<any>();
+
+
     const appMetadata: HashConnectTypes.AppMetadata = {
         name: "dApp Example",
         description: "An example hedera dApp",
@@ -75,9 +83,11 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
         })
 
         //This is fired when a wallet approves a pairing
-        hashconnect.pairingEvent.on((data) => {
+        hashconnect.pairingEvent.on((data: any) => {
             console.log("Paired with wallet", data);
             setPairingData(null);
+            setProvider(hashconnect.getProvider(data.pairingData.network, data.pairingData.topic, data.pairingData?.accountIds[0]))
+            setUserClient(hashconnect.getSigner(provider))
         });
 
         //This is fired when HashConnect loses connection, pairs successfully, or is starting connection
@@ -121,6 +131,10 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
         hashconnect,
         topic,
         setTopic,
+        provider,
+        userClient,
+        setUserClient,
+        setProvider,
         pairingString,
         pairingData,
         availableExtension,

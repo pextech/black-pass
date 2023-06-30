@@ -13,22 +13,24 @@ let appMetaData = {
   };
 
 
-const UseHashConnect = async () => {
+const UseHashConnect = async (setProvider, setUserHederaAccount, setUserClient) => {
 
   let initData = await hashConnect.init(appMetaData, "testnet", false)
+  let pairingData;
 
   hashConnect.foundExtensionEvent.once((walletMetaData) => {
     hashConnect.connectToLocalWallet(initData.pairingString, walletMetaData)
   })
 
-  hashConnect.pairingEvent.once((pairingData) => {
+  hashConnect.pairingEvent.once((data) => {
     console.log('wallet paired')
-    console.log(pairingData, "pairing data")
+    console.log(data, "pairing data")
+    const provider = hashConnect.getProvider(data.pairingData.network, data.pairingData.topic, data.pairingData?.accountIds[0])
+    setProvider(provider)
+    setUserHederaAccount(data.pairingData?.accountIds[0])
+    setUserClient(hashConnect.getSigner(provider))
   })
 
-  
-
-  return initData;
 }
 
 export default UseHashConnect

@@ -5,6 +5,10 @@ import { Dispatch, SetStateAction } from "react"
 export type HashConnectContent = {
     hcData: object,
     topic: string,
+    provider: any,
+    userClient: any;
+    setProvider: Function;
+    setUserClient: Function;
     setTopic: Function,
     clearPairings: Function,
     pairingString: string,

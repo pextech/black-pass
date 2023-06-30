@@ -1,0 +1,581 @@
+[
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "_collections",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "collectionOwner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "collectionAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "idOfPlayer",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "symbol",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "nfts",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "_nfts",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "idOfCollection",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "idOfPlayer",
+				"type": "uint256"
+			},
+			{
+				"internalType": "int64",
+				"name": "tokenId",
+				"type": "int64"
+			},
+			{
+				"internalType": "address",
+				"name": "collectionAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "tokenURI",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "_players",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "playerAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "active",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "claimed",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "allCollections",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "collectionOwner",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "collectionAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "idOfPlayer",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "symbol",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "nfts",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct ICollection.Collection[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "allPlayers",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "playerAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimed",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct IPlayer.Player[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "collectionCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "defaultAdmin",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "collectionId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bytes[]",
+				"name": "metadata",
+				"type": "bytes[]"
+			},
+			{
+				"internalType": "string",
+				"name": "_tokenURI",
+				"type": "string"
+			}
+		],
+		"name": "mint",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "nftsCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "playersCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_symbol",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "playerId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "collectionAddress",
+				"type": "address"
+			}
+		],
+		"name": "setCollection",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "collectionOwner",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "collectionAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "idOfPlayer",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "symbol",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "nfts",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct ICollection.Collection",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "playerAddress",
+				"type": "address"
+			}
+		],
+		"name": "setPlayer",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "playerAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimed",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct IPlayer.Player",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "tokenAddress",
+				"type": "address"
+			}
+		],
+		"name": "tokenAssociate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "playerAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "status",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "claimed",
+				"type": "bool"
+			}
+		],
+		"name": "updatePlayer",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "playerAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimed",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct IPlayer.Player",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "target",
+				"type": "address"
+			}
+		],
+		"name": "whitelist_as_Default_Admin",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
