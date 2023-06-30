@@ -9,22 +9,6 @@ import BlackPassImg from '../assets/black-pass-image.png'
 
 const LandingPageCard = ({username}) => {
 
-  // const [user, setUser] = useState([])
-  // const userCollectionRef = collection(db, "users")
-
-  // useEffect(() => {
-  //     const getUser = async () => {
-  //       const data = await getDocs(userCollectionRef)
-  //       setUser(data.docs.map((doc) => ({...doc.data(), id: doc.id})))
-  //     }
-
-  //     getUser()
-  // }, [])
-
-  
-  // let obj = user.find(user => {
-  //   user.accountId = accountId
-  // })
 
 
 

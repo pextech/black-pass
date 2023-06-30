@@ -6,10 +6,12 @@ import ConnectWalletButton from "./ConnectWalletButton";
 import { RxHamburgerMenu } from "react-icons/rx";
 import UseHashConnect from '../connectWallet/UseHashConnect'
 import { useAppSelector } from '../../redux/store'
+import { useHashConnectContext } from "../context/hashConnect";
 
 const NavBar = () => {
 
   const [isActiveDrawer, setActiveDrawer] = useState(false);
+  const { connectToExtension, status, disconnect, pairingData } = useHashConnectContext();
 
   const isLogin = useAppSelector((state) => state.authReducer.value.isLogin)
   console.log(isLogin, "login status navbar")
@@ -18,10 +20,13 @@ const NavBar = () => {
     setActiveDrawer(!isActiveDrawer);
   };
 
-  const connectWallet = async () => {
-     await UseHashConnect()
+  const connectWallet = () => {
+    if(status === "Paired"){
+      disconnect()
+    } else{
+      connectToExtension()
+    }
   }
-
 
 
   return (
@@ -45,7 +50,7 @@ const NavBar = () => {
           <Link href="/community">Community</Link>
           <Link href="/blog">Blog</Link>
         </div>
-        <ConnectWalletButton btnTitle={isLogin ? "Disconnect Wallet" : "Connect Wallet"} handleClick={connectWallet}  />
+        <ConnectWalletButton btnTitle={status === "Paired" ? "Disconnect Wallet" : "Connect Wallet"} handleClick={connectWallet}   />
       </div>
 
       {/* mobile Navbar */}
@@ -77,7 +82,7 @@ const NavBar = () => {
               <Link href="/faqs">FAQs</Link>
               <Link href="/community">Community</Link>
               <Link href="/blog">Blog</Link>
-              <ConnectWalletButton btnTitle={isLogin ? "Disconnect Wallet" : "Connect Wallet"} />
+              <ConnectWalletButton btnTitle={status === "Paired" ? "Disconnect Wallet" : "Connect Wallet"} />
             </div>
           </div>
         </div>

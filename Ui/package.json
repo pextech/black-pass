@@ -20,6 +20,7 @@
     "ethers": "^6.6.0",
     "firebase": "^9.22.2",
     "hashconnect": "^0.2.4",
+    "netlify-cli": "^15.7.0",
     "next": "13.4.5",
     "postcss": "8.4.24",
     "react": "18.2.0",
