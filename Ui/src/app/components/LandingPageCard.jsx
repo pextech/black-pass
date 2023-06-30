@@ -6,10 +6,17 @@ import ConnectWalletButton from "./ConnectWalletButton";
 import {db} from '../firebase.config'
 import {collection, getDocs} from 'firebase/firestore';
 import BlackPassImg from '../assets/black-pass-image.png'
+import { redeemBlackPass } from "../service/HederaServices";
 
-const LandingPageCard = ({username}) => {
+const LandingPageCard = ({username, userPlayerId, accountId, provider, userClient}) => {
 
-
+  const reedemBlackPass = async () => {
+    console.log(userPlayerId, accountId, provider, userClient)
+    if (userPlayerId) {
+      console.log('started')
+      await redeemBlackPass(accountId, userPlayerId, userClient)
+    }
+  }
 
 
   return (
@@ -26,7 +33,7 @@ const LandingPageCard = ({username}) => {
         <Image className="w-[60%]" src={BlackPassImg} width={350} height={350} alt="NFT" priority />
 
         <div className="my-6">
-          <ConnectWalletButton btnTitle="Redeem Black Pass" handleClick={()=>{alert('hi')}} />
+          <ConnectWalletButton btnTitle="Redeem Black Pass" handleClick={()=>{reedemBlackPass()}} />
         </div>
       </div>
     </div>

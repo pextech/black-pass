@@ -46,8 +46,6 @@ function searchUserByAccountId(users: any, accountId: string) {
   return null; // User not found
 }
 
-console.log(pairingData)
-
   return (
     <main className="h-screen">
       {
