@@ -11,7 +11,7 @@ import { useHashConnectContext } from "../context/useHashConnect";
 const NavBar = () => {
 
   const [isActiveDrawer, setActiveDrawer] = useState(false);
-  const { connectToExtension, status, disconnect, pairingData } = useHashConnectContext();
+  const { connectToExtension, status, disconnect, pairingData, clearPairings } = useHashConnectContext();
 
   const isLogin = useAppSelector((state) => state.authReducer.value.isLogin)
   console.log(isLogin, "login status navbar")
@@ -23,6 +23,7 @@ const NavBar = () => {
   const connectWallet = () => {
     if(status === "Paired"){
       disconnect()
+      clearPairings()
     } else{
       connectToExtension()
     }

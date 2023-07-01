@@ -9,12 +9,17 @@ import {collection, getDocs} from 'firebase/firestore';
 
 import {useHashConnectContext} from './context/useHashConnect';
 
+interface User {
+  id: string;
+  // Add other user properties here
+}
+
 export default function Home() {
 
 
   const [accountIsAvailable, setAccountIsAvailable] = useState(false);
   const [username, setUsername] = useState('')
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState<User[]>([])
 
   const { connectToExtension, status, pairingData } = useHashConnectContext();
   const accountId = pairingData?.accountIds[0] || ""
@@ -29,12 +34,12 @@ export default function Home() {
   useEffect(() => {
     const getUser = async () => {
       const data = await getDocs(userCollectionRef)
-      setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id || ''})));
+      setUsers(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
     }
 
     getUser()
     searchUserByAccountId(users, accountId) 
-},[userCollectionRef, users, accountId])
+},[accountId, users, userCollectionRef])
 
 function searchUserByAccountId(users: any, accountId: string) {
   for (let i = 0; i < users.length; i++) {
