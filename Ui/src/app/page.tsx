@@ -55,7 +55,7 @@ function searchUserByAccountId(users: any, accountId: string) {
     <main className="h-screen">
       {
       status === "Paired"  && !accountIsAvailable ? <CreateAccountCard accountId={accountId} /> 
-      : status === "Paired" && accountIsAvailable ? <LandingPageCard username={username} /> 
+      : status === "Paired" && accountIsAvailable ? <LandingPageCard username={username} accountId={accountId} userPlayerId="" provider="" userClient="" /> 
       : <LoginCard handleConnect={connectWallet} />}
     </main>
   );
