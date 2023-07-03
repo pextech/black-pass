@@ -6,7 +6,6 @@ import CreateAccountCard from "./components/CreateAccountCard";
 import { useState, useEffect } from "react";
 import {db} from './firebase.config'
 import {collection, getDocs} from 'firebase/firestore';
-import { HashConnect} from "hashconnect";
 import {useHashConnectContext} from './context/useHashConnect';
 
 interface User {
@@ -16,7 +15,7 @@ interface User {
 export default function Home() {
 
 
-  const [accountIsAvailable, setAccountIsAvailable] = useState(true);
+  const [accountIsAvailable, setAccountIsAvailable] = useState(false);
   const [username, setUsername] = useState('')
   const [playerId, setPlayerId] = useState('')
   const [users, setUsers] = useState<User[]>([])

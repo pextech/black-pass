@@ -110,7 +110,7 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     }
 
     const disconnect = () => {
-        hashconnect.disconnect(pairingData!.topic)
+        hashconnect.disconnect(state.pairingData.topic)
         setPairingData(null);
         console.log("got disconnected")
     }
