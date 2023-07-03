@@ -2,20 +2,11 @@
 
 import React from "react";
 import ConnectWalletButton from "./ConnectWalletButton";
-import { ethers } from "ethers";
 
-const LoginCard = () => {
-  const connectWallet = () => {
-    if (window.ethereum) {
-      window.ethereum
-        .request({ method: "eth_requestAccounts" })
-        .then((result) => {
-          accountAddress(result[0]);
-        });
-    } else {
-      alert("Please Install Metamask");
-    }
-  };
+
+const LoginCard = ({handleConnect}) => {
+
+  
 
   return (
     <div className="flex justify-center items-center">
@@ -62,7 +53,7 @@ const LoginCard = () => {
         </div>
 
         <div className="flex justify-center my-5">
-          <ConnectWalletButton btnTitle="Connect Wallet" handleClick={connectWallet} />
+          <ConnectWalletButton btnTitle="Connect Wallet" handleClick={handleConnect} />
         </div>
       </div>
     </div>
