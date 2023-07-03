@@ -6,7 +6,7 @@ import CreateAccountCard from "./components/CreateAccountCard";
 import { useState, useEffect } from "react";
 import {db} from './firebase.config'
 import {collection, getDocs} from 'firebase/firestore';
-
+import { HashConnect} from "hashconnect";
 import {useHashConnectContext} from './context/useHashConnect';
 
 interface User {
@@ -17,15 +17,22 @@ interface User {
 export default function Home() {
 
 
-  const [accountIsAvailable, setAccountIsAvailable] = useState(false);
+  const [accountIsAvailable, setAccountIsAvailable] = useState(true);
   const [username, setUsername] = useState('')
+  const [playerId, setPlayerId] = useState('')
   const [users, setUsers] = useState<User[]>([])
-
-  const { connectToExtension, status, pairingData } = useHashConnectContext();
+  const hashconnect = new HashConnect(true);
+  const { connectToExtension, status, pairingData, provider } = useHashConnectContext();
   const accountId = pairingData?.accountIds[0] || ""
-
+  
+  // const signer = hashconnect?.getSigner(provider) ?? null
   const userCollectionRef = collection(db, "users")
 
+  console.log(provider, "this ios provider")
+  // console.log(signer, "this is signer")
+  // console.log(users, "this is user")
+  
+  
 
   const connectWallet = () => {
     connectToExtension()
@@ -39,13 +46,14 @@ export default function Home() {
 
     getUser()
     searchUserByAccountId(users, accountId) 
-},[accountId, users, userCollectionRef])
+},[accountId])
 
 function searchUserByAccountId(users: any, accountId: string) {
   for (let i = 0; i < users.length; i++) {
     if (users[i].accountId === accountId) {
       setAccountIsAvailable(true)
       setUsername(users[i].username) 
+      setPlayerId(users[i].playerId)
     } 
   }
   return null; // User not found
@@ -55,7 +63,7 @@ function searchUserByAccountId(users: any, accountId: string) {
     <main className="h-screen">
       {
       status === "Paired"  && !accountIsAvailable ? <CreateAccountCard accountId={accountId} /> 
-      : status === "Paired" && accountIsAvailable ? <LandingPageCard username={username} accountId={accountId} userPlayerId="" provider="" userClient="" /> 
+      : status === "Paired" && accountIsAvailable ? <LandingPageCard username={username} accountId={accountId} userPlayerId={playerId ?? 1}  /> 
       : <LoginCard handleConnect={connectWallet} />}
     </main>
   );

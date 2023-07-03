@@ -14,7 +14,6 @@ const NavBar = () => {
   const { connectToExtension, status, disconnect, pairingData, clearPairings } = useHashConnectContext();
 
   const isLogin = useAppSelector((state) => state.authReducer.value.isLogin)
-  console.log(isLogin, "login status navbar")
 
   const handleToggle = () => {
     setActiveDrawer(!isActiveDrawer);
@@ -24,6 +23,7 @@ const NavBar = () => {
     if(status === "Paired"){
       disconnect()
       clearPairings()
+      location.reload()
     } else{
       connectToExtension()
     }

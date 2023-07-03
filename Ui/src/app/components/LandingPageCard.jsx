@@ -3,12 +3,17 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import ConnectWalletButton from "./ConnectWalletButton";
-import {db} from '../firebase.config'
-import {collection, getDocs} from 'firebase/firestore';
 import BlackPassImg from '../assets/black-pass-image.png'
 import { redeemBlackPass } from "../service/HederaServices";
+import { HashConnect} from "hashconnect";
+import {useHashConnectContext} from '../context/useHashConnect';
 
-const LandingPageCard = ({username, userPlayerId, accountId, provider, userClient}) => {
+const LandingPageCard = ({username, userPlayerId, accountId}) => {
+
+  const { provider } = useHashConnectContext();
+  const hashconnect = new HashConnect(true);
+  const userClient = hashconnect?.getSigner(provider) ?? null
+  console.log(userClient, "this is signer")
 
   const reedemBlackPass = async () => {
     console.log(userPlayerId, accountId, provider, userClient)

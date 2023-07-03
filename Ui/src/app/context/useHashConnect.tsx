@@ -50,11 +50,10 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
 
     const [status, setStatus] = useState(HashConnectConnectionState.Disconnected);
 
-    const [message, setMessage] = useState('');
 
     useEffect(() => {
         init();
-    }, []);
+    },[]);
 
     hashconnect.connectionStatusChangeEvent.on((data) => {
         setStatus(data);
@@ -73,7 +72,16 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
 
         //Saved pairings will return here, generally you will only have one unless you are doing something advanced
         setPairingData(initData.savedPairings[0]);
+
+        // console.log("this is init data", pairingData )
+
+        setProvider(hashconnect.getProvider(initData?.savedPairings[0]?.network, initData?.savedPairings[0]?.topic, initData?.savedPairings[0]?.accountIds[0]))
+        
+        
     }
+    console.log("this is pairing data", pairingData )
+   
+
 
     const setUpHashConnectEvents = () => {
         //This is fired when a extension is found
@@ -85,9 +93,8 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
         //This is fired when a wallet approves a pairing
         hashconnect.pairingEvent.on((data: any) => {
             console.log("Paired with wallet", data);
-            setPairingData(null);
-            setProvider(hashconnect.getProvider(data.pairingData.network, data.pairingData.topic, data.pairingData?.accountIds[0]))
-            setUserClient(hashconnect.getSigner(provider))
+            // setUserClient(hashconnect.getSigner(provider))
+            // setProvider(hashconnect.getProvider(data?.network, data.topic, data.accountIds[0]))
         });
 
         //This is fired when HashConnect loses connection, pairs successfully, or is starting connection
@@ -100,19 +107,19 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     const connectToExtension = async () => {
         //this will automatically pop up a pairing request in the HashConnect extension
         hashconnect.connectToLocalWallet();
+
     }
 
 
+    // const requestAccountInfo = async () => {
+    //     let request = {
+    //         topic: topic,
+    //         network: "testnet",
+    //         multiAccount: true
+    //     }
 
-    const requestAccountInfo = async () => {
-        let request = {
-            topic: topic,
-            network: "testnet",
-            multiAccount: true
-        }
-
-        await hashconnect.requestAdditionalAccounts(topic, request);
-    }
+    //     await hashconnect.requestAdditionalAccounts(topic, request);
+    // }
 
     const disconnect = () => {
         hashconnect.disconnect(pairingData!.topic)

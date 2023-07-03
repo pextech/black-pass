@@ -11,10 +11,6 @@ import { playerCreator } from '../service/HederaServices'
 
 const CreateAccountCard = ({accountId}) => {
 
-  // const [accountData, setAccountData] = useState({
-  //   username: "",
-  //   email: ""
-  // })
 
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -29,7 +25,7 @@ const CreateAccountCard = ({accountId}) => {
     await addDoc(userCollectionRef, {username: username, email: email, accountId: accountId, playerId })
     setIsLoading(true)
     toastSuccess()
-    router.push('/black-pass')
+    router.push('/')
   }
   
 

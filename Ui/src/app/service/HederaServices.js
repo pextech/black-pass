@@ -213,7 +213,9 @@ export const redeemBlackPass = async (playerHederaId, playerId, userClient) => {
   try {
 
     console.log('=============================================')
-
+    console.log(playerHederaId, "Player hedera id")
+    console.log(playerId, "Player id")
+    console.log(userClient, "user client")
     const { tokenId, tokenIdSolidity, collectionId } = await collectionCreator(playerId, 'BLACK PASS COLLECTION', 'BPC', userClient);
 console.log(tokenId && collectionId)
     console.log('=============================================')
