@@ -11,7 +11,6 @@ import {useHashConnectContext} from './context/useHashConnect';
 
 interface User {
   id: string;
-  // Add other user properties here
 }
 
 export default function Home() {
@@ -21,21 +20,13 @@ export default function Home() {
   const [username, setUsername] = useState('')
   const [playerId, setPlayerId] = useState('')
   const [users, setUsers] = useState<User[]>([])
-  const hashconnect = new HashConnect(true);
-  const { connectToExtension, status, pairingData, provider } = useHashConnectContext();
-  const accountId = pairingData?.accountIds[0] || ""
+  const { connectToExtension, status, pairingData, provider, userClient, state } = useHashConnectContext();
+  const accountId = state.pairingData?.accountIds[0] || ""
   
-  // const signer = hashconnect?.getSigner(provider) ?? null
   const userCollectionRef = collection(db, "users")
 
-  console.log(provider, "this ios provider")
-  // console.log(signer, "this is signer")
-  // console.log(users, "this is user")
-  
-  
-
-  const connectWallet = () => {
-    connectToExtension()
+  const connectWallet = async () => {
+    await connectToExtension()
   }
  
   useEffect(() => {
@@ -62,8 +53,8 @@ function searchUserByAccountId(users: any, accountId: string) {
   return (
     <main className="h-screen">
       {
-      status === "Paired"  && !accountIsAvailable ? <CreateAccountCard accountId={accountId} /> 
-      : status === "Paired" && accountIsAvailable ? <LandingPageCard username={username} accountId={accountId} userPlayerId={playerId ?? 1}  /> 
+      state.pairingData?.accountIds[0]  && !accountIsAvailable ? <CreateAccountCard accountId={accountId} /> 
+      : state.pairingData?.accountIds[0] && accountIsAvailable ? <LandingPageCard username={username} accountId={accountId} userPlayerId={1} userClient={userClient}  /> 
       : <LoginCard handleConnect={connectWallet} />}
     </main>
   );

@@ -10,6 +10,7 @@ export type HashConnectContent = {
     setProvider: Function;
     setUserClient: Function;
     setTopic: Function,
+    state: any,
     clearPairings: Function,
     pairingString: string,
     pairingData: HashConnectTypes.SavedPairingData | null,

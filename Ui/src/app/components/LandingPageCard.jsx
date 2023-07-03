@@ -8,15 +8,14 @@ import { redeemBlackPass } from "../service/HederaServices";
 import { HashConnect} from "hashconnect";
 import {useHashConnectContext} from '../context/useHashConnect';
 
-const LandingPageCard = ({username, userPlayerId, accountId}) => {
+const LandingPageCard = ({ username, userPlayerId, accountId, userClient }) => {
+  
+  console.log('userClient', userClient)
+  console.log('accountId', accountId)
+  console.log('userPlayerId', userPlayerId)
 
-  const { provider } = useHashConnectContext();
-  const hashconnect = new HashConnect(true);
-  const userClient = hashconnect?.getSigner(provider) ?? null
-  console.log(userClient, "this is signer")
 
   const reedemBlackPass = async () => {
-    console.log(userPlayerId, accountId, provider, userClient)
     if (userPlayerId) {
       console.log('started')
       await redeemBlackPass(accountId, userPlayerId, userClient)

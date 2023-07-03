@@ -11,7 +11,7 @@ import { useHashConnectContext } from "../context/useHashConnect";
 const NavBar = () => {
 
   const [isActiveDrawer, setActiveDrawer] = useState(false);
-  const { connectToExtension, status, disconnect, pairingData, clearPairings } = useHashConnectContext();
+  const { connectToExtension, status, disconnect, pairingData, clearPairings, state } = useHashConnectContext();
 
   const isLogin = useAppSelector((state) => state.authReducer.value.isLogin)
 
@@ -51,7 +51,7 @@ const NavBar = () => {
           <Link href="/community">Community</Link>
           <Link href="/blog">Blog</Link>
         </div>
-        <ConnectWalletButton btnTitle={status === "Paired" ? "Disconnect Wallet" : "Connect Wallet"} handleClick={connectWallet}   />
+        <ConnectWalletButton btnTitle={status === "Paired" ? state.pairingData?.accountIds[0] ? 'Disconnect' : 'Connecting' : "Connect Wallet"} accountId={state.pairingData?.accountIds[0]} handleClick={connectWallet}   />
       </div>
 
       {/* mobile Navbar */}
