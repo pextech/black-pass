@@ -5,10 +5,9 @@ import Image from "next/image";
 import ConnectWalletButton from "./ConnectWalletButton";
 import BlackPassImg from '../assets/black-pass-image.png'
 import { redeemBlackPass } from "../service/HederaServices";
-import { HashConnect} from "hashconnect";
-import {useHashConnectContext} from '../context/useHashConnect';
 
-const LandingPageCard = ({ username, userPlayerId, accountId, userClient }) => {
+
+const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle }) => {
   
   console.log('userClient', userClient)
   console.log('accountId', accountId)
@@ -37,7 +36,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient }) => {
         <Image className="w-[60%]" src={BlackPassImg} width={350} height={350} alt="NFT" priority />
 
         <div className="my-6">
-          <ConnectWalletButton btnTitle="Redeem Black Pass" handleClick={()=>{reedemBlackPass()}} />
+          <ConnectWalletButton disableHandle={disableHandle} btnTitle="Redeem Black Pass" handleClick={()=>{reedemBlackPass()}} />
         </div>
       </div>
     </div>

@@ -19,4 +19,13 @@ export type HashConnectContent = {
     hashconnect: HashConnect | null
     connectToExtension: Function,
     disconnect: Function,
+    modal: boolean,
+    openModal: Function,
+    closeModal: Function,
+    connectBlade: Function,
+    bladeConnectStatus: boolean,
+    bladeAccountId: string,
+    disconnectBlade: Function,
+    setBladeSigner: Function,
+    bladeSigner: any
 }

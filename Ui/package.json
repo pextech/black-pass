@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@bladelabs/blade-web3.js": "^1.0.3",
+    "@hashgraph/sdk": "^2.29.0",
+    "@next/font": "^13.4.7",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/node": "20.3.1",
     "@types/react": "18.2.12",
@@ -21,7 +24,7 @@
     "firebase": "^9.22.2",
     "hashconnect": "^0.2.4",
     "netlify-cli": "^15.7.0",
-    "next": "13.4.5",
+    "next": "^13.4.8",
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",

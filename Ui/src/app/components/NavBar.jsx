@@ -4,14 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import ConnectWalletButton from "./ConnectWalletButton";
 import { RxHamburgerMenu } from "react-icons/rx";
-import UseHashConnect from '../connectWallet/UseHashConnect'
 import { useAppSelector } from '../../redux/store'
 import { useHashConnectContext } from "../context/useHashConnect";
+import Modals from "../components/Modals";
 
 const NavBar = () => {
 
   const [isActiveDrawer, setActiveDrawer] = useState(false);
-  const { connectToExtension, status, disconnect, pairingData, clearPairings, state } = useHashConnectContext();
+  const { connectToExtension, status, disconnect, pairingData, clearPairings, state, modal, closeModal, openModal, bladeConnectStatus, disconnectBlade, bladeAccountId } = useHashConnectContext();
 
   const isLogin = useAppSelector((state) => state.authReducer.value.isLogin)
 
@@ -24,8 +24,11 @@ const NavBar = () => {
       disconnect()
       clearPairings()
       location.reload()
-    } else{
-      connectToExtension()
+    } if(bladeConnectStatus) {
+      disconnectBlade()
+      location.reload()
+    }else{
+      openModal()
     }
   }
 
@@ -51,9 +54,9 @@ const NavBar = () => {
           <Link href="/community">Community</Link>
           <Link href="/blog">Blog</Link>
         </div>
-        <ConnectWalletButton btnTitle={status === "Paired" ? state.pairingData?.accountIds[0] ? 'Disconnect' : 'Connecting' : "Connect Wallet"} accountId={state.pairingData?.accountIds[0]} handleClick={connectWallet}   />
+        <ConnectWalletButton btnTitle={bladeConnectStatus ? "Disconnect" : status === "Paired" ? state.pairingData?.accountIds[0] ? 'Disconnect' : 'Connecting' : "Connect Wallet"} accountId={state.pairingData?.accountIds[0] || bladeAccountId} handleClick={connectWallet}   />
       </div>
-
+      {modal && <Modals closeModal={closeModal} connectHash={connectToExtension} connectBlade={() => console.log('')} />}
       {/* mobile Navbar */}
 
       <div className="md:hidden flex items-center justify-between mx-auto mt-4">

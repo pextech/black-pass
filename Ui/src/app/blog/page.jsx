@@ -1,7 +1,14 @@
 import React from "react";
+import Modals from "../components/Modals";
 
-const page = () => {
-  return <div>Blog</div>;
+const Page = () => {
+  return (
+    <div>
+      Blog
+
+      <Modals />
+    </div>
+  );
 };
 
-export default page;
+export default Page;

@@ -22,7 +22,7 @@ import {
   TokenType
 } from '@hashgraph/sdk'
 import Web3 from 'web3';
-const abi = require('../../../../smart-contracts/blackPass.json');
+const abi = require('../../../blackPass.json');
 
 export const operatorId = AccountId.fromString(process.env.NEXT_PUBLIC_ACCOUNT_ID || '')
 const operatorKey = PrivateKey.fromString(process.env.NEXT_PUBLIC_PRIVATE_KEY || '')

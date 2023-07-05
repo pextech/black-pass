@@ -4,6 +4,8 @@ import { createContext, useContext, PropsWithChildren, useEffect, useState } fro
 import { HashConnect, HashConnectTypes} from "hashconnect";
 import { HashConnectConnectionState } from "hashconnect/dist/types";
 import { HashConnectContent } from "./hashConnect";
+import {BladeConnector, ConnectorStrategy} from '@bladelabs/blade-web3.js';
+import {HederaNetwork} from '@bladelabs/blade-web3.js';
 
 
 const HashConnectContext = createContext<HashConnectContent>({
@@ -22,10 +24,36 @@ const HashConnectContext = createContext<HashConnectContent>({
     status: HashConnectConnectionState.Disconnected,
     connectToExtension: () => { },
     clearPairings: () => { },
-    disconnect: () => { }
+    disconnect: () => { },
+    modal: false,
+    openModal: () => { },
+    closeModal: () => {},
+    connectBlade: () => {},
+    bladeConnectStatus: false,
+    bladeAccountId: '',
+    disconnectBlade: () => {},
+    setBladeSigner: () => {},
+    bladeSigner: ''
 });
 
 const hashconnect = new HashConnect(true);
+
+
+const bladeConnector = new BladeConnector(
+  ConnectorStrategy.WALLET_CONNECT, // preferred strategy is optional 
+  { // dApp metadata options are optional, but are highly recommended to use
+    name: "Black Pass",
+    description: "This is a project Black Pass program, which involves Soulbound Hedera NFTs with modifiable traits and the ability to claim RVV tokens. The contract allows users to create player profiles, claim loyalty passes, and interact with NFTs and collections.",
+    url: "https://awesome-dapp.io/",
+    icons: ["some-image-url.png"]
+  }
+);
+
+// params are optional, and Mainnet is used as a default
+const params = {
+    network: HederaNetwork.Testnet,
+    dAppCode: "SomeAwesomeDApp" // optional while testing, request specific one by contacting us
+  }
 
 export default function HashConnectProvider({ children }: PropsWithChildren) {
 
@@ -41,7 +69,13 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     const [provider, setProvider] = useState<any>();
     const [userClient, setUserClient] = useState<any>();
     const [savedData, setSavedData] = useState({})
+    const [modal, setModal] = useState(false)
     const [state, setState] = useState({ pairingData: { accountIds: '', topic: '', network: '' } })
+
+
+    const [bladeConnectStatus, setBladeConnectStatus] = useState(false);
+    const [bladeAccountId, setBladeAccountId] = useState('');
+    const [bladeSigner, setBladeSigner] = useState<any>()
 
 
     const appMetadata: HashConnectTypes.AppMetadata = {
@@ -80,6 +114,12 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     }
     
   }
+  const openModal = () => {
+    setModal(true)
+  }
+  const closeModal = () => {
+    setModal(false)
+  }
 
     const onConnectionChange = async (state: any) => {
 
@@ -90,7 +130,7 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     const connectToExtension = async () => {
         let appMetadata = {
             name: "Black Pass",
-            description: "This is a projecte Black Pass program, which involves Soulbound Hedera NFTs with modifiable traits and the ability to claim RVV tokens. The contract allows users to create player profiles, claim loyalty passes, and interact with NFTs and collections.",
+            description: "This is a project Black Pass program, which involves Soulbound Hedera NFTs with modifiable traits and the ability to claim RVV tokens. The contract allows users to create player profiles, claim loyalty passes, and interact with NFTs and collections.",
           icon: "https://www.hashpack.app/img/logo.svg"
         }
     
@@ -121,6 +161,32 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     }
 
 
+    // blade Connect
+    const connectBlade = async () => {
+      try {
+        const walletDate = await bladeConnector.createSession(params);
+        setBladeConnectStatus(true)
+        closeModal()
+        setBladeAccountId(walletDate[0])
+        console.log("wallet connected", walletDate[0])
+        const signerParam = bladeConnector.getSigner()
+        setBladeSigner(signerParam)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    const disconnectBlade = async () => {
+      try {
+        await bladeConnector.killSession();
+        setBladeConnectStatus(false)
+        console.log("blade disconnected")
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+
     return <HashConnectContext.Provider value={{
         hcData,
         hashconnect,
@@ -137,7 +203,16 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
         status,
         connectToExtension,
         clearPairings,
-        disconnect
+        disconnect,
+        modal,
+        openModal,
+        closeModal,
+        connectBlade,
+        bladeConnectStatus,
+        bladeAccountId,
+        disconnectBlade,
+        bladeSigner,
+        setBladeSigner
     }}>
         {children}
     </HashConnectContext.Provider>
