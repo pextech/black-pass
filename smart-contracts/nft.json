@@ -1,6 +1,6 @@
 {
 "name": "Black Pass Card",
-"description": "This NFN acts as a Debit card, where you can claim your tokens once they become available for you.",
+"description": "Astra Nova is web3's first true metaRPG. Black Pass is Astra Nova's identity and loyalty program to reward community members.",
 "image": "https://ipfs.io/ipfs/QmQwuzCMK3kuSe8DX8pALfANJyzHzqnc5KYM9YP2XTfwPB",
 "animation_url": "https://ipfs.io/ipfs/QmQiyqWN7rkDUJ7SRjUnfDy1F7KfNFEpfVtJyPExrkbBob",
 "dna": "5797317f73c6ad1534f3f272fb604143a2e3ad4d",
@@ -9,8 +9,12 @@
 "external_url": "https://zoolabs.io",
 "attributes": [
     {
-    "trait_type": "Balance",
+    "trait_type": "Balance ($RVV)",
     "value": "1000"
+    },
+    {
+    "trait_type": "Tier",
+    "value": "Infinite"
     }
 ]
 }

@@ -216,7 +216,7 @@ export const redeemBlackPass = async (playerHederaId, playerId, userClient) => {
     console.log(playerHederaId, "Player hedera id")
     console.log(playerId, "Player id")
     console.log(userClient, "user client")
-    const { tokenId, tokenIdSolidity, collectionId } = await collectionCreator(playerId, 'BLACK PASS COLLECTION', 'BPC', userClient);
+    const { tokenId, tokenIdSolidity, collectionId } = await collectionCreator(playerId, 'BLACK PASS', 'BP', userClient);
 console.log(tokenId && collectionId)
     console.log('=============================================')
 
@@ -294,7 +294,7 @@ export async function mintNft(tokenId) {
   try {
     const mintTx = new TokenMintTransaction()
     .setTokenId(TokenId.fromString(tokenId))
-    .setMetadata([Buffer.from('https://ipfs.io/ipfs/QmS2WUcyBfconmbKjF1vBxBQabTvUchfuzYTnRVXKDAPLN')]) 
+    .setMetadata([Buffer.from('https://ipfs.io/ipfs/QmaRdxCZLvdfg2BWyMEVhe4kFteU1UAS443g1YHT6uWGna')]) 
     .setMaxTransactionFee(maxTransactionFee)
 
   
