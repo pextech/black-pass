@@ -33,7 +33,10 @@ const HashConnectContext = createContext<HashConnectContent>({
     bladeAccountId: '',
     disconnectBlade: () => {},
     setBladeSigner: () => {},
-    bladeSigner: ''
+    bladeSigner: '',
+    accountAvailableStatus: false,
+    setAccountIsAvailable: () => {},
+    setAccountNotAvailable: () => {}
 });
 
 const hashconnect = new HashConnect(true);
@@ -71,6 +74,7 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     const [savedData, setSavedData] = useState({})
     const [modal, setModal] = useState(false)
     const [state, setState] = useState({ pairingData: { accountIds: '', topic: '', network: '' } })
+    const [accountAvailableStatus, setAccountAvailableStatus] = useState(false)
 
 
     const [bladeConnectStatus, setBladeConnectStatus] = useState(false);
@@ -186,6 +190,14 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
       }
     }
 
+    const setAccountIsAvailable = () => {
+      setAccountAvailableStatus(true)
+    }
+
+    const setAccountNotAvailable = () => {
+      setAccountAvailableStatus(false)
+    }
+
 
     return <HashConnectContext.Provider value={{
         hcData,
@@ -212,7 +224,10 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
         bladeAccountId,
         disconnectBlade,
         bladeSigner,
-        setBladeSigner
+        setBladeSigner,
+        accountAvailableStatus,
+        setAccountIsAvailable,
+        setAccountNotAvailable
     }}>
         {children}
     </HashConnectContext.Provider>

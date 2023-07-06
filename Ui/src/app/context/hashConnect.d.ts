@@ -27,5 +27,8 @@ export type HashConnectContent = {
     bladeAccountId: string,
     disconnectBlade: Function,
     setBladeSigner: Function,
-    bladeSigner: any
+    bladeSigner: any,
+    accountAvailableStatus: boolean,
+    setAccountIsAvailable: Function,
+    setAccountNotAvailable: Function
 }

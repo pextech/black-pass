@@ -15,7 +15,7 @@ interface User {
 
 
 export default function Home() {
-  const [accountIsAvailable, setAccountIsAvailable] = useState(false);
+
   const [username, setUsername] = useState("");
   const [playerId, setPlayerId] = useState("");
   const [hasClaimed, setHasClaimed] = useState(false);
@@ -33,7 +33,9 @@ export default function Home() {
     connectBlade,
     bladeConnectStatus,
     bladeAccountId,
-    bladeSigner
+    bladeSigner,
+    accountAvailableStatus,
+    setAccountIsAvailable
   } = useHashConnectContext();
   const accountId = state.pairingData?.accountIds[0] || "";
   
@@ -47,7 +49,7 @@ export default function Home() {
     closeModal()
   };
 
-  
+
 
   useEffect(() => {
     const getUser = async () => {
@@ -68,7 +70,7 @@ export default function Home() {
   function searchUserByAccountId(users: any, accountId: string) {
     for (let i = 0; i < users.length; i++) {
       if (users[i].accountId === accountId) {
-        setAccountIsAvailable(true);
+        setAccountIsAvailable();
         setUsername(users[i].username);
         setPlayerId(users[i].playerId);
         setHasClaimed(users[i].hasClaimed)
@@ -78,10 +80,10 @@ export default function Home() {
   }
 
   return (
-    <main className="h-screen">
-      {state.pairingData?.accountIds[0] && !accountIsAvailable ? (
+    <main className="h-screen text-white">
+      {state.pairingData?.accountIds[0] && !accountAvailableStatus || !accountAvailableStatus && bladeAccountId ? (
         <CreateAccountCard accountId={accountId || bladeAccountId} />
-      ) : accountIsAvailable ? (
+      ) : accountAvailableStatus ? (
         <LandingPageCard
           username={username}
           accountId={accountId || bladeAccountId}

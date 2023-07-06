@@ -5,7 +5,8 @@ import Image from "next/image";
 import ConnectWalletButton from "./ConnectWalletButton";
 import BlackPassImg from '../assets/black-pass-image.png'
 import { redeemBlackPass } from "../service/HederaServices";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle }) => {
   
@@ -13,11 +14,25 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
   console.log('accountId', accountId)
   console.log('userPlayerId', userPlayerId)
 
+  const loading = () => toast.loading("redeeming Black Pass...")
+  const toastSuccess = () => toast.success('Successfully redeem Black Pass');
+  const toastError = () => toast.error('Redeem failed');
+  const [isLoading, setIsLoading] = useState(false)
+
 
   const reedemBlackPass = async () => {
-    if (userPlayerId) {
-      console.log('started')
-      await redeemBlackPass(accountId, userPlayerId, userClient)
+    try {
+      if (userPlayerId) {
+        console.log('started')
+        setIsLoading(true)
+        loading()
+        await redeemBlackPass(accountId, userPlayerId, userClient)
+        setIsLoading(false)
+        toastSuccess()
+      }
+    } catch (error) {
+      console.log(error, "redeem error")
+      toastError()
     }
   }
 
@@ -38,6 +53,22 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
         <div className="my-6">
           <ConnectWalletButton disableHandle={disableHandle} btnTitle="Redeem Black Pass" handleClick={()=>{reedemBlackPass()}} />
         </div>
+
+        {
+            isLoading && (
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
+            )
+          }
       </div>
     </div>
   );

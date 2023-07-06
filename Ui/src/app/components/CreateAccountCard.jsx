@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation'
 import { playerCreator } from '../service/HederaServices'
+import { useHashConnectContext } from "../context/useHashConnect";
 
 const CreateAccountCard = ({accountId}) => {
 
@@ -15,17 +16,23 @@ const CreateAccountCard = ({accountId}) => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [hasClaimed, setHasClaimed] = useState(false);
   const userCollectionRef = collection(db, "users")
+  const loading = () => toast.loading("Creating account...")
   const toastSuccess = () => toast.success('Successfully created an account');
   const router = useRouter();
+
+  const {setAccountIsAvailable } = useHashConnectContext();
   
 
   const createUser = async () => {
-    const playerId = await playerCreator(accountId)
-    await addDoc(userCollectionRef, {username: username, email: email, accountId: accountId, playerId })
     setIsLoading(true)
+    loading()
+    const playerId = await playerCreator(accountId)
+    await addDoc(userCollectionRef, {username: username, email: email, accountId: accountId, playerId, hasClaimed })
+    setIsLoading(false)
     toastSuccess()
-    router.push('/')
+    setAccountIsAvailable()
   }
   
 

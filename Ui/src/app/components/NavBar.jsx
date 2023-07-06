@@ -35,7 +35,7 @@ const NavBar = () => {
 
   return (
     <div>
-      <div className="md:flex md:justify-around md:items-center md:my-4 hidden">
+      <div className="md:flex md:justify-around md:items-center md:my-4 hidden text-white">
         <div className="flex gap-8 items-center">
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="44">
             <path
@@ -59,7 +59,7 @@ const NavBar = () => {
       {modal && <Modals closeModal={closeModal} connectHash={connectToExtension} connectBlade={() => console.log('')} />}
       {/* mobile Navbar */}
 
-      <div className="md:hidden flex items-center justify-between mx-auto mt-4">
+      <div className="md:hidden flex items-center justify-between mx-auto mt-4 text-white">
         <div className="ml-4">
           <svg xmlns="http://www.w3.org/2000/svg" width="50" height="44">
             <path

@@ -17,7 +17,7 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: #fff;
   background-image: url(./assets/bg-image.png);
   background-color: #010101;
   background-size: "cover";
@@ -27,4 +27,8 @@ body {
 }
 .showDrawer {
   top: 9%;
+}
+.toast-loading{
+  background: #292929 !important;
+  color: #0FC4B3 !important;
 }
