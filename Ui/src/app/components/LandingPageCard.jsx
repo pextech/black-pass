@@ -7,6 +7,9 @@ import BlackPassImg from '../assets/black-pass-image.png'
 import { redeemBlackPass } from "../service/HederaServices";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useHashConnectContext } from "../context/useHashConnect";
+import { db } from "../firebase.config";
+import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 
 const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle }) => {
   
@@ -14,11 +17,20 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
   console.log('accountId', accountId)
   console.log('userPlayerId', userPlayerId)
 
-  const loading = () => toast.loading("redeeming Black Pass...")
+  const loading = () => toast.loading("redeeming Black Pass...", {className: 'toast-loading'})
   const toastSuccess = () => toast.success('Successfully redeem Black Pass');
   const toastError = () => toast.error('Redeem failed');
   const [isLoading, setIsLoading] = useState(false)
 
+  const userCollectionRef = collection(db, "users");
+
+  const {hasClaimed, setClaimed, state } = useHashConnectContext();
+
+  // const updateHasClaimed = async (id, hasClaim) => {
+  //   const userDoc = doc(db, "users", id)
+  //   const newUpdate = {hasClaimed: true}
+  //   await updateDoc(userDoc, {hasClaimed: true})
+  // }
 
   const reedemBlackPass = async () => {
     try {
@@ -29,6 +41,8 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
         await redeemBlackPass(accountId, userPlayerId, userClient)
         setIsLoading(false)
         toastSuccess()
+        setClaimed()
+        // updateHasClaimed(accountId, hasClaimed)
       }
     } catch (error) {
       console.log(error, "redeem error")
@@ -53,6 +67,12 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
         <div className="my-6">
           <ConnectWalletButton disableHandle={disableHandle} btnTitle="Redeem Black Pass" handleClick={()=>{reedemBlackPass()}} />
         </div>
+
+        {hasClaimed && 
+          <p className="bg-[#0e0e10] py-2 px-4 text-[#16B2A4]">
+          You already redeem the Black Pass
+          </p>
+        }
 
         {
             isLoading && (

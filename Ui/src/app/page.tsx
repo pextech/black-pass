@@ -18,7 +18,7 @@ export default function Home() {
 
   const [username, setUsername] = useState("");
   const [playerId, setPlayerId] = useState("");
-  const [hasClaimed, setHasClaimed] = useState(false);
+  const [userId, setUserId] = useState()
   const [users, setUsers] = useState<User[]>([]);
   const {
     connectToExtension,
@@ -35,13 +35,12 @@ export default function Home() {
     bladeAccountId,
     bladeSigner,
     accountAvailableStatus,
-    setAccountIsAvailable
+    setAccountIsAvailable,
+    hasClaimed
   } = useHashConnectContext();
   const accountId = state.pairingData?.accountIds[0] || "";
   
  
-  console.log(bladeConnectStatus, "blade status")
-  console.log(bladeSigner, "blade signer")
   const userCollectionRef = collection(db, "users");
 
   const connectWallet = async () => {
@@ -62,7 +61,6 @@ export default function Home() {
   
     searchUserByAccountId(users, accountId);
     searchUserByAccountId(users, bladeAccountId);
-    // searchUserByAccountId(users, bladeAccountId);
   }, [accountId, bladeAccountId]);
 
   
@@ -73,11 +71,13 @@ export default function Home() {
         setAccountIsAvailable();
         setUsername(users[i].username);
         setPlayerId(users[i].playerId);
-        setHasClaimed(users[i].hasClaimed)
+        setUserId(users[i].id)
+        // setHasClaimed(users[i].hasClaimed)
       }
     }
     return null; // User not found
   }
+
 
   return (
     <main className="h-screen text-white">

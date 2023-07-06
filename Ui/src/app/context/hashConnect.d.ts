@@ -30,5 +30,7 @@ export type HashConnectContent = {
     bladeSigner: any,
     accountAvailableStatus: boolean,
     setAccountIsAvailable: Function,
-    setAccountNotAvailable: Function
+    setAccountNotAvailable: Function,
+    hasClaimed: boolean,
+    setClaimed: Function
 }
