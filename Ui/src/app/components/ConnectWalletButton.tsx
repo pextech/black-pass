@@ -1,8 +1,15 @@
 "use client"
 
+interface buttonProps {
+  btnTitle: string,
+  handleClick: any,
+  accountId?: string,
+  disableHandle?: any
+}
+
 import React from "react";
 
-const ConnectWalletButton = ({ btnTitle, handleClick, accountId, disableHandle }) => {
+const ConnectWalletButton = ({ btnTitle, handleClick, accountId, disableHandle }: buttonProps) => {
   return (
     <div className="flex flex-row justify-between">
       <button

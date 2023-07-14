@@ -19,24 +19,20 @@ export default function Home() {
   const [username, setUsername] = useState("");
   const [playerId, setPlayerId] = useState("");
   const [userId, setUserId] = useState()
+  const [hasClaimed, setHasClaimed] = useState(false)
   const [users, setUsers] = useState<User[]>([]);
   const {
     connectToExtension,
-    status,
-    pairingData,
-    provider,
     userClient,
     state,
     modal,
     openModal,
     closeModal,
     connectBlade,
-    bladeConnectStatus,
     bladeAccountId,
     bladeSigner,
     accountAvailableStatus,
-    setAccountIsAvailable,
-    hasClaimed
+    setAccountIsAvailable
   } = useHashConnectContext();
   const accountId = state.pairingData?.accountIds[0] || "";
   
@@ -51,16 +47,18 @@ export default function Home() {
 
 
   useEffect(() => {
-    const getUser = async () => {
-      const data = await getDocs(userCollectionRef);
-      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
 
-    getUser();
+        const getUser = async () => {
+          const data = await getDocs(userCollectionRef);
+          setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+        };
     
-  
-    searchUserByAccountId(users, accountId);
-    searchUserByAccountId(users, bladeAccountId);
+        getUser();
+        
+      
+        searchUserByAccountId(users, accountId);
+        searchUserByAccountId(users, bladeAccountId);
+
   }, [accountId, bladeAccountId]);
 
   
@@ -72,11 +70,12 @@ export default function Home() {
         setUsername(users[i].username);
         setPlayerId(users[i].playerId);
         setUserId(users[i].id)
-        // setHasClaimed(users[i].hasClaimed)
+        setHasClaimed(users[i].hasClaimed)
       }
     }
     return null; // User not found
   }
+
 
 
   return (
@@ -89,7 +88,9 @@ export default function Home() {
           accountId={accountId || bladeAccountId}
           userPlayerId={1}
           userClient={userClient || bladeSigner}
-          disableHandle={hasClaimed ? true : false}
+          disableHandle={ false}
+          id={userId}
+          hasClaimed={hasClaimed}
         />
       ) : (
         <LoginCard handleConnect={openModal} />

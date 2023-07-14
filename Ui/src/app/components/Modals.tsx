@@ -1,7 +1,15 @@
-"use client";
-import React, { useState } from "react";
 
-const Modals = ({ closeModal, connectHash, connectBlade }) => {
+import Image from "next/image";
+import hashpackLogo from '../assets/hashpack-logo.png'
+import bladeLogo from '../assets/blade-logo.png'
+
+interface modalProps {
+  closeModal: Function,
+  connectHash: any,
+  connectBlade: any
+}
+
+const Modals = ({ closeModal, connectHash, connectBlade }: modalProps) => {
   return (
     <div>
       <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full bg-[#0007]">
@@ -32,10 +40,12 @@ const Modals = ({ closeModal, connectHash, connectBlade }) => {
             </div>
 
             <div className="p-6 space-y-6">
-              <div className="py-2 w-full hover:bg-gray-700 rounded px-3">
-              <button className="w-full text-left" onClick={connectBlade}>Blade Wallet</button>
+              <div className="py-2 w-full hover:bg-gray-700 rounded px-3 flex gap-3">
+                <Image src={bladeLogo} alt="Hashpack-logo" className="w-[40px] rounded-lg" />
+                <button className="w-full text-left" onClick={connectBlade}>Blade Wallet</button>
               </div>
-              <div className="py-2 w-full hover:bg-gray-700 rounded px-3">
+              <div className="py-2 w-full hover:bg-gray-700 rounded px-3 flex gap-3">
+                <Image src={hashpackLogo} alt="Hashpack-logo" className="w-[40px] rounded-lg" />
                 <button className="w-full text-left" onClick={connectHash}>Hashconnect</button>
               </div>
             </div>

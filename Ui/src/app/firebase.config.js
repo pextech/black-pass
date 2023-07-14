@@ -4,8 +4,7 @@ import {getFirestore} from '@firebase/firestore'
 
 
 const firebaseConfig = {
-  // apiKey: process.env.API_KEY,
-  apiKey: "AIzaSyAyKHC4_702WV_u6WO8onsqo9Zo5wzQEp8",
+  apiKey: process.env.API_KEY,
   authDomain: "astra-nova-black-pass.firebaseapp.com",
   projectId: "astra-nova-black-pass",
   storageBucket: "astra-nova-black-pass.appspot.com",

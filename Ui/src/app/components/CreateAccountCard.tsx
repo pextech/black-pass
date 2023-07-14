@@ -6,11 +6,10 @@ import { addDoc, collection } from 'firebase/firestore'
 import {db} from '../firebase.config'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRouter } from 'next/navigation'
 import { playerCreator } from '../service/HederaServices'
 import { useHashConnectContext } from "../context/useHashConnect";
 
-const CreateAccountCard = ({accountId}) => {
+const CreateAccountCard = ({accountId}: any) => {
 
 
   const [username, setUsername] = useState('')

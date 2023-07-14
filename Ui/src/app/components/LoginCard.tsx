@@ -1,10 +1,8 @@
-'use client'
 
-import React from "react";
 import ConnectWalletButton from "./ConnectWalletButton";
 
 
-const LoginCard = ({handleConnect}) => {
+const LoginCard = ({handleConnect}: any) => {
 
   
 

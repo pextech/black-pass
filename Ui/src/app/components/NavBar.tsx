@@ -4,16 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import ConnectWalletButton from "./ConnectWalletButton";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { useAppSelector } from '../../redux/store'
 import { useHashConnectContext } from "../context/useHashConnect";
-import Modals from "../components/Modals";
+import Modals from "./Modals";
+
 
 const NavBar = () => {
 
   const [isActiveDrawer, setActiveDrawer] = useState(false);
-  const { connectToExtension, status, disconnect, pairingData, clearPairings, state, modal, closeModal, openModal, bladeConnectStatus, disconnectBlade, bladeAccountId } = useHashConnectContext();
-
-  const isLogin = useAppSelector((state) => state.authReducer.value.isLogin)
+  const { connectToExtension, status, disconnect, clearPairings, state, modal, closeModal, openModal, bladeConnectStatus, disconnectBlade, bladeAccountId, connectBlade, } = useHashConnectContext();
 
   const handleToggle = () => {
     setActiveDrawer(!isActiveDrawer);
@@ -56,7 +54,7 @@ const NavBar = () => {
         </div>
         <ConnectWalletButton btnTitle={bladeConnectStatus ? "Disconnect" : status === "Paired" ? state.pairingData?.accountIds[0] ? 'Disconnect' : 'Connecting' : "Connect Wallet"} accountId={state.pairingData?.accountIds[0] || bladeAccountId} handleClick={connectWallet}   />
       </div>
-      {modal && <Modals closeModal={closeModal} connectHash={connectToExtension} connectBlade={() => console.log('')} />}
+      {modal && <Modals closeModal={closeModal} connectHash={connectToExtension} connectBlade={connectBlade} />}
       {/* mobile Navbar */}
 
       <div className="md:hidden flex items-center justify-between mx-auto mt-4 text-white">
@@ -86,7 +84,7 @@ const NavBar = () => {
               <Link href="/faqs">FAQs</Link>
               <Link href="/community">Community</Link>
               <Link href="/blog">Blog</Link>
-              <ConnectWalletButton btnTitle={status === "Paired" ? "Disconnect Wallet" : "Connect Wallet"} />
+              <ConnectWalletButton btnTitle={bladeConnectStatus ? "Disconnect" : status === "Paired" ? state.pairingData?.accountIds[0] ? 'Disconnect' : 'Connecting' : "Connect Wallet"} accountId={state.pairingData?.accountIds[0] || bladeAccountId} handleClick={connectWallet} />
             </div>
           </div>
         </div>
