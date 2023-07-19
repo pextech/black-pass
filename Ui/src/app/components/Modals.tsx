@@ -12,7 +12,7 @@ interface modalProps {
 const Modals = ({ closeModal, connectHash, connectBlade }: modalProps) => {
   return (
     <div>
-      <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full bg-[#0007]">
+      <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full max-h-full bg-[#0007]">
         <div className="relative w-full flex items-center justify-center h-full">
           <div className="relative bg-[#0e0e10] rounded-lg shadow  w-[500px]">
             <div className="flex items-center justify-between p-5 border-b border-gray-800 rounded-t">

@@ -22,6 +22,7 @@ import {
   TokenType
 } from '@hashgraph/sdk'
 import Web3 from 'web3';
+import { toast } from 'react-toastify';
 const abi = require('../../../blackPass.json');
 
 export const operatorId = AccountId.fromString(process.env.NEXT_PUBLIC_ACCOUNT_ID || '')
@@ -283,9 +284,11 @@ export async function transferNFT(recipientAccountId, tokenId, serialId) {
 	
 	const record = await tokenTransferSubmit.getRecord(client);
 
-    alert('Black Pass Token Minted successfully')
+    // alert('Black Pass Token Minted successfully')
+    toast.success('Successfully redeem Black Pass', {className: 'toast-loading'});
 	} catch (error) {
 	  console.log('Error transferring NFT token:', error);
+    toast.error('Redeem failed', {className: 'toast-loading'});
 	}
 }
 

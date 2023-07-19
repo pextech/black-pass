@@ -88,7 +88,7 @@ export default function Home() {
           accountId={accountId || bladeAccountId}
           userPlayerId={1}
           userClient={userClient || bladeSigner}
-          disableHandle={ false}
+          disableHandle={hasClaimed ? true : false}
           id={userId}
           hasClaimed={hasClaimed}
         />

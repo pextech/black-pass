@@ -22,7 +22,7 @@ const CreateAccountCard = ({accountId}: any) => {
   const [hasClaimed, setHasClaimed] = useState(false);
   const userCollectionRef = collection(db, "users")
   const loading = () => toast.loading("Creating account...", {className: 'toast-loading'})
-  const toastSuccess = () => toast.success('Successfully created an account');
+  const toastSuccess = () => toast.success('Successfully created an account', {className: 'toast-loading'});
 
   const [showTwitter, setShowTwitter] = useState(false)
   const [showDiscord, setShowDiscord] = useState(false)

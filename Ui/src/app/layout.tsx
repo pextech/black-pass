@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { ReduxProvider } from "../redux/provider";
 import HashConnectProvider from "./context/useHashConnect";
+import ToasterContext from "./context/ToastContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
         <ReduxProvider>
           <HashConnectProvider>
             <NavBar />
+            <ToasterContext />
             {children}
           </HashConnectProvider>
         </ReduxProvider>

@@ -2,7 +2,7 @@
 
 interface buttonProps {
   btnTitle: string,
-  handleClick: any,
+  handleClick?: any,
   accountId?: string,
   disableHandle?: any
 }
@@ -15,7 +15,7 @@ const ConnectWalletButton = ({ btnTitle, handleClick, accountId, disableHandle }
       <button
         onClick={handleClick}
         disabled={disableHandle}
-        className="bg-[#163331] text-[#16B2A4] py-3 md:px-10 px-5 rounded-full text-[15px] md:text-[16px] hover:bg-[#10c4b3] hover:text-black disabled:bg-gray-600 disabled:text-[#c4c4c4] disabled:cursor-not-allowed"
+        className="bg-[#163331] text-[#16B2A4] py-3 md:px-10 px-5 rounded-full text-[15px] md:text-[16px] hover:bg-[#10c4b3] hover:text-black cursor-pointer disabled:bg-gray-600 disabled:text-[#c4c4c4] disabled:cursor-not-allowed"
       >
         {btnTitle}
       </button>
