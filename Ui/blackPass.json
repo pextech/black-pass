@@ -8,6 +8,25 @@
 		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"indexed": false,
+				"internalType": "bytes",
+				"name": "",
+				"type": "bytes"
+			}
+		],
+		"name": "CallResponseEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
 				"indexed": true,
 				"internalType": "address",
 				"name": "previousOwner",
@@ -24,49 +43,13 @@
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "_collections",
+		"inputs": [],
+		"name": "RVVToken",
 		"outputs": [
 			{
-				"internalType": "uint256",
-				"name": "id",
-				"type": "uint256"
-			},
-			{
 				"internalType": "address",
-				"name": "collectionOwner",
+				"name": "",
 				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "collectionAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "idOfPlayer",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "symbol",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "nfts",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -75,9 +58,33 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
+				"internalType": "bytes[]",
+				"name": "metadata",
+				"type": "bytes[]"
+			},
+			{
+				"internalType": "string",
+				"name": "_tokenURI",
+				"type": "string"
+			}
+		],
+		"name": "ReedemBlackpass",
+		"outputs": [
+			{
+				"internalType": "int64",
 				"name": "",
-				"type": "uint256"
+				"type": "int64"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"name": "_nfts",
@@ -99,7 +106,7 @@
 			},
 			{
 				"internalType": "int64",
-				"name": "tokenId",
+				"name": "serialId",
 				"type": "int64"
 			},
 			{
@@ -111,6 +118,11 @@
 				"internalType": "string",
 				"name": "tokenURI",
 				"type": "string"
+			},
+			{
+				"internalType": "int64",
+				"name": "balance",
+				"type": "int64"
 			}
 		],
 		"stateMutability": "view",
@@ -119,9 +131,9 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
+				"internalType": "address",
 				"name": "",
-				"type": "uint256"
+				"type": "address"
 			}
 		],
 		"name": "_players",
@@ -148,16 +160,91 @@
 			},
 			{
 				"internalType": "bool",
+				"name": "reedemed",
+				"type": "bool"
+			},
+			{
+				"internalType": "string",
+				"name": "username",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "twitter",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "discord",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "telegram",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "_rewards",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "int64",
+				"name": "amount",
+				"type": "int64"
+			},
+			{
+				"internalType": "bool",
+				"name": "claimable",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
 				"name": "claimed",
 				"type": "bool"
+			},
+			{
+				"internalType": "address",
+				"name": "playerAddress",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "allCollections",
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "playerAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "int64",
+				"name": "amount",
+				"type": "int64"
+			}
+		],
+		"name": "addReward",
 		"outputs": [
 			{
 				"components": [
@@ -167,77 +254,67 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "address",
-						"name": "collectionOwner",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "collectionAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "idOfPlayer",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "symbol",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "nfts",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct ICollection.Collection[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "allPlayers",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "playerAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
+						"internalType": "int64",
+						"name": "amount",
+						"type": "int64"
 					},
 					{
 						"internalType": "bool",
-						"name": "active",
+						"name": "claimable",
 						"type": "bool"
 					},
 					{
 						"internalType": "bool",
 						"name": "claimed",
 						"type": "bool"
+					},
+					{
+						"internalType": "address",
+						"name": "playerAddress",
+						"type": "address"
 					}
 				],
-				"internalType": "struct IPlayer.Player[]",
+				"internalType": "struct IReward.Reward",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "allRewards",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "int64",
+						"name": "amount",
+						"type": "int64"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimable",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimed",
+						"type": "bool"
+					},
+					{
+						"internalType": "address",
+						"name": "playerAddress",
+						"type": "address"
+					}
+				],
+				"internalType": "struct IReward.Reward[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -247,20 +324,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "collectionCount",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "_value",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "defaultAdmin",
+		"name": "blackPassCollection",
 		"outputs": [
 			{
 				"internalType": "address",
@@ -274,8 +338,42 @@
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "int64",
+				"name": "amount",
+				"type": "int64"
+			},
+			{
+				"internalType": "int64[]",
+				"name": "serialNumbers",
+				"type": "int64[]"
+			}
+		],
+		"name": "burnTokenPublic",
+		"outputs": [
+			{
+				"internalType": "int256",
+				"name": "responseCode",
+				"type": "int256"
+			},
+			{
+				"internalType": "int64",
+				"name": "newTotalSupply",
+				"type": "int64"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
-				"name": "collectionId",
+				"name": "_id",
 				"type": "uint256"
 			},
 			{
@@ -289,12 +387,129 @@
 				"type": "string"
 			}
 		],
-		"name": "mint",
+		"name": "claimReward",
 		"outputs": [
 			{
-				"internalType": "uint256",
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "int64",
+						"name": "amount",
+						"type": "int64"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimable",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimed",
+						"type": "bool"
+					},
+					{
+						"internalType": "address",
+						"name": "playerAddress",
+						"type": "address"
+					}
+				],
+				"internalType": "struct IReward.Reward",
 				"name": "",
-				"type": "uint256"
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "symbol",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "memo",
+				"type": "string"
+			},
+			{
+				"internalType": "int64",
+				"name": "maxSupply",
+				"type": "int64"
+			}
+		],
+		"name": "createBlackPassCollection",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "symbol",
+				"type": "string"
+			},
+			{
+				"internalType": "int64",
+				"name": "initialTotalSupply",
+				"type": "int64"
+			},
+			{
+				"internalType": "int32",
+				"name": "decimals",
+				"type": "int32"
+			}
+		],
+		"name": "generateRVV",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes[]",
+				"name": "metadata",
+				"type": "bytes[]"
+			},
+			{
+				"internalType": "address",
+				"name": "playerAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_tokenURI",
+				"type": "string"
+			},
+			{
+				"internalType": "int64",
+				"name": "balance",
+				"type": "int64"
+			}
+		],
+		"name": "mintBlackPass",
+		"outputs": [
+			{
+				"internalType": "int64",
+				"name": "",
+				"type": "int64"
 			}
 		],
 		"stateMutability": "nonpayable",
@@ -327,6 +542,52 @@
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "playerAddress",
+				"type": "address"
+			}
+		],
+		"name": "playerRewards",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "int64",
+						"name": "amount",
+						"type": "int64"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimable",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimed",
+						"type": "bool"
+					},
+					{
+						"internalType": "address",
+						"name": "playerAddress",
+						"type": "address"
+					}
+				],
+				"internalType": "struct IReward.Reward[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "playersCount",
 		"outputs": [
@@ -340,6 +601,24 @@
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "bytes",
+				"name": "encodedFunctionSelector",
+				"type": "bytes"
+			}
+		],
+		"name": "redirectForToken",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "renounceOwnership",
 		"outputs": [],
@@ -347,74 +626,16 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_symbol",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "playerId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "collectionAddress",
-				"type": "address"
-			}
-		],
-		"name": "setCollection",
+		"inputs": [],
+		"name": "rewardsCount",
 		"outputs": [
 			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "collectionOwner",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "collectionAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "idOfPlayer",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "symbol",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "nfts",
-						"type": "uint256"
-					}
-				],
-				"internalType": "struct ICollection.Collection",
-				"name": "",
-				"type": "tuple"
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
 			}
 		],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -428,6 +649,31 @@
 				"internalType": "address",
 				"name": "playerAddress",
 				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "username",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "twitter",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "discord",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "telegram",
+				"type": "string"
 			}
 		],
 		"name": "setPlayer",
@@ -456,8 +702,33 @@
 					},
 					{
 						"internalType": "bool",
-						"name": "claimed",
+						"name": "reedemed",
 						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "email",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "twitter",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "discord",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "telegram",
+						"type": "string"
 					}
 				],
 				"internalType": "struct IPlayer.Player",
@@ -471,18 +742,119 @@
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "claimable",
+				"type": "bool"
+			}
+		],
+		"name": "toggleClaimableStatus",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "int64",
+						"name": "amount",
+						"type": "int64"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimable",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimed",
+						"type": "bool"
+					},
+					{
+						"internalType": "address",
+						"name": "playerAddress",
+						"type": "address"
+					}
+				],
+				"internalType": "struct IReward.Reward",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
-				"name": "sender",
+				"name": "token",
 				"type": "address"
 			},
 			{
 				"internalType": "address",
-				"name": "tokenAddress",
+				"name": "from",
 				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
 			}
 		],
-		"name": "tokenAssociate",
-		"outputs": [],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"internalType": "int64",
+				"name": "responseCode",
+				"type": "int64"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "serialNumber",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFromNFT",
+		"outputs": [
+			{
+				"internalType": "int64",
+				"name": "responseCode",
+				"type": "int64"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -495,85 +867,6 @@
 			}
 		],
 		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "address",
-				"name": "playerAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "bool",
-				"name": "status",
-				"type": "bool"
-			},
-			{
-				"internalType": "bool",
-				"name": "claimed",
-				"type": "bool"
-			}
-		],
-		"name": "updatePlayer",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "playerAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "bool",
-						"name": "active",
-						"type": "bool"
-					},
-					{
-						"internalType": "bool",
-						"name": "claimed",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct IPlayer.Player",
-				"name": "",
-				"type": "tuple"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "target",
-				"type": "address"
-			}
-		],
-		"name": "whitelist_as_Default_Admin",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import ConnectWalletButton from "./ConnectWalletButton";
 import { addDoc, collection } from 'firebase/firestore'
 import {db} from '../firebase.config'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { playerCreator } from '../service/HederaServices'
 import { useHashConnectContext } from "../context/useHashConnect";
 
-const CreateAccountCard = ({accountId}: any) => {
+const CreateAccountCard = ({accountId, userClient}: any) => {
 
 
   const [username, setUsername] = useState('')
@@ -19,8 +19,6 @@ const CreateAccountCard = ({accountId}: any) => {
   const [telegramAccount, setTelegramAccount] = useState('')
 
   const [isLoading, setIsLoading] = useState(false)
-  const [hasClaimed, setHasClaimed] = useState(false);
-  const userCollectionRef = collection(db, "users")
   const loading = () => toast.loading("Creating account...", {className: 'toast-loading'})
   const toastSuccess = () => toast.success('Successfully created an account', {className: 'toast-loading'});
 
@@ -33,12 +31,10 @@ const CreateAccountCard = ({accountId}: any) => {
 
   const createUser = async () => {
     setIsLoading(true)
-    loading()
-    const playerId = await playerCreator(accountId)
-    await addDoc(userCollectionRef, {username: username, email: email, accountId: accountId, playerId, hasClaimed, twitterAccount, discordAccount, telegramAccount })
+    toast("Creating the account...", {className: 'toast-loading', pauseOnHover: false})
+    const playerId = await playerCreator(accountId, userClient, username, email, twitterAccount ?? '', discordAccount ?? '', telegramAccount ?? '')
+    // await addDoc(userCollectionRef, {username, email, accountId, playerId, hasClaimed, twitterAccount, discordAccount, telegramAccount })
     setIsLoading(false)
-    toastSuccess()
-    setAccountIsAvailable()
   }
   
 
@@ -139,21 +135,6 @@ const CreateAccountCard = ({accountId}: any) => {
           <ConnectWalletButton btnTitle="Create Account" handleClick={createUser} />
         </div>
 
-        {
-            isLoading && (
-              <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-              />
-            )
-          }
       </div>
     </div>
   );

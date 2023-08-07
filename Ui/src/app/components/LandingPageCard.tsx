@@ -5,55 +5,51 @@ import Image from "next/image";
 import ConnectWalletButton from "./ConnectWalletButton";
 import BlackPassImg from '../assets/black-pass-image.png'
 import { redeemBlackPass } from "../service/HederaServices";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useHashConnectContext } from "../context/useHashConnect";
 import { db } from "../firebase.config";
 import { doc, updateDoc } from "firebase/firestore";
 import StakingComponent from "./StakingComponent";
+import AdminComponent from "./AdminComponent";
 
 
 interface landingPageProps {
-  username: string,
+  username?: string,
   userPlayerId: number,
   accountId: string,
   userClient: any,
   disableHandle?: any,
   id: any,
-  hasClaimed: boolean
+  hasClaimed?: boolean
 }
 
 const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle, id, hasClaimed }: landingPageProps) => {
   
-  console.log('userClient', userClient)
-  console.log('accountId', accountId)
-  console.log('userPlayerId', userPlayerId)
+  // console.log('userClient', userClient)
+  // console.log('accountId', accountId)
+  // console.log('userPlayerId', userPlayerId)
 
-  const loading = () => toast.loading("redeeming Black Pass...", {className: 'toast-loading'})
-  const toastSuccess = () => toast.success('Successfully redeem Black Pass');
-  const toastError = () => toast.error('Redeem failed');
   const [isLoading, setIsLoading] = useState(false)
 
-  const { state } = useHashConnectContext();
+  const { state, admin } = useHashConnectContext();
 
 
-  const usersRef = doc(db, "users", id);
-  const handleClaim = async() => {
-    await updateDoc(usersRef, {
-      hasClaimed: true
-    });  
-   }
+  // const usersRef = doc(db, "users", id);
+  // const handleClaim = async() => {
+  //   await updateDoc(usersRef, {
+  //     hasClaimed: true
+  //   });  
+  //  }
 
   const reedemBlackPass = async () => {
     try {
       if (userPlayerId) {
         console.log('started')
         setIsLoading(true)
-        loading()
-        await redeemBlackPass(accountId, userPlayerId, userClient)
+        toast("redeeming Black Pass...", {className: 'toast-loading', pauseOnHover: false}) 
+        await redeemBlackPass(accountId, userClient)
         setIsLoading(false)
-        // toastSuccess()
-        handleClaim()  
       }
     } catch (error) {
       console.log(error, "redeem error")
@@ -64,7 +60,10 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
 
   return (
     <div className="flex items-center justify-center mt-20 mx-6">
-      <div className="flex items-center justify-center flex-col w-[700px] text-center">
+      {admin ? (
+        <AdminComponent /> 
+      ) : (
+        <div className="flex items-center justify-center flex-col w-[700px] text-center">
         <h1 className="md:text-[46px] text-[35px] font-bold mb-3 capitalize">
           Welcome {username}
         </h1>
@@ -88,23 +87,8 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
 
         )
         }
-
-        {
-            isLoading && (
-              <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-              />
-            )
-          }
       </div>
+      )}
     </div>
   );
 };

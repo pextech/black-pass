@@ -32,3 +32,9 @@ body {
   background: #191919 !important;
   color: #fff !important;
 }
+.Toastify__close-button{
+  color: #fff !important;
+}
+:root {
+  --toastify-color-progress-dark: #ffffff !important;
+}

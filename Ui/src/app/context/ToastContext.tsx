@@ -12,9 +12,10 @@ const ToasterContext = () => {
                 newestOnTop={false}
                 closeOnClick
                 rtl={false}
-                pauseOnFocusLoss
+                pauseOnFocusLoss={false}
                 draggable
-                pauseOnHover
+                pauseOnHover={false}
+                theme='dark'
               />
         </div>
     )

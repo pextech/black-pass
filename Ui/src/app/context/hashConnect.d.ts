@@ -32,5 +32,8 @@ export type HashConnectContent = {
     setAccountIsAvailable: Function,
     setAccountNotAvailable: Function,
     hasClaimed: boolean,
-    setClaimed: Function
+    setClaimed: Function,
+    admin:boolean,
+    setAdmin: Function,
+    adminAccountId: string
 }

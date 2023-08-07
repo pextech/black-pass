@@ -38,7 +38,10 @@ const HashConnectContext = createContext<HashConnectContent>({
     setAccountIsAvailable: () => {},
     setAccountNotAvailable: () => {},
     hasClaimed: false,
-    setClaimed: () => {}
+    setClaimed: () => {},
+    admin: false,
+    setAdmin: () => {},
+    adminAccountId: ''
 });
 
 const hashconnect = new HashConnect(true);
@@ -78,6 +81,8 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     const [state, setState] = useState({ pairingData: { accountIds: '', topic: '', network: '' } })
     const [accountAvailableStatus, setAccountAvailableStatus] = useState(false)
     const [hasClaimed, setHasClaimed] = useState(false)
+    const [admin, setAdmin] = useState(false)
+    const adminAccountId = '0.0.15041213'
 
 
     const [bladeConnectStatus, setBladeConnectStatus] = useState(false);
@@ -236,7 +241,10 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
         setAccountIsAvailable,
         setAccountNotAvailable,
         hasClaimed,
-        setClaimed
+        setClaimed,
+        admin,
+        setAdmin,
+        adminAccountId
     }}>
         {children}
     </HashConnectContext.Provider>

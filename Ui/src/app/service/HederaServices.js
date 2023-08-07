@@ -19,11 +19,14 @@ import {
   ContractCallQuery,
   TokenGrantKycTransaction,
   TokenCreateTransaction,
-  TokenType
+  TokenType,
+  AccountAllowanceApproveTransaction,
+  TokenBurnTransaction,
 } from '@hashgraph/sdk'
 import Web3 from 'web3';
 import { toast } from 'react-toastify';
 const abi = require('../../../blackPass.json');
+const axios = require('axios');
 
 export const operatorId = AccountId.fromString(process.env.NEXT_PUBLIC_ACCOUNT_ID || '')
 const operatorKey = PrivateKey.fromString(process.env.NEXT_PUBLIC_PRIVATE_KEY || '')
@@ -52,8 +55,8 @@ function decodeFunctionResult(functionName, resultAsBytes) {
   return result;
 }
 
-export async function getSetting(fcnName) {
-  const functionCallAsUint8Array = await encodeFunctionCall(fcnName, []);
+async function getSetting(fcnName, params) {
+  const functionCallAsUint8Array = await encodeFunctionCall(fcnName, params);
   const contractCall = await new ContractCallQuery()
     .setContractId(contractId)
     .setFunctionParameters(functionCallAsUint8Array)
@@ -61,10 +64,8 @@ export async function getSetting(fcnName) {
     .setGas(100000)
     .execute(client);
   const queryResult = await decodeFunctionResult(fcnName, contractCall.bytes);
-  console.log(queryResult['0'].toString())
-  return queryResult['0'].toString()
+  return queryResult
 }
-
 
 export const getAccountAssociationStatus = async (
   userhederaId, tokenId
@@ -82,94 +83,8 @@ export const getAccountAssociationStatus = async (
   }
 }
 
-const tokenCreator = async (name, symbol) => {
-  try {
-    const token = await new TokenCreateTransaction()
-      .setTokenName(name)
-      .setTokenSymbol(symbol)
-      .setTokenType(TokenType.NonFungibleUnique)
-      .setTreasuryAccountId(operatorId)
-      .setAdminKey(operatorKey)
-      .setSupplyKey(operatorKey)
-      .freezeWith(client)
-      .sign(operatorKey);
 
-    const sumbitNFTToken = await token.execute(client);
-    const tokenCreateReceipt = await sumbitNFTToken.getReceipt(client);
-    const tokenId = tokenCreateReceipt.tokenId;
-    const tokenIdSolidity = tokenId.toSolidityAddress();
-
-    return { tokenIdSolidity, tokenId };
-  } catch (err) {
-    if (err instanceof ReceiptStatusError) {
-      console.log(
-        'Error Creating Collection',
-        JSON.stringify(err, null, 2),
-      );
-    } else {
-      console.log(
-        err.message,
-        JSON.stringify(err, null, 2),
-      );
-    }
-  }
-};
-
-export const collectionCreator = async (
-  playerId,
-  name,
-  symbol,
-  userClient
-) => {
-  try {
-    const { tokenId, tokenIdSolidity } = await tokenCreator(
-      name,
-      symbol,
-    );
-
-    console.log(tokenId, tokenIdSolidity)
-
-    const contractSetCollection = await new ContractExecuteTransaction()
-      .setContractId(contractId)
-      .setGas(3000000)
-      .setFunction(
-        'setCollection',
-        new ContractFunctionParameters()
-          .addString(name)
-          .addString(symbol)
-          .addUint256(playerId)
-          .addAddress(tokenIdSolidity),
-      );
-
-    const contractSetCollectionExecute = await contractSetCollection.execute(client)
-    const contractSetCollectionReceipt = await contractSetCollectionExecute.getReceipt(
-      client,
-    );
-
-    const collectionId = Number(await getSetting('collectionCount'));
-
-    console.log(
-      'Contract add Collection was a ',
-      contractSetCollectionReceipt.status.toString(),
-    );
-
-    return { tokenId, tokenIdSolidity, collectionId: +collectionId };
-  } catch (err) {
-    if (err instanceof ReceiptStatusError) {
-      console.log(
-        'Error Creating a Collection',
-        JSON.stringify(err, null, 2),
-      );
-    } else {
-      console.log(
-        err.message,
-        JSON.stringify(err, null, 2),
-      );
-    }
-  }
-};
-
-export const playerCreator = async (userAccount) => {
+export const playerCreator = async (userAccount, userClient, username, email, twitter, discord, telegram) => {
   try {
 
     const accountAddress = AccountId.fromString(userAccount).toSolidityAddress()
@@ -179,7 +94,7 @@ export const playerCreator = async (userAccount) => {
       .setGas(3000000)
       .setFunction(
         'setPlayer',
-        new ContractFunctionParameters().addString(userAccount).addAddress(accountAddress),
+        new ContractFunctionParameters().addString(userAccount).addAddress(accountAddress).addString(username).addString(email).addString(twitter).addString(discord).addString(telegram),
       )
 
     const contractSetPlayerExecute = await contractSetPlayer.execute(client)
@@ -191,13 +106,26 @@ export const playerCreator = async (userAccount) => {
       contractSetPlayerReceipt.status.toString(),
     );
 
-    const playerId = await getSetting('playersCount');
-    console.log(playerId)
-    return +playerId;
+    const playerId = await getSetting('playersCount', []);
+    console.log(playerId['0'].toString())
+
+    const isAssociated = await getAccountAssociationStatus(userAccount, process.env.NEXT_PUBLIC_RVV_TOKEN)
+
+      console.log(isAssociated)
+  
+      console.log('=============================================')
+    
+      if (!isAssociated) {
+        await associateToken(userAccount, userClient, process.env.NEXT_PUBLIC_RVV_TOKEN)
+      }
+
+    toast.success('Successfully created an account', {className: 'toast-loading'});
+    return +playerId['0'].toString();
   } catch (err) {
     console.log(err);
-
+    toast.error('Creating account is failed', {className: 'toast-loading'});
     if (err instanceof ReceiptStatusError) {
+
       console.log(
         'Error Creating Player',
         JSON.stringify(err, null, 2),
@@ -210,45 +138,42 @@ export const playerCreator = async (userAccount) => {
   }
 };
 
-export const redeemBlackPass = async (playerHederaId, playerId, userClient) => {
+export const redeemBlackPass = async(playerHederaId, userClient) => {
   try {
 
     console.log('=============================================')
-    console.log(playerHederaId, "Player hedera id")
-    console.log(playerId, "Player id")
-    console.log(userClient, "user client")
-    const { tokenId, tokenIdSolidity, collectionId } = await collectionCreator(playerId, 'BLACK PASS', 'BP', userClient);
-console.log(tokenId && collectionId)
-    console.log('=============================================')
 
-    if (tokenId && collectionId) {
-      const isAssociated = await getAccountAssociationStatus(playerHederaId, tokenId)
+      const isAssociated = await getAccountAssociationStatus(playerHederaId, process.env.NEXT_PUBLIC_BLACKPASS_TOKEN)
 
       console.log(isAssociated)
   
       console.log('=============================================')
     
       if (!isAssociated) {
-        await associateToken(playerHederaId, userClient, tokenId)
+        await associateToken(playerHederaId, userClient, process.env.NEXT_PUBLIC_BLACKPASS_TOKEN)
       }
-      console.log('=============================================')
-  
-      mintNft(tokenId).then(async (serialId) => {
-        setTimeout(async () => {
-          console.log('=============================================')
-          if (serialId) {
-            await transferNFT(playerHederaId, tokenId, serialId)
-          }
+    
+    const contractMintBlackPass = await new ContractExecuteTransaction()
+      .setContractId(contractId)
+      .setGas(3000000)
+      .setFunction(
+        'ReedemBlackpass',
+        new ContractFunctionParameters().addBytesArray([Buffer.from('https://ipfs.io/ipfs/QmaRdxCZLvdfg2BWyMEVhe4kFteU1UAS443g1YHT6uWGna')]).addString('https://ipfs.io/ipfs/QmaRdxCZLvdfg2BWyMEVhe4kFteU1UAS443g1YHT6uWGna'),
+      ).freezeWithSigner(userClient)
 
-        }, 3000);
-      })
-    }
+    const contractMintBlackPassExecute = await contractMintBlackPass.executeWithSigner(userClient)
 
-   
+    console.log(
+      'Contract mint black pass was a ',
+      contractMintBlackPassExecute,
+    );
+
+
+    toast.success('Successfully redeem Black Pass', {className: 'toast-loading'});
     
   } catch (err) {
     console.log(err);
-
+    toast.error('Redeem failed', {className: 'toast-loading'});
     if (err instanceof ReceiptStatusError) {
       console.log(
         'Error reddeming Black Pass',
@@ -262,59 +187,213 @@ console.log(tokenId && collectionId)
   }
 };
 
-export async function transferNFT(recipientAccountId, tokenId, serialId) {
-	try {
-	    const tokenTransferTx = await new TransferTransaction()
-      .addNftTransfer(
-        TokenId.fromString(tokenId),
-        serialId,
-        operatorId,
-        AccountId.fromString(recipientAccountId),
+export const addReward = async (playerHederaId, amount) => {
+  try {
+
+    console.log('=============================================')
+
+    const contractAddReward = await new ContractExecuteTransaction()
+      .setContractId(contractId)
+      .setGas(3000000)
+      .setFunction(
+        'addReward',
+        new ContractFunctionParameters().addAddress(AccountId.fromString(playerHederaId).toSolidityAddress()).addInt64(amount),
       )
-      .freezeWith(client)
 
-    const tokenTransferSign = await tokenTransferTx.sign(operatorKey);
-
-    const tokenTransferSubmit = await tokenTransferSign.execute(client);
-    const tokenTransferRx = await tokenTransferSubmit.getReceipt(client);
-
+    const contractAddRewardExecute = await contractAddReward.execute(client)
+    const contractAddRewardReceipt = await contractAddRewardExecute.getReceipt(
+      client,
+    );
     console.log(
-      `\n- NFT transfer: ${tokenTransferRx.status} \n`,
-	);
-	
-	const record = await tokenTransferSubmit.getRecord(client);
+      'Contract add Reward was a ',
+      contractAddRewardReceipt,
+    );
+    
+  } catch (err) {
+    console.log(err);
 
-    // alert('Black Pass Token Minted successfully')
-    toast.success('Successfully redeem Black Pass', {className: 'toast-loading'});
-	} catch (error) {
-	  console.log('Error transferring NFT token:', error);
-    toast.error('Redeem failed', {className: 'toast-loading'});
-	}
+    if (err instanceof ReceiptStatusError) {
+      console.log(
+        'Error adding Reward',
+        JSON.stringify(err, null, 2),
+      );
+    } else {
+      console.log(
+        err.message
+      );
+    }
+  }
+};
+
+export async function getBlackPassBalance(playerHederaId) {
+  const balance = await getSetting('_nfts', [AccountId.fromString(playerHederaId).toSolidityAddress()]);
+
+  return parseInt(balance['balance'].toString())
 }
 
-export async function mintNft(tokenId) {
+export async function getPlayerData(playerHederaId) {
+  const player = await getSetting('_players', [AccountId?.fromString(playerHederaId).toSolidityAddress()]);
 
+  return player
+}
+
+export async function getBlackPassNftId(playerHederaId) {
+  const serialId = await getSetting('_nfts', [AccountId.fromString(playerHederaId).toSolidityAddress()]);
+  console.log(serialId)
+  return parseInt(serialId['serialId'].toString())
+}
+
+export async function getRewardAmount(rewardId) {
+  const amount = await getSetting('_rewards', [rewardId]);
+
+  return parseInt(amount['amount'].toString())
+}
+
+
+
+export async function getPlayerRewards(playerHederaId) {
+  const allRewards = await getSetting('playerRewards', [AccountId.fromString(playerHederaId).toSolidityAddress()]);
+
+  return +allRewards
+}
+
+export async function getAllAdminRewards() {
+  const allRewards = await getSetting('allRewards', []);
+
+  return +allRewards
+}
+
+
+function constructNewNft(rewardAmount, currentAmount) {
+  const metadata = {
+    "name": "Black Pass Card",
+    "description": "Astra Nova is web3's first true metaRPG. Black Pass is Astra Nova's identity and loyalty program to reward community members.",
+    "image": "https://ipfs.io/ipfs/QmQwuzCMK3kuSe8DX8pALfANJyzHzqnc5KYM9YP2XTfwPB",
+    "animation_url": "https://ipfs.io/ipfs/QmQiyqWN7rkDUJ7SRjUnfDy1F7KfNFEpfVtJyPExrkbBob",
+    "dna": "5797317f73c6ad1534f3f272fb604143a2e3ad4d",
+    "edition": 1,
+    "date": 1644828328513,
+    "external_url": "https://astranova.world",
+    "attributes": [
+        {
+        "trait_type": "Balance ($RVV)",
+        "value": `${(rewardAmount + currentAmount).toString()}`
+        },
+        {
+        "trait_type": "Tier",
+        "value": "Infinite"
+        }
+    ]
+  }
+    
+
+  return metadata
+}
+
+const pintoJSON = async (metadata) =>
+  axios.post(`https://api.pinata.cloud/pinning/pinJSONToIPFS`, metadata, {
+    headers: {
+      pinata_api_key: "6b587ab26c622a549062",
+      pinata_secret_api_key:
+        "880aa0c3d34fa96447892701034bec5e2ccb8f1f720c4dbec48bfcaac7bfbef2",
+    },
+  });
+
+async function uploadMetadataToIPFS(playerHederaId, rewardId) {
   try {
-    const mintTx = new TokenMintTransaction()
-    .setTokenId(TokenId.fromString(tokenId))
-    .setMetadata([Buffer.from('https://ipfs.io/ipfs/QmaRdxCZLvdfg2BWyMEVhe4kFteU1UAS443g1YHT6uWGna')]) 
-    .setMaxTransactionFee(maxTransactionFee)
+    const playerBalance = await getBlackPassBalance(playerHederaId)
+    const rewardAmount = await getRewardAmount(rewardId)
 
-  
-    const mintTxSign = await mintTx.freezeWith(client).sign(operatorKey);
+    console.log(rewardAmount, playerBalance)
 
-	const mintTxSubmit = await mintTxSign.execute(client);
-
-	const mintRx = await mintTxSubmit.getReceipt(client);
-
-	console.log(`- Created NFT ${TokenId.fromString(tokenId)} with serial: ${mintRx.serials[0].low} \n`);
-    return (mintRx.serials[0].low)
-
+    const metadata = constructNewNft(rewardAmount, playerBalance)
+    
+    const data = await pintoJSON(metadata)
+    
+    return data.data.IpfsHash;
   } catch (error) {
-   console.log('error is', error)
+    console.error('Error uploading metadata to IPFS:', error);
+    throw error;
   }
 }
 
+const ownNFT = async (
+  tokenId,
+  serialId,
+  accountId,
+) => {
+  const nftInfos = await new TokenNftInfoQuery()
+    .setNftId(new NftId(TokenId.fromString(tokenId), serialId))
+    .execute(client);
+
+  if (nftInfos[0].accountId.toString() != accountId) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+export const claimReward = async (rewardId, playerHederaId, userClient) => {
+  try {
+
+    console.log('=============================================')
+
+    const isAssociated = await getAccountAssociationStatus(playerHederaId, process.env.NEXT_PUBLIC_RVV_TOKEN)
+
+    console.log(isAssociated)
+  
+    console.log('=============================================')
+    
+    if (!isAssociated) {
+      await associateToken(playerHederaId, userClient, process.env.NEXT_PUBLIC_RVV_TOKEN)
+    }
+
+    const serialId = await getBlackPassNftId(playerHederaId)
+
+    console.log('serialId', serialId)
+
+
+    const ownThisNFT = await ownNFT(process.env.NEXT_PUBLIC_BLACKPASS_TOKEN, serialId, playerHederaId)
+    
+    if (ownThisNFT) {
+      await burnNFT(playerHederaId, serialId, userClient)
+    }
+    
+    const cid = await uploadMetadataToIPFS(playerHederaId, rewardId)
+
+    console.log('cid is', cid)
+    
+    const contractClaimRewardPass = await new ContractExecuteTransaction()
+      .setContractId(contractId)
+      .setGas(3000000)
+      .setFunction(
+        'claimReward',
+        new ContractFunctionParameters().addUint256(rewardId).addBytesArray([Buffer.from(`https://ipfs.io/ipfs/${cid}`)]).addString(`https://ipfs.io/ipfs/${cid}`),
+      ).freezeWithSigner(userClient)
+
+    const contractRewardExecute = await contractClaimRewardPass.executeWithSigner(userClient)
+
+    console.log(
+      'Contract claim reward was a ',
+      contractRewardExecute,
+    );
+    
+    
+  } catch (err) {
+    console.log(err);
+
+    if (err instanceof ReceiptStatusError) {
+      console.log(
+        'Error claiming a reward',
+        JSON.stringify(err, null, 2),
+      );
+    } else {
+      console.log(
+        err.message
+      );
+    }
+  }
+};
 
 export const associateToken = async (accountId, senderClient, tokenId) => {
   try {
@@ -330,4 +409,53 @@ export const associateToken = async (accountId, senderClient, tokenId) => {
   } catch (error) {
     console.log('Hedera Error', error)
   }
+}
+
+export const burnNFT = async (hederaAccountId,serialId, senderClient) => {
+  try {
+    await transferNFT(hederaAccountId, serialId, senderClient)
+
+    const contractbBurnToken= await new ContractExecuteTransaction()
+    .setContractId(contractId)
+    .setGas(3000000)
+    .setFunction(
+      'burnTokenPublic',
+      new ContractFunctionParameters().addAddress(TokenId.fromString(process.env.NEXT_PUBLIC_BLACKPASS_TOKEN).toSolidityAddress()).addInt64(0).addInt64Array([serialId]),
+    )
+
+  const contractBurnTokenExecute = await contractbBurnToken.execute(client)
+  const contractBurnTokenReceipt = await contractBurnTokenExecute.getReceipt(
+    client,
+  );
+  console.log(
+    'Contract burn token was a ',
+    contractBurnTokenReceipt,
+  );
+
+  } catch (error) {
+    console.log('Hedera Error', error)
+  }
+}
+
+async function transferNFT(hederaAccountId, serialId, userCLient) {
+  console.log(hederaAccountId, serialId)
+	try {
+	    const tokenTransferTx = await new TransferTransaction()
+      .addNftTransfer(
+        process.env.NEXT_PUBLIC_BLACKPASS_TOKEN,
+        serialId,
+        hederaAccountId,
+        process.env.NEXT_PUBLIC_BLACK_PASS_ID,
+      )
+      .freezeWithSigner(userCLient)
+
+      const txResponse = await tokenTransferTx.executeWithSigner(userCLient)
+    console.log(
+      `\n- NFT transfer: ${txResponse} \n`,
+	);
+	
+	  console.log('NFT token transferred successfully');
+	} catch (error) {
+	  console.error('Error transferring NFT token:', error);
+	}
 }
