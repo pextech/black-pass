@@ -21,10 +21,11 @@ interface landingPageProps {
   userClient: any,
   disableHandle?: any,
   id: any,
-  hasClaimed?: boolean
+  hasClaimed?: boolean,
+  playerBalance?: number
 }
 
-const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle, id, hasClaimed }: landingPageProps) => {
+const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle, id, hasClaimed, playerBalance }: landingPageProps) => {
   
   // console.log('userClient', userClient)
   // console.log('accountId', accountId)
@@ -70,7 +71,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
 
 
         {hasClaimed ? (
-           <StakingComponent />
+           <StakingComponent playerBalance={playerBalance} />
         ) : (
           <div className="flex flex-col items-center justify-center">
             <p>

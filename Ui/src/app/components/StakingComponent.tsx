@@ -2,7 +2,11 @@ import React from 'react'
 import { BiLogoBitcoin } from "react-icons/bi";
 import RewardHistory from './RewardHistory';
 
-const StakingComponent = () => {
+interface StakingComponent {
+    playerBalance: any
+}
+
+const StakingComponent = ({playerBalance}: StakingComponent) => {
   return (
     <div>
         <p className=" mb-6">Congratulations on successfully redeeming your Black Pass!</p>
@@ -18,7 +22,7 @@ const StakingComponent = () => {
             <div className="bg-[#0E0E10] rounded-2xl py-4 px-10 text-left">
                 <BiLogoBitcoin className='text-[2.2rem]' />
                 <p className="text-[#6C7284] my-3">Reward Balance</p>
-                <h3 className="text-xl font-semibold">1.23 $RVV</h3>
+                <h3 className="text-xl font-semibold">{playerBalance} $RVV</h3>
             </div>
 
             <div className="bg-[#0E0E10] rounded-2xl py-4 px-10 text-left">

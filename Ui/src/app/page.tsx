@@ -8,7 +8,7 @@ import { db } from "./firebase.config";
 import { collection, getDocs } from "firebase/firestore";
 import { useHashConnectContext } from "./context/useHashConnect";
 import Modals from "./components/Modals";
-import { getPlayerData } from "./service/HederaServices";
+import { getPlayerData, getBlackPassBalance, getPlayerRewards, getAllAdminRewards } from "./service/HederaServices";
 
 interface User {
   id: string;
@@ -28,8 +28,8 @@ interface PlayerData {
 
 export default function Home() {
 
-  const [username, setUsername] = useState("");
-  const [playerId, setPlayerId] = useState("");
+  const [playerBalance, setPlayerBalance] = useState(0);
+  const [playerReward, setPlayerReward] = useState(0);
   const [playerData, setPlayerData] = useState<PlayerData>()
   const [userId, setUserId] = useState()
   const [hasClaimed, setHasClaimed] = useState(false)
@@ -80,12 +80,28 @@ useEffect(() => {
         console.log(error)
       }
     }
+    const getPlayerBalance = async () => {
+      try {
+        const getDataBalance = await getBlackPassBalance(accountId)
+        const playerReward = await getPlayerRewards(accountId)
+        const adminReward = await getAllAdminRewards()
+        console.log("this is player balance", getDataBalance)
+        console.log("this is player reward", playerReward)
+        setPlayerReward(playerReward)
+        console.log("this is admin reward", adminReward)
+        setPlayerBalance(getDataBalance)
+      } catch (error) {
+        console.log(error)
+      }
+    }
     getData()
+    getPlayerBalance()
 },[accountId]) 
 
 
 
 console.log("player data", playerData)
+console.log("player reward", playerReward)
 
      
 
@@ -117,6 +133,7 @@ console.log("player data", playerData)
           disableHandle={playerData?.reedemed ? true : false}
           id={userId}
           hasClaimed={playerData?.reedemed}
+          playerBalance={playerBalance}
         />
       ) : (
         <LoginCard handleConnect={openModal} />

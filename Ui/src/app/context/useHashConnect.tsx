@@ -82,7 +82,7 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     const [accountAvailableStatus, setAccountAvailableStatus] = useState(false)
     const [hasClaimed, setHasClaimed] = useState(false)
     const [admin, setAdmin] = useState(false)
-    const adminAccountId = '0.0.15041213'
+    const adminAccountId = '0.0.446176'
 
 
     const [bladeConnectStatus, setBladeConnectStatus] = useState(false);
