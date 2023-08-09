@@ -252,15 +252,15 @@ export async function getRewardAmount(rewardId) {
 
 
 export async function getPlayerRewards(playerHederaId) {
-  const allRewards = await getSetting('playerRewards', [AccountId.fromString(playerHederaId).toSolidityAddress()]);
+  const allRewards = await getSetting('playerRewards', [AccountId.fromString('0.0.444397').toSolidityAddress()]);
 
-  return +allRewards
+  return allRewards
 }
 
 export async function getAllAdminRewards() {
   const allRewards = await getSetting('allRewards', []);
 
-  return +allRewards
+  return allRewards
 }
 
 

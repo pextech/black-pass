@@ -22,10 +22,14 @@ interface landingPageProps {
   disableHandle?: any,
   id: any,
   hasClaimed?: boolean,
-  playerBalance?: number
+  playerBalance?: number,
+  addReward: () => {},
+  data: any,
+  adminData: any,
+  claimPlayerReward: () => {}
 }
 
-const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle, id, hasClaimed, playerBalance }: landingPageProps) => {
+const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle, id, hasClaimed, playerBalance, addReward, data, adminData, claimPlayerReward}: landingPageProps) => {
   
   // console.log('userClient', userClient)
   // console.log('accountId', accountId)
@@ -60,9 +64,9 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
 
 
   return (
-    <div className="flex items-center justify-center mt-20 mx-6">
+    <div className="w-full flex items-center justify-center mt-20 mx-6">
       {admin ? (
-        <AdminComponent /> 
+        <AdminComponent addReward={addReward} dummyData={adminData} /> 
       ) : (
         <div className="flex items-center justify-center flex-col w-[700px] text-center">
         <h1 className="md:text-[46px] text-[35px] font-bold mb-3 capitalize">
@@ -71,7 +75,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
 
 
         {hasClaimed ? (
-           <StakingComponent playerBalance={playerBalance} />
+           <StakingComponent playerBalance={playerBalance} data={data} claimPlayerReward={claimPlayerReward} />
         ) : (
           <div className="flex flex-col items-center justify-center">
             <p>

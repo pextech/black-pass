@@ -3,42 +3,23 @@
 import React, {useState} from 'react'
 import { BiSearch } from 'react-icons/bi'
 
-const dummyData = [
-  {
-    walletAddress: "343njjdjj3jdjd",
-    username: "jaa23",
-    tierPass: "Tier 1",
-    status: "claimed",
-    rewardAmounts: 100000
-  },
-  {
-    walletAddress: "343njjdjj3jdjd",
-    username: "martha12",
-    tierPass: "Tier 1",
-    status: "claimed",
-    rewardAmounts: 100000
-  },
-  {
-    walletAddress: "343njjdjj3jdjd",
-    username: "john3",
-    tierPass: "Tier 1",
-    status: "claimed",
-    rewardAmounts: 100000
-  },
-  {
-    walletAddress: "james888939",
-    username: "harry2",
-    tierPass: "Tier 1",
-    status: "claimed",
-    rewardAmounts: 100000
-  }
-]
 
-const AdminComponent = () => {
+
+interface AddReward{
+  addReward: () => {},
+  dummyData: any
+}
+
+const AdminComponent = ({addReward, dummyData}: AddReward) => {
 
   const [searchAddress, setSearchAddress] = useState("");
 
-  
+  function shortenWalletAddress(address: any) {
+    const firstThreeChars = address.slice(0, 3);
+    const lastThreeChars = address.slice(-3);
+
+  return `${firstThreeChars}...${lastThreeChars}`;
+  }
 
   return (
     <div className='w-full mx-12'>
@@ -68,7 +49,6 @@ const AdminComponent = () => {
                 <thead className='bg-[#0E0E10] px-4'>
                     <tr className=''>
                         <th className='px-6 py-4'>Wallet Address</th>
-                        <th className='px-6 py-4'>Username</th>
                         <th className='px-6 py-4'>Black Tier Pass</th>
                         <th className='px-6 py-4'>Status</th>
                         <th className='px-6 py-4'>Total Rewards Amount</th>
@@ -77,20 +57,19 @@ const AdminComponent = () => {
                 </thead>
 
                 <tbody>
-                  {dummyData.filter((data) => {
-                    return searchAddress.toLowerCase() === "" ? data : data.walletAddress.toLowerCase().includes(searchAddress)
-                  }).map((data) => (
-                    <tr key={data.walletAddress} className='border-b border-gray-600'>
-                      <td className='px-6 py-4'>{data.walletAddress}</td>
-                      <td className='px-6 py-4'>{data.username}</td>
-                      <td className='px-6 py-4'>{data.tierPass}</td>
-                      <td className='px-6 py-4'>{data.status}</td>
-                      <td className='px-6 py-4'>{data.rewardAmounts}</td>
+                  {dummyData.filter((data:any) => {
+                    return searchAddress.toLowerCase() === "" ? data : data.playerAddress.toLowerCase().includes(searchAddress)
+                  }).map((data:any) => (
+                    <tr key={data.id} className='border-b border-gray-600'>
+                      <td className='px-6 py-4'>{shortenWalletAddress(data.playerAddress)}</td>
+                      <td className='px-6 py-4'>Tier 1</td>
+                      <td className='px-6 py-4'>{data.claimed ? 'Claimed' : 'Unclaimed'}</td>
+                      <td className='px-6 py-4'>{Number(data.amount)}</td>
                       <td className='px-6 py-4 flex gap-4 justify-center'>
                         <button className="bg-[#163331] text-[#16B2A4] py-2 md:px-8 px-3 rounded-full text-[15px] md:text-[16px] hover:bg-[#10c4b3] hover:text-black cursor-pointer disabled:bg-gray-600 disabled:text-[#c4c4c4] disabled:cursor-not-allowed">
                                 Revoke
                         </button>
-                        <button className="bg-[#163331] text-[#16B2A4] py-2 md:px-8 px-3 rounded-full text-[15px] md:text-[16px] hover:bg-[#10c4b3] hover:text-black cursor-pointer disabled:bg-gray-600 disabled:text-[#c4c4c4] disabled:cursor-not-allowed">
+                        <button onClick={addReward} className="bg-[#163331] text-[#16B2A4] py-2 md:px-8 px-3 rounded-full text-[15px] md:text-[16px] hover:bg-[#10c4b3] hover:text-black cursor-pointer disabled:bg-gray-600 disabled:text-[#c4c4c4] disabled:cursor-not-allowed">
                                 Add Reward
                         </button>
                       </td>

@@ -3,10 +3,13 @@ import { BiLogoBitcoin } from "react-icons/bi";
 import RewardHistory from './RewardHistory';
 
 interface StakingComponent {
-    playerBalance: any
+    playerBalance: number | undefined,
+    data: any,
+    claimPlayerReward: any
 }
 
-const StakingComponent = ({playerBalance}: StakingComponent) => {
+
+const StakingComponent = ({playerBalance, data, claimPlayerReward}: StakingComponent) => {
   return (
     <div>
         <p className=" mb-6">Congratulations on successfully redeeming your Black Pass!</p>
@@ -32,7 +35,7 @@ const StakingComponent = ({playerBalance}: StakingComponent) => {
             </div>
         </div>
 
-        <RewardHistory />
+        <RewardHistory data={data} claimPlayerReward={claimPlayerReward} />
   </div> 
   )
 }

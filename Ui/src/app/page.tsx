@@ -8,11 +8,9 @@ import { db } from "./firebase.config";
 import { collection, getDocs } from "firebase/firestore";
 import { useHashConnectContext } from "./context/useHashConnect";
 import Modals from "./components/Modals";
-import { getPlayerData, getBlackPassBalance, getPlayerRewards, getAllAdminRewards } from "./service/HederaServices";
+import { getPlayerData, getBlackPassBalance, getPlayerRewards, getAllAdminRewards, addReward, claimReward } from "./service/HederaServices";
 
-interface User {
-  id: string;
-}
+
 
 interface PlayerData {
   username: string,
@@ -29,11 +27,11 @@ interface PlayerData {
 export default function Home() {
 
   const [playerBalance, setPlayerBalance] = useState(0);
-  const [playerReward, setPlayerReward] = useState(0);
+  const [playerReward, setPlayerReward] = useState<any>([]);
+  const [adminReward, setAdminReward] = useState<any>([]);
   const [playerData, setPlayerData] = useState<PlayerData>()
   const [userId, setUserId] = useState()
-  const [hasClaimed, setHasClaimed] = useState(false)
-  const [users, setUsers] = useState<User[]>([]);
+
   const {
     connectToExtension,
     userClient,
@@ -70,6 +68,15 @@ export default function Home() {
 
   // }, [accountId, bladeAccountId]);
 
+  const addPlayerReward = async () => {
+    await addReward(accountId, 10)
+    console.log('reward added')
+  }
+
+  const claimPlayerReward = async () => {
+    console.log('test')
+  }
+
 useEffect(() => {
     const getData = async () => {
       try {
@@ -85,10 +92,12 @@ useEffect(() => {
         const getDataBalance = await getBlackPassBalance(accountId)
         const playerReward = await getPlayerRewards(accountId)
         const adminReward = await getAllAdminRewards()
-        console.log("this is player balance", getDataBalance)
-        console.log("this is player reward", playerReward)
-        setPlayerReward(playerReward)
-        console.log("this is admin reward", adminReward)
+
+        const playerRewardArray = Object.values(playerReward)[0];
+        const adminRewardArray = Object.values(adminReward)[0];
+        
+        setPlayerReward(playerRewardArray)
+        setAdminReward(adminRewardArray)
         setPlayerBalance(getDataBalance)
       } catch (error) {
         console.log(error)
@@ -102,6 +111,7 @@ useEffect(() => {
 
 console.log("player data", playerData)
 console.log("player reward", playerReward)
+console.log("admin reward", adminReward)
 
      
 
@@ -134,6 +144,10 @@ console.log("player reward", playerReward)
           id={userId}
           hasClaimed={playerData?.reedemed}
           playerBalance={playerBalance}
+          addReward={addPlayerReward}
+          data={playerReward}
+          adminData={adminReward}
+          claimPlayerReward={claimPlayerReward}
         />
       ) : (
         <LoginCard handleConnect={openModal} />
