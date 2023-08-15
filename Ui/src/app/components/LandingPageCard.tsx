@@ -27,7 +27,7 @@ interface landingPageProps {
   data: any,
   adminData: any,
   claimPlayerReward: () => {},
-  twitterTest: any,
+  twitterTest?: any,
   revokeReward: any
 }
 

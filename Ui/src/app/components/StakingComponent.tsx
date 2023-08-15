@@ -41,7 +41,7 @@ const StakingComponent = ({ playerBalance, data, claimPlayerReward, twitterTest 
                 </div>
             </div>
 
-            {/* <ConnectWalletButton btnTitle='twitter test' handleClick={twitterTest} /> */}
+            <ConnectWalletButton btnTitle='twitter test' handleClick={twitterTest} />
 
             <RewardHistory data={data} claimPlayerReward={claimPlayerReward} />
         </div>

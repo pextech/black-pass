@@ -58,6 +58,57 @@ export default function Home() {
   };
 
 
+  const fetchAccessToken = async () => {
+    const consumerKey = "PdsgGBkiP90VqoCsR6EhqQTby";
+    const consumerSecret = "IGUwRbrG4RMnSHNWiymhyFeXVKSsBUJU5rIDpLSZyU6zn0oK9R";
+
+    const oauthTimestamp = Math.floor(Date.now() / 1000).toString();
+    const oauthNonce = Math.random().toString(36).substring(2);
+    const oauthSignatureMethod = "HMAC-SHA1";
+    const oauthVersion = "1.0";
+
+    // Construct the base string for signature generation
+    const baseString = `POST&${encodeURIComponent("https://api.twitter.com/oauth/request_token")}&` +
+      encodeURIComponent(`oauth_consumer_key=${consumerKey}&` +
+        `oauth_nonce=${oauthNonce}&` +
+        `oauth_signature_method=${oauthSignatureMethod}&` +
+        `oauth_timestamp=${oauthTimestamp}&` +
+        `oauth_version=${oauthVersion}`);
+
+    // Generate the OAuth signature
+    const signingKey = encodeURIComponent(consumerSecret) + "&";
+    const oauthSignature = encodeURIComponent(CryptoJS.HmacSHA1(baseString, signingKey).toString(CryptoJS.enc.Base64));
+
+    // Construct the Authorization header
+    const authorizationHeader = `OAuth oauth_consumer_key="${consumerKey}", ` +
+      `oauth_nonce="${oauthNonce}", ` +
+      `oauth_signature="${oauthSignature}", ` +
+      `oauth_signature_method="${oauthSignatureMethod}", ` +
+      `oauth_timestamp="${oauthTimestamp}", ` +
+      `oauth_version="${oauthVersion}"`;
+
+    const requestOptions: any = {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Authorization': authorizationHeader,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+    };
+
+    try {
+      const response = await fetch("https://api.twitter.com/oauth/request_token", requestOptions);
+      if (response.ok) {
+        const responseText = await response.text();
+        console.log("Response:", responseText);
+      } else {
+        console.log("Request failed with status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
 
 
 
@@ -128,6 +179,7 @@ export default function Home() {
           adminData={adminReward}
           claimPlayerReward={claimPlayerReward}
           revokeReward={() => console.log('test')}
+          twitterTest={fetchAccessToken}
         />
       ) : (
         <LoginCard handleConnect={openModal} />
