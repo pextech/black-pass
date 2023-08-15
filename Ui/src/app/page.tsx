@@ -9,7 +9,8 @@ import { collection, getDocs } from "firebase/firestore";
 import { useHashConnectContext } from "./context/useHashConnect";
 import Modals from "./components/Modals";
 import { getPlayerData, getBlackPassBalance, getPlayerRewards, getAllAdminRewards, addReward, claimReward } from "./service/HederaServices";
-
+import EditRewardModal from "./components/EditRewardModal";
+import CryptoJS from 'crypto-js';
 
 
 interface PlayerData {
@@ -31,6 +32,7 @@ export default function Home() {
   const [adminReward, setAdminReward] = useState<any>([]);
   const [playerData, setPlayerData] = useState<PlayerData>()
   const [userId, setUserId] = useState()
+  const [adminEditModal, setAdminEditModal] = useState(false)
 
   const {
     connectToExtension,
@@ -42,10 +44,12 @@ export default function Home() {
     connectBlade,
     bladeAccountId,
     bladeSigner,
+    hashAccountId,
+    bladeConnectStatus
   } = useHashConnectContext();
-  const accountId = state.pairingData?.accountIds[0] || "" || bladeAccountId;
-  
- 
+  const accountId = hashAccountId || bladeAccountId;
+
+
   // const userCollectionRef = collection(db, "users");
 
   const connectWallet = async () => {
@@ -53,34 +57,27 @@ export default function Home() {
     closeModal()
   };
 
-  // useEffect(() => {
 
-  //       const getUser = async () => {
-  //         const data = await getDocs(userCollectionRef);
-  //         setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  //       };
-    
-  //       getUser();
 
-      
-  //       searchUserByAccountId(users, accountId);
-  //       searchUserByAccountId(users, bladeAccountId);
 
-  // }, [accountId, bladeAccountId]);
 
   const addPlayerReward = async () => {
     await addReward(accountId, 10)
     console.log('reward added')
   }
 
+  const openEditModal = () => {
+    setAdminEditModal(true)
+  }
+
   const claimPlayerReward = async () => {
     console.log('test')
   }
 
-useEffect(() => {
+  useEffect(() => {
     const getData = async () => {
       try {
-        const getData:any = await getPlayerData(accountId) 
+        const getData: any = await getPlayerData(accountId)
         setPlayerData(getData)
         // console.log("this is player data", getData)
       } catch (error) {
@@ -95,7 +92,7 @@ useEffect(() => {
 
         const playerRewardArray = Object.values(playerReward)[0];
         const adminRewardArray = Object.values(adminReward)[0];
-        
+
         setPlayerReward(playerRewardArray)
         setAdminReward(adminRewardArray)
         setPlayerBalance(getDataBalance)
@@ -105,34 +102,16 @@ useEffect(() => {
     }
     getData()
     getPlayerBalance()
-},[accountId]) 
+  }, [accountId])
 
 
-
-console.log("player data", playerData)
-console.log("player reward", playerReward)
-console.log("admin reward", adminReward)
-
-     
-
-  // function searchUserByAccountId(users: any, accountId: string) {
-  //   for (let i = 0; i < users.length; i++) {
-  //     if (users[i].accountId === accountId) {
-  //       setAccountIsAvailable();
-  //       setUsername(users[i].username);
-  //       setPlayerId(users[i].playerId);
-  //       setUserId(users[i].id)
-  //       setHasClaimed(users[i].hasClaimed)
-  //     }
-  //   }
-  //   return null; // User not found
-  // }
-
+  console.log("this playerReward", playerReward)
+  console.log("this admin Reward", adminReward)
 
 
   return (
     <main className="h-screen text-white">
-      { playerData?.active === false ? (
+      {bladeConnectStatus && playerData?.active === false || state.state === "Paired" && playerData?.active === false ? (
         <CreateAccountCard accountId={accountId || bladeAccountId} />
       ) : playerData?.active === true ? (
         <LandingPageCard
@@ -144,15 +123,21 @@ console.log("admin reward", adminReward)
           id={userId}
           hasClaimed={playerData?.reedemed}
           playerBalance={playerBalance}
-          addReward={addPlayerReward}
+          editReward={openEditModal}
           data={playerReward}
           adminData={adminReward}
           claimPlayerReward={claimPlayerReward}
+          revokeReward={() => console.log('test')}
         />
       ) : (
         <LoginCard handleConnect={openModal} />
       )}
       {modal && <Modals closeModal={closeModal} connectHash={connectWallet} connectBlade={connectBlade} />}
+      {
+        adminEditModal && (
+          <EditRewardModal closeModal={() => setAdminEditModal(false)} />
+        )
+      }
     </main>
   );
 }

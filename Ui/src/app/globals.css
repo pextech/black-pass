@@ -15,15 +15,31 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
 
 body {
   color: #fff;
-  background-image: url(./assets/bg-image.png);
   background-color: #010101;
   background-size: "cover";
   background-repeat: "no-repeat";
   background-position: "center";
   position: "absolute";
+}
+.image-bg {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  height: -webkit-fill-available;
 }
 .showDrawer {
   top: 9%;

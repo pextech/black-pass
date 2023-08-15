@@ -4,13 +4,13 @@ import ConnectWalletButton from './ConnectWalletButton'
 
 const RewardHistory = ({data, claimPlayerReward}: any) => {
   return (
-    <div className='w-full md:w-[900px] mt-12'>
+    <div className='w-full mt-12 '>
         <div className='text-left font-medium text-2xl  border-neutral-500 pb-2'>
             <h3 className=''>All Rewards</h3>
         </div>
 
         <div className=''>
-            <table className='w-full text-left table-auto'>
+            <table className='w-full text-left'>
                 <thead className='bg-[#0E0E10] px-4 rounded'>
                     <tr className=''>
                         <th className='px-8 py-4'>Rewards Amount</th>

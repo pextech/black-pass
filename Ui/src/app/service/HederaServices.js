@@ -138,6 +138,84 @@ export const playerCreator = async (userAccount, userClient, username, email, tw
   }
 };
 
+export const playerUpdate = async (userAccount, username, email, twitter, discord, telegram) => {
+  try {
+
+    const accountAddress = AccountId.fromString(userAccount).toSolidityAddress()
+
+    const contractUpdatePlayer = await new ContractExecuteTransaction()
+      .setContractId(contractId)
+      .setGas(3000000)
+      .setFunction(
+        'updatePlayer',
+        new ContractFunctionParameters().addAddress(accountAddress).addString(username).addString(email).addString(twitter).addString(discord).addString(telegram),
+      )
+
+    const contractUpdatePlayerExecute = await contractUpdatePlayer.execute(client)
+    const contractUpdatePlayerReceipt = await contractUpdatePlayerExecute.getReceipt(
+      client,
+    );
+    console.log(
+      'Contract update player was added ',
+      contractUpdatePlayerReceipt.status.toString(),
+    );
+
+    toast.success('Successfully created an account', {className: 'toast-loading'});
+  } catch (err) {
+    console.log(err);
+    toast.error('updating player is failed', {className: 'toast-loading'});
+    if (err instanceof ReceiptStatusError) {
+
+      console.log(
+        'Error Updating Player',
+        JSON.stringify(err, null, 2),
+      );
+    } else {
+      console.log(
+        err.message
+      );
+    }
+  }
+};
+
+export const revokeReward = async (rewardId) => {
+  try {
+
+    const contractRevokeRewards = await new ContractExecuteTransaction()
+      .setContractId(contractId)
+      .setGas(3000000)
+      .setFunction(
+        'toggleClaimableStatus',
+        new ContractFunctionParameters().addUint256(rewardId).addBool(false),
+      )
+
+    const contractRevokeExecute = await contractRevokeRewards.execute(client)
+    const contractRevokeReceipt = await contractRevokeExecute.getReceipt(
+      client,
+    );
+    console.log(
+      'Contract revoke reward was ',
+      contractRevokeReceipt.status.toString(),
+    );
+
+    toast.success('Successfully revoked a reward', {className: 'toast-loading'});
+  } catch (err) {
+    console.log(err);
+    toast.error('Revoke a Reward failed', {className: 'toast-loading'});
+    if (err instanceof ReceiptStatusError) {
+
+      console.log(
+        'Error revoking Reward',
+        JSON.stringify(err, null, 2),
+      );
+    } else {
+      console.log(
+        err.message
+      );
+    }
+  }
+};
+
 export const redeemBlackPass = async(playerHederaId, userClient) => {
   try {
 
@@ -158,7 +236,7 @@ export const redeemBlackPass = async(playerHederaId, userClient) => {
       .setGas(3000000)
       .setFunction(
         'ReedemBlackpass',
-        new ContractFunctionParameters().addBytesArray([Buffer.from('https://ipfs.io/ipfs/QmaRdxCZLvdfg2BWyMEVhe4kFteU1UAS443g1YHT6uWGna')]).addString('https://ipfs.io/ipfs/QmaRdxCZLvdfg2BWyMEVhe4kFteU1UAS443g1YHT6uWGna'),
+        new ContractFunctionParameters().addBytesArray([Buffer.from('https://ipfs.io/ipfs/QmRqczXXFB9xmS8VrYEsUvwxMDuNpeA9BtMGauHzcYrQgr')]).addString('https://ipfs.io/ipfs/QmRqczXXFB9xmS8VrYEsUvwxMDuNpeA9BtMGauHzcYrQgr'),
       ).freezeWithSigner(userClient)
 
     const contractMintBlackPassExecute = await contractMintBlackPass.executeWithSigner(userClient)
@@ -236,6 +314,7 @@ export async function getPlayerData(playerHederaId) {
 
   return player
 }
+
 
 export async function getBlackPassNftId(playerHederaId) {
   const serialId = await getSetting('_nfts', [AccountId.fromString(playerHederaId).toSolidityAddress()]);

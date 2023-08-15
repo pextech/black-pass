@@ -1,5 +1,7 @@
 
 import ConnectWalletButton from "./ConnectWalletButton";
+import Image from "next/image";
+import imageBg from '../assets/bg-image.png'
 
 
 const LoginCard = ({handleConnect}: any) => {
@@ -7,8 +9,9 @@ const LoginCard = ({handleConnect}: any) => {
   
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="bg-[#0e0e10] p-12 rounded-xl flex-col justify-center flex items-center my-10 md:mb-0 md:w-[550px] w-[320px] max-w-full">
+    <div className="flex justify-center items-center w-full">
+      <Image src={imageBg} alt="image-bg" className="image-bg" />
+      <div className=" bg-[#0e0e10] p-12 rounded-xl flex-col justify-center flex items-center my-20 md:mb-0 md:w-[550px] w-[320px] max-w-full">
         <h1 className="font-bold text-[22px] text-center mb-4">
           Black Pass
         </h1>

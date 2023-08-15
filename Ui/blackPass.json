@@ -226,6 +226,11 @@
 				"internalType": "address",
 				"name": "playerAddress",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -272,6 +277,11 @@
 						"internalType": "address",
 						"name": "playerAddress",
 						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
 					}
 				],
 				"internalType": "struct IReward.Reward",
@@ -312,6 +322,11 @@
 						"internalType": "address",
 						"name": "playerAddress",
 						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
 					}
 				],
 				"internalType": "struct IReward.Reward[]",
@@ -415,6 +430,11 @@
 						"internalType": "address",
 						"name": "playerAddress",
 						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
 					}
 				],
 				"internalType": "struct IReward.Reward",
@@ -577,6 +597,11 @@
 						"internalType": "address",
 						"name": "playerAddress",
 						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
 					}
 				],
 				"internalType": "struct IReward.Reward[]",
@@ -780,6 +805,11 @@
 						"internalType": "address",
 						"name": "playerAddress",
 						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
 					}
 				],
 				"internalType": "struct IReward.Reward",
@@ -868,6 +898,102 @@
 		],
 		"name": "transferOwnership",
 		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "playerAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "username",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "twitter",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "discord",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "telegram",
+				"type": "string"
+			}
+		],
+		"name": "updatePlayer",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "playerAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "active",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "reedemed",
+						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "email",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "twitter",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "discord",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "telegram",
+						"type": "string"
+					}
+				],
+				"internalType": "struct IPlayer.Player",
+				"name": "",
+				"type": "tuple"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}

@@ -23,14 +23,16 @@ interface landingPageProps {
   id: any,
   hasClaimed?: boolean,
   playerBalance?: number,
-  addReward: () => {},
+  editReward: any,
   data: any,
   adminData: any,
-  claimPlayerReward: () => {}
+  claimPlayerReward: () => {},
+  twitterTest: any,
+  revokeReward: any
 }
 
-const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle, id, hasClaimed, playerBalance, addReward, data, adminData, claimPlayerReward}: landingPageProps) => {
-  
+const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle, id, hasClaimed, playerBalance, editReward, data, adminData, claimPlayerReward, twitterTest, revokeReward }: landingPageProps) => {
+
   // console.log('userClient', userClient)
   // console.log('accountId', accountId)
   // console.log('userPlayerId', userPlayerId)
@@ -52,7 +54,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
       if (userPlayerId) {
         console.log('started')
         setIsLoading(true)
-        toast("redeeming Black Pass...", {className: 'toast-loading', pauseOnHover: false}) 
+        toast("redeeming Black Pass...", { className: 'toast-loading', pauseOnHover: false })
         await redeemBlackPass(accountId, userClient)
         setIsLoading(false)
       }
@@ -64,35 +66,35 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
 
 
   return (
-    <div className="w-full flex items-center justify-center mt-20 mx-6">
+    <div className=" flex items-center justify-center mt-20 mx-6">
       {admin ? (
-        <AdminComponent addReward={addReward} dummyData={adminData} /> 
+        <AdminComponent editReward={editReward} dummyData={adminData} revokeReward={revokeReward} />
       ) : (
-        <div className="flex items-center justify-center flex-col w-[700px] text-center">
-        <h1 className="md:text-[46px] text-[35px] font-bold mb-3 capitalize">
-          Welcome {username}
-        </h1>
+        <div className="flex items-center justify-center flex-col md:w-[900px] text-center">
+          <h1 className="md:text-[46px] text-[35px] font-bold mb-3 capitalize">
+            Welcome {username}
+          </h1>
 
 
-        {hasClaimed ? (
-           <StakingComponent playerBalance={playerBalance} data={data} claimPlayerReward={claimPlayerReward} />
-        ) : (
-          <div className="flex flex-col items-center justify-center">
-            <p>
-              Welcome to the Astra Nova Black Pass portal. Thank you for creating
-              your account. You now have the exciting opportunity to redeem a free
-              Black Pass NFT card.
-            </p>
-            <Image className="w-[60%]" src={BlackPassImg} width={350} height={350} alt="NFT" priority />
+          {hasClaimed ? (
+            <StakingComponent twitterTest={twitterTest} playerBalance={playerBalance} data={data} claimPlayerReward={claimPlayerReward} />
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              <p>
+                Welcome to the Astra Nova Black Pass portal. Thank you for creating
+                your account. You now have the exciting opportunity to redeem a free
+                Black Pass NFT card.
+              </p>
+              <Image className="w-[60%]" src={BlackPassImg} width={350} height={350} alt="NFT" priority />
 
-            <div className="my-6">
-              <ConnectWalletButton disableHandle={disableHandle} btnTitle="Redeem Black Pass" handleClick={()=>{reedemBlackPass()}} />
+              <div className="my-6">
+                <ConnectWalletButton disableHandle={disableHandle} btnTitle="Redeem Black Pass" handleClick={() => { reedemBlackPass() }} />
+              </div>
             </div>
-        </div>
 
-        )
-        }
-      </div>
+          )
+          }
+        </div>
       )}
     </div>
   );

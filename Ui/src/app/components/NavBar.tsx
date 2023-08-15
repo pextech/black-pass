@@ -27,8 +27,10 @@ const NavBar = () => {
     admin,
     setAdmin,
     adminAccountId, 
+    hashAccountId
   } = useHashConnectContext();
 
+  const accountId = bladeAccountId || hashAccountId
 
   const handleToggle = () => {
     setActiveDrawer(!isActiveDrawer);

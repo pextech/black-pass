@@ -35,5 +35,6 @@ export type HashConnectContent = {
     setClaimed: Function,
     admin:boolean,
     setAdmin: Function,
-    adminAccountId: string
+    adminAccountId: string,
+    hashAccountId: string
 }
