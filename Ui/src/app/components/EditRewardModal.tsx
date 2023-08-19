@@ -3,9 +3,16 @@
 
 interface modalProps {
   closeModal: Function,
+  handleEditFormChange: any,
+  handleEditSubmit: any,
+  walletAddress: string,
+  rewardAmount: number,
 }
 
-const EditRewardModal = ({ closeModal }: modalProps) => {
+const EditRewardModal = ({ closeModal, handleEditFormChange, handleEditSubmit, walletAddress, rewardAmount }: modalProps) => {
+
+
+
   return (
     <div>
       <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full max-h-full bg-[#0007]">
@@ -35,32 +42,32 @@ const EditRewardModal = ({ closeModal }: modalProps) => {
               </button>
             </div>
 
-            <div className="py-6 px-8 space-y-6">
+            <form className="py-6 px-8 space-y-6" onSubmit={handleEditSubmit} >
               <div className="flex flex-col">
                 <label className="mb-3">Wallet Address</label>
-                <input className="bg-[#272728] px-4 py-3 rounded-lg" type="text" placeholder="0xF4607Ba...Ba3e77" />
+                <input onChange={handleEditFormChange} value={walletAddress} name="walletAddress" className="bg-[#272728] px-4 py-3 rounded-lg" type="text" placeholder="0xF4607Ba...Ba3e77" />
               </div>
 
-              <div className="flex flex-col">
+              {/* <div className="flex flex-col">
                 <label className="mb-3">Black Tier Pass</label>
                 <select className="bg-[#272728] px-4 py-3 rounded-lg">
                     <option selected>Tier Reward</option>
                     <option value="tier1">Tier 1</option>
                     <option value="tier2">Tier 2</option>
                 </select>
-              </div>
+              </div> */}
 
               <div className="flex flex-col">
                 <label className="mb-3">Total Rewards Amount</label>
-                <input className="bg-[#272728] px-4 py-3 rounded-lg" type="number" placeholder="100.000" />
+                <input onChange={handleEditFormChange} name='rewardAmount' value={rewardAmount} className="bg-[#272728] px-4 py-3 rounded-lg" type="number" placeholder="100.000" />
               </div>
 
               <div className="flex items-center justify-center mb-6">
                 <button className="bg-[#163331] text-[#16B2A4] py-2 md:px-12 px-3 rounded-full text-[15px] md:text-[16px] hover:bg-[#10c4b3] hover:text-black cursor-pointer disabled:bg-gray-600 disabled:text-[#c4c4c4] disabled:cursor-not-allowed">
-                    Update
+                  Update Reward
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>

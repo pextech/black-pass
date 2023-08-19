@@ -10,12 +10,12 @@ import ConnectWalletButton from './ConnectWalletButton';
 interface StakingComponent {
     playerBalance: number | undefined,
     data: any,
-    claimPlayerReward: any
-    twitterTest?: any
+    accountId: string,
+    userClient: any
 }
 
 
-const StakingComponent = ({ playerBalance, data, claimPlayerReward, twitterTest }: StakingComponent) => {
+const StakingComponent = ({ playerBalance, data, accountId, userClient }: StakingComponent) => {
     return (
         <div className='w-full mb-8'>
             <p className=" mb-6">Congratulations on successfully redeeming your Black Pass!</p>
@@ -41,9 +41,7 @@ const StakingComponent = ({ playerBalance, data, claimPlayerReward, twitterTest 
                 </div>
             </div>
 
-            <ConnectWalletButton btnTitle='twitter test' handleClick={twitterTest} />
-
-            <RewardHistory data={data} claimPlayerReward={claimPlayerReward} />
+            <RewardHistory data={data} accountId={accountId} userClient={userClient} />
         </div>
     )
 }

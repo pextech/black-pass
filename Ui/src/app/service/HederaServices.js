@@ -60,8 +60,8 @@ async function getSetting(fcnName, params) {
   const contractCall = await new ContractCallQuery()
     .setContractId(contractId)
     .setFunctionParameters(functionCallAsUint8Array)
-    .setMaxQueryPayment(new Hbar(2))
-    .setGas(100000)
+    .setMaxQueryPayment(new Hbar(10))
+    .setGas(1000000)
     .execute(client);
   const queryResult = await decodeFunctionResult(fcnName, contractCall.bytes);
   return queryResult
@@ -286,19 +286,21 @@ export const addReward = async (playerHederaId, amount) => {
       'Contract add Reward was a ',
       contractAddRewardReceipt,
     );
-    
+    toast.success()
   } catch (err) {
     console.log(err);
-
+    toast.error()
     if (err instanceof ReceiptStatusError) {
       console.log(
         'Error adding Reward',
         JSON.stringify(err, null, 2),
       );
+      toast.error()
     } else {
       console.log(
         err.message
       );
+      toast.error()
     }
   }
 };
@@ -331,7 +333,7 @@ export async function getRewardAmount(rewardId) {
 
 
 export async function getPlayerRewards(playerHederaId) {
-  const allRewards = await getSetting('playerRewards', [AccountId.fromString('0.0.444397').toSolidityAddress()]);
+  const allRewards = await getSetting('playerRewards', [AccountId.fromString(playerHederaId).toSolidityAddress()]);
 
   return allRewards
 }
@@ -457,10 +459,10 @@ export const claimReward = async (rewardId, playerHederaId, userClient) => {
       contractRewardExecute,
     );
     
-    
+    toast.success('You have successfully claim the reward')
   } catch (err) {
     console.log(err);
-
+    toast.error('Error claiming the reward')
     if (err instanceof ReceiptStatusError) {
       console.log(
         'Error claiming a reward',

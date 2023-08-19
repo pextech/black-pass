@@ -4,12 +4,10 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import ConnectWalletButton from "./ConnectWalletButton";
 import BlackPassImg from '../assets/black-pass-image.png'
-import { redeemBlackPass } from "../service/HederaServices";
+import { redeemBlackPass, getPlayerRewards, claimReward } from "../service/HederaServices";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useHashConnectContext } from "../context/useHashConnect";
-import { db } from "../firebase.config";
-import { doc, updateDoc } from "firebase/firestore";
 import StakingComponent from "./StakingComponent";
 import AdminComponent from "./AdminComponent";
 
@@ -23,31 +21,36 @@ interface landingPageProps {
   id: any,
   hasClaimed?: boolean,
   playerBalance?: number,
-  editReward: any,
-  data: any,
-  adminData: any,
-  claimPlayerReward: () => {},
-  twitterTest?: any,
-  revokeReward: any
 }
 
-const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle, id, hasClaimed, playerBalance, editReward, data, adminData, claimPlayerReward, twitterTest, revokeReward }: landingPageProps) => {
+const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle, hasClaimed, playerBalance }: landingPageProps) => {
 
-  // console.log('userClient', userClient)
-  // console.log('accountId', accountId)
-  // console.log('userPlayerId', userPlayerId)
+
 
   const [isLoading, setIsLoading] = useState(false)
+  const [playerReward, setPlayerReward] = useState<any>([]);
 
   const { state, admin } = useHashConnectContext();
 
 
-  // const usersRef = doc(db, "users", id);
-  // const handleClaim = async() => {
-  //   await updateDoc(usersRef, {
-  //     hasClaimed: true
-  //   });  
-  //  }
+
+
+  useEffect(() => {
+
+    const playerRewardData = async () => {
+      try {
+        const playerReward = await getPlayerRewards(accountId)
+        const playerRewardArray = Object.values(playerReward)[0];
+        setPlayerReward(playerRewardArray)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    playerRewardData()
+  }, [accountId, admin]
+  )
+
+
 
   const reedemBlackPass = async () => {
     try {
@@ -68,7 +71,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
   return (
     <div className=" flex items-center justify-center mt-20 mx-6">
       {admin ? (
-        <AdminComponent editReward={editReward} dummyData={adminData} revokeReward={revokeReward} />
+        <AdminComponent accountId={accountId} />
       ) : (
         <div className="flex items-center justify-center flex-col md:w-[900px] text-center">
           <h1 className="md:text-[46px] text-[35px] font-bold mb-3 capitalize">
@@ -77,7 +80,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
 
 
           {hasClaimed ? (
-            <StakingComponent twitterTest={twitterTest} playerBalance={playerBalance} data={data} claimPlayerReward={claimPlayerReward} />
+            <StakingComponent playerBalance={playerBalance} data={playerReward} accountId={accountId} userClient={userClient} />
           ) : (
             <div className="flex flex-col items-center justify-center">
               <p>
@@ -85,7 +88,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
                 your account. You now have the exciting opportunity to redeem a free
                 Black Pass NFT card.
               </p>
-              <Image className="w-[60%]" src={BlackPassImg} width={350} height={350} alt="NFT" priority />
+              <Image className="w-[50%]" src={BlackPassImg} width={350} height={350} alt="NFT" priority />
 
               <div className="my-6">
                 <ConnectWalletButton disableHandle={disableHandle} btnTitle="Redeem Black Pass" handleClick={() => { reedemBlackPass() }} />
