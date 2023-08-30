@@ -42,7 +42,9 @@ const HashConnectContext = createContext<HashConnectContent>({
   admin: false,
   setAdmin: () => { },
   adminAccountId: '',
-  hashAccountId: ''
+  hashAccountId: '',
+  refetchDataPlayer: false,
+  handleRefetch: () => { }
 });
 
 const hashconnect = new HashConnect(true);
@@ -84,7 +86,9 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
   const [hasClaimed, setHasClaimed] = useState(false)
   const [admin, setAdmin] = useState(false)
   const [hashAccountId, setHashAccountId] = useState('')
-  const adminAccountId = '0.0.446176'
+
+  const [refetchDataPlayer, setRefetchDataPlayer] = useState(false)
+  const adminAccountId = '0.0.1119875'
   // const adminAccountId = '0.0.618236'
 
 
@@ -213,6 +217,10 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     setHasClaimed(true)
   }
 
+  const handleRefetch = () => {
+    setRefetchDataPlayer(!refetchDataPlayer)
+  }
+
 
   return <HashConnectContext.Provider value={{
     hcData,
@@ -248,7 +256,9 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     admin,
     setAdmin,
     adminAccountId,
-    hashAccountId
+    hashAccountId,
+    refetchDataPlayer,
+    handleRefetch
   }}>
     {children}
   </HashConnectContext.Provider>

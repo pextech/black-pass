@@ -28,29 +28,36 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
 
 
   const [isLoading, setIsLoading] = useState(false)
+  const [refetch, setRefetch] = useState(false)
   const [playerReward, setPlayerReward] = useState<any>([]);
 
-  const { state, admin } = useHashConnectContext();
+  const { state, admin, refetchDataPlayer, handleRefetch } = useHashConnectContext();
 
 
 
+  const playerRewardData = async () => {
+    try {
+      const playerReward = await getPlayerRewards(accountId)
+      const playerRewardArray = Object.values(playerReward)[0];
+      setPlayerReward(playerRewardArray)
+
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setRefetch(true)
+      handleRefetch()
+    }
+  }
 
   useEffect(() => {
 
-    const playerRewardData = async () => {
-      try {
-        const playerReward = await getPlayerRewards(accountId)
-        const playerRewardArray = Object.values(playerReward)[0];
-        setPlayerReward(playerRewardArray)
-      } catch (error) {
-        console.log(error)
-      }
-    }
+
     playerRewardData()
-  }, [accountId, admin]
+  }, [accountId, admin, refetch, refetchDataPlayer]
   )
 
-
+  // console.log("player reward", playerReward)
+  // console.log("this is refetch", refetch)
 
   const reedemBlackPass = async () => {
     try {
@@ -64,6 +71,9 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
     } catch (error) {
       console.log(error, "redeem error")
       setIsLoading(false)
+    } finally {
+      setRefetch(!refetch)
+      handleRefetch()
     }
   }
 

@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import ConnectWalletButton from "./ConnectWalletButton";
-import { addDoc, collection } from 'firebase/firestore'
-import { db } from '../firebase.config'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { playerCreator } from '../service/HederaServices'
@@ -27,6 +25,7 @@ const CreateAccountCard = ({ accountId, userClient }: any) => {
   const [discordAccessToken, setDiscordAccessToken] = useState()
   const [discordCallback, setDiscordCallback] = useState(false)
 
+  const { handleRefetch } = useHashConnectContext()
 
   const clientId = '1142403829745336412';
   const clientSecret = 'kKvcB5YptG7Tpq1rOeZlQBmgWdjo5wv_'
@@ -50,8 +49,8 @@ const CreateAccountCard = ({ accountId, userClient }: any) => {
   }, [discordCallback])
 
 
-  console.log("discord callback", discordCallback)
-  console.log("discord akun", discordAccount)
+  // console.log("discord callback", discordCallback)
+  // console.log("discord akun", discordAccount)
 
   const handleCallback = async () => {
     const params = new URLSearchParams(window.location.search);
@@ -103,8 +102,15 @@ const CreateAccountCard = ({ accountId, userClient }: any) => {
 
 
   const createUser = async () => {
-    toast("Creating the account...", { className: 'toast-loading', pauseOnHover: false })
-    await playerCreator(accountId, userClient, username, email, twitterAccount ?? '', discordAccount ?? '', telegramAccount ?? '')
+    try {
+      toast("Creating the account...", { className: 'toast-loading', pauseOnHover: false })
+      await playerCreator(accountId, userClient, username, email, twitterAccount ?? '', discordAccount ?? '', telegramAccount ?? '')
+    } catch (error) {
+      console.log(error)
+      toast.error("Failed creating an account")
+    } finally {
+      handleRefetch()
+    }
   }
 
 

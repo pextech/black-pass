@@ -22,6 +22,7 @@ const AdminComponent = ({ accountId }: AddReward) => {
   const [adminEditModal, setAdminEditModal] = useState(false)
   const [btnEditClicked, setBtnEditClicked] = useState(false)
   const [choosenReward, setChoosenReward] = useState()
+  const [refetch, setRefetch] = useState(false)
 
   const [addRewardData, setAddRewardData] = useState({
     walletAddress: '',
@@ -40,7 +41,7 @@ const AdminComponent = ({ accountId }: AddReward) => {
       setAdminReward(adminRewardArray)
     }
     getAdminData()
-  }, [accountId])
+  }, [accountId, refetch])
 
   function shortenWalletAddress(address: any) {
     const firstThreeChars = address.slice(0, 4);
@@ -49,8 +50,7 @@ const AdminComponent = ({ accountId }: AddReward) => {
     return `${firstThreeChars}...${lastThreeChars}`;
   }
 
-  console.log("admin reward", adminReward)
-
+  console.log("refetch admin", refetch)
 
   const revokePlayerReward = (dataId: any) => {
     const dataChoosen = adminReward.find((data: any) => {
@@ -79,12 +79,15 @@ const AdminComponent = ({ accountId }: AddReward) => {
   const handleSubmitAddReward = async (e: any) => {
     try {
       e.preventDefault()
+      toast("adding reward...", { className: 'toast-loading', pauseOnHover: false })
       console.log(addRewardData)
       await addReward(addRewardData.walletAddress, addRewardData.rewardAmount)
-      toast("adding reward...", { className: 'toast-loading', pauseOnHover: false })
       setAdminAddRewardModal(false)
     } catch (error) {
       console.log(error)
+    } finally {
+      setRefetch(!refetch)
+      toast.success("Successfully add Reward")
     }
   }
 
@@ -99,6 +102,8 @@ const AdminComponent = ({ accountId }: AddReward) => {
       toast.success('Successfully update new reward')
     } catch (error) {
       console.log(error)
+    } finally {
+      setRefetch(!refetch)
     }
   }
 
@@ -122,7 +127,7 @@ const AdminComponent = ({ accountId }: AddReward) => {
     }))
   }
 
-  console.log('this choosen reward id', choosenReward)
+  console.log('admin reward list', adminReward)
 
   return (
     <div className='w-full mx-12'>
@@ -138,13 +143,13 @@ const AdminComponent = ({ accountId }: AddReward) => {
       <p className='mt-4'>Select the wallet address to receive the $RVV token rewards.</p>
 
       <div className='flex justify-between w-full'>
-        <div className='flex items-center border border-gray-700 rounded  w-80 my-4 px-2 py-1'>
+        <div className='flex items-center border border-gray-700 rounded  w-80 my-4 px-2 py-1 focus-within:border-white'>
           <BiSearch className='text-2xl' />
           <input
             type="text"
             onChange={(e) => setSearchAddress(e.target.value)}
             placeholder='Search by wallet address'
-            className='appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none placeholder:text-[14px]'
+            className='appearance-none bg-transparent border-none w-full text-gray-300 mr-3 py-1 px-2 leading-tight focus:outline-none placeholder:text-[14px] '
           />
         </div>
 
@@ -155,7 +160,7 @@ const AdminComponent = ({ accountId }: AddReward) => {
         </div>
       </div>
 
-      <div className=''>
+      <div className='mb-20'>
         <table className='w-full text-center'>
           <thead className='bg-[#0E0E10] px-4'>
             <tr className=''>
@@ -168,7 +173,7 @@ const AdminComponent = ({ accountId }: AddReward) => {
           </thead>
 
           <tbody>
-            {adminReward.filter((data: any) => {
+            {adminReward.slice().reverse().filter((data: any) => {
               return searchAddress.toLowerCase() === "" ? data : data.playerAddress.toLowerCase().includes(searchAddress)
             }).map((data: any) => (
               <tr key={data.id} className='border-b border-gray-600'>
@@ -182,10 +187,10 @@ const AdminComponent = ({ accountId }: AddReward) => {
                 <td className='px-6 py-4'>{data.claimed ? 'Claimed' : !data.claimable ? "Reward Revoked" : 'Unclaimed'}</td>
                 <td className='px-6 py-4'>{Number(data.amount)}</td>
                 <td className='px-6 py-4 flex gap-4 justify-center'>
-                  <button disabled={!data.claimable ? true : false} onClick={() => revokePlayerReward(data.id)} className="bg-[#163331] text-[#16B2A4] py-2 md:px-8 px-3 rounded-full text-[15px] md:text-[16px] hover:bg-[#10c4b3] hover:text-black cursor-pointer disabled:bg-gray-600 disabled:text-[#c4c4c4] disabled:cursor-not-allowed">
+                  <button disabled={!data.claimable ? true : data.claimed ? true : false} onClick={() => revokePlayerReward(data.id)} className="bg-[#163331] text-[#16B2A4] py-2 md:px-8 px-3 rounded-full text-[15px] md:text-[16px] hover:bg-[#10c4b3] hover:text-black cursor-pointer disabled:bg-gray-600 disabled:text-[#c4c4c4] disabled:cursor-not-allowed">
                     Revoke
                   </button>
-                  <button disabled={!data.claimable ? true : false} onClick={() => {
+                  <button disabled={!data.claimable ? true : data.claimed ? true : false} onClick={() => {
                     console.log(data.id)
                     openEditModal()
                     setChoosenReward(data.id)

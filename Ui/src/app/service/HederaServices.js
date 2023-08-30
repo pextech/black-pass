@@ -286,7 +286,7 @@ export const addReward = async (playerHederaId, amount) => {
       'Contract add Reward was a ',
       contractAddRewardReceipt,
     );
-    toast.success()
+    
   } catch (err) {
     console.log(err);
     toast.error()

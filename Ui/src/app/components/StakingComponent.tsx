@@ -17,7 +17,7 @@ interface StakingComponent {
 
 const StakingComponent = ({ playerBalance, data, accountId, userClient }: StakingComponent) => {
     return (
-        <div className='w-full mb-8'>
+        <div className='w-full mb-20'>
             <p className=" mb-6">Congratulations on successfully redeeming your Black Pass!</p>
 
             <div className="flex items-center justify-center gap-7">

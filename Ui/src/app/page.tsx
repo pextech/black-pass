@@ -8,7 +8,8 @@ import { useHashConnectContext } from "./context/useHashConnect";
 import Modals from "./components/Modals";
 import { getPlayerData, getBlackPassBalance } from "./service/HederaServices";
 import CryptoJS from 'crypto-js';
-
+import OAuth from 'oauth-1.0a';
+import axios from './api/twitter-proxy'
 import ConnectWalletButton from "./components/ConnectWalletButton";
 
 
@@ -30,6 +31,7 @@ export default function Home() {
   const [playerBalance, setPlayerBalance] = useState(0);
   const [playerData, setPlayerData] = useState<PlayerData>()
   const [userId, setUserId] = useState()
+  const [refetch, setRefetch] = useState(false)
 
 
 
@@ -44,7 +46,8 @@ export default function Home() {
     bladeAccountId,
     bladeSigner,
     hashAccountId,
-    bladeConnectStatus
+    bladeConnectStatus,
+    refetchDataPlayer
   } = useHashConnectContext();
   const accountId = hashAccountId || bladeAccountId;
 
@@ -56,89 +59,61 @@ export default function Home() {
   };
 
 
-  const fetchAccessToken = async () => {
-    const consumerKey = "PdsgGBkiP90VqoCsR6EhqQTby";
-    const consumerSecret = "IGUwRbrG4RMnSHNWiymhyFeXVKSsBUJU5rIDpLSZyU6zn0oK9R";
+  const TWITTER_API_KEY = 'PdsgGBkiP90VqoCsR6EhqQTby';
+  const TWITTER_API_SECRET = 'IGUwRbrG4RMnSHNWiymhyFeXVKSsBUJU5rIDpLSZyU6zn0oK9R';
+  const oauth = new OAuth({
+    consumer: {
+      key: TWITTER_API_KEY,
+      secret: TWITTER_API_SECRET,
+    },
+    signature_method: 'HMAC-SHA1',
+    hash_function(base_string, key) {
+      return CryptoJS.HmacSHA1(base_string, key).toString(CryptoJS.enc.Base64);
+    },
+  });
 
-    const oauthTimestamp = Math.floor(Date.now() / 1000).toString();
-    const oauthNonce = Math.random().toString(36).substring(2);
-    const oauthSignatureMethod = "HMAC-SHA1";
-    const oauthVersion = "1.0";
-
-    // Construct the base string for signature generation
-    const baseString = `POST&${encodeURIComponent("https://api.twitter.com/oauth/request_token")}&` +
-      encodeURIComponent(`oauth_consumer_key=${consumerKey}&` +
-        `oauth_nonce=${oauthNonce}&` +
-        `oauth_signature_method=${oauthSignatureMethod}&` +
-        `oauth_timestamp=${oauthTimestamp}&` +
-        `oauth_version=${oauthVersion}`);
-
-    // Generate the OAuth signature
-    const signingKey = encodeURIComponent(consumerSecret) + "&";
-    const oauthSignature = encodeURIComponent(CryptoJS.HmacSHA1(baseString, signingKey).toString(CryptoJS.enc.Base64));
-
-    // Construct the Authorization header
-    const authorizationHeader = `OAuth oauth_consumer_key="${consumerKey}", ` +
-      `oauth_nonce="${oauthNonce}", ` +
-      `oauth_signature="${oauthSignature}", ` +
-      `oauth_signature_method="${oauthSignatureMethod}", ` +
-      `oauth_timestamp="${oauthTimestamp}", ` +
-      `oauth_version="${oauthVersion}"`;
-
-    const requestOptions: any = {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Authorization': authorizationHeader,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-    };
-
+  const fetchData = async () => {
     try {
-      const response = await fetch("https://api.twitter.com/oauth/request_token", requestOptions);
-      if (response.ok) {
-        const responseText = await response.text();
-        console.log("Response:", responseText);
-      } else {
-        console.log("Request failed with status:", response.status);
-      }
+      const response = await fetch('/api/twitter-proxy'); // Use the proxy API route
+      const result = await response.text();
+      console.log("ini result", result);
     } catch (error) {
-      console.error("Error:", error);
+      console.log('error', error);
     }
   };
 
+  const getData = async () => {
+    try {
+      const getData: any = await getPlayerData(accountId)
+      setPlayerData(getData)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setRefetch(!refetch)
+    }
+  }
+
+  const getPlayerBalance = async () => {
+    try {
+      const getDataBalance = await getBlackPassBalance(accountId)
+      setPlayerBalance(getDataBalance)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const getData: any = await getPlayerData(accountId)
-        setPlayerData(getData)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    const getPlayerBalance = async () => {
-      try {
-        const getDataBalance = await getBlackPassBalance(accountId)
-        setPlayerBalance(getDataBalance)
-      } catch (error) {
-        console.log(error)
-      }
-    }
     getData()
     getPlayerBalance()
-  }, [accountId])
+  }, [accountId, refetchDataPlayer])
 
-
-
-
-  console.log("player data", playerData)
+  // console.log("player data", playerData)
 
 
   return (
     <main className="h-screen text-white">
       {bladeConnectStatus && playerData?.active === false || state.state === "Paired" && playerData?.active === false ? (
-        <CreateAccountCard accountId={accountId || bladeAccountId} />
+        <CreateAccountCard accountId={accountId || bladeAccountId} refetchDataPlayer={getData} />
       ) : playerData?.active === true ? (
         <div>
           <LandingPageCard
@@ -151,7 +126,7 @@ export default function Home() {
             hasClaimed={playerData?.reedemed}
             playerBalance={playerBalance}
           />
-          <ConnectWalletButton btnTitle="twitter test" handleClick={fetchAccessToken} />
+          <ConnectWalletButton btnTitle="twitter test" handleClick={fetchData} />
         </div>
       ) : (
         <LoginCard handleConnect={openModal} />

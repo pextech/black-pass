@@ -27,6 +27,7 @@
     "hashconnect": "^0.2.4",
     "netlify-cli": "^15.7.0",
     "next": "^13.4.8",
+    "oauth-1.0a": "^2.2.6",
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -1,19 +1,28 @@
 import React from 'react'
 import { claimReward } from '../service/HederaServices'
 import { toast } from 'react-toastify';
+import { useHashConnectContext } from '../context/useHashConnect';
 
 
 const RewardHistory = ({ data, accountId, userClient }: any) => {
 
-  const handleClaimReward = (rewardId: any) => {
-    const rewardChoosen = data.find((reward: any) => {
-      if (reward.id === rewardId) {
-        claimReward(Number(rewardId), accountId, userClient)
-        toast("Claiming your reward...", { className: 'toast-loading', pauseOnHover: false })
+  const { handleRefetch } = useHashConnectContext()
+
+  const handleClaimReward = async (rewardId: any) => {
+    const rewardChoosen = data.find((reward: any) => reward.id === rewardId);
+
+    if (rewardChoosen) {
+      try {
+        toast("Claiming your reward...", { className: 'toast-loading', pauseOnHover: false });
+        await claimReward(Number(rewardId), accountId, userClient);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        handleRefetch();
       }
-    })
-    console.log(rewardChoosen)
-  }
+    }
+  };
+
 
   return (
     <div className='w-full mt-12 '>
@@ -34,13 +43,13 @@ const RewardHistory = ({ data, accountId, userClient }: any) => {
           </thead>
 
           <tbody>
-            {data.map((item: any) => (
+            {data.slice().reverse().map((item: any) => (
               <tr key={item.id} className='border-b border-gray-600'>
                 <td className='px-8 py-4'>{Number(item.amount)}</td>
-                <td className='px-8 py-4'>{item.claimed ? 'Claimed' : 'Unclaimed'}</td>
+                <td className='px-8 py-4'>{item.claimed ? 'Claimed' : !item.claimable ? 'Reward Revoked' : 'Unclaimed'}</td>
                 <td className='px-8 py-4'>
                   {!item.claimed ? (
-                    <button onClick={() => handleClaimReward(item.id)} className="bg-[#163331] text-[#16B2A4] py-2 md:px-8 px-3 rounded-full text-[15px] md:text-[16px] hover:bg-[#10c4b3] hover:text-black cursor-pointer disabled:bg-gray-600 disabled:text-[#c4c4c4] disabled:cursor-not-allowed">
+                    <button disabled={item.claimable ? false : true} onClick={() => handleClaimReward(item.id)} className="bg-[#163331] text-[#16B2A4] py-2 md:px-8 px-3 rounded-full text-[15px] md:text-[16px] hover:bg-[#10c4b3] hover:text-black cursor-pointer disabled:bg-gray-600 disabled:text-[#c4c4c4] disabled:cursor-not-allowed">
                       Claim
                     </button>
                   ) : (
