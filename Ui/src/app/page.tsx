@@ -9,7 +9,6 @@ import Modals from "./components/Modals";
 import { getPlayerData, getBlackPassBalance } from "./service/HederaServices";
 import CryptoJS from 'crypto-js';
 import OAuth from 'oauth-1.0a';
-import axios from './api/twitter-proxy'
 import ConnectWalletButton from "./components/ConnectWalletButton";
 
 
@@ -72,15 +71,15 @@ export default function Home() {
     },
   });
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch('/api/twitter-proxy'); // Use the proxy API route
-      const result = await response.text();
-      console.log("ini result", result);
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await fetch('/api/twitter-proxy'); // Use the proxy API route
+  //     const result = await response.text();
+  //     console.log("ini result", result);
+  //   } catch (error) {
+  //     console.log('error', error);
+  //   }
+  // };
 
   const getData = async () => {
     try {
@@ -126,7 +125,7 @@ export default function Home() {
             hasClaimed={playerData?.reedemed}
             playerBalance={playerBalance}
           />
-          <ConnectWalletButton btnTitle="twitter test" handleClick={fetchData} />
+          {/* <ConnectWalletButton btnTitle="twitter test" handleClick={fetchData} /> */}
         </div>
       ) : (
         <LoginCard handleConnect={openModal} />
