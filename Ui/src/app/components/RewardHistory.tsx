@@ -43,7 +43,7 @@ const RewardHistory = ({ data, accountId, userClient }: any) => {
           </thead>
 
           <tbody>
-            {data.slice().reverse().map((item: any) => (
+            {data.filter((item: any) => Number(item.id) !== 0).slice().reverse().map((item: any) => (
               <tr key={item.id} className='border-b border-gray-600'>
                 <td className='px-8 py-4'>{Number(item.amount)}</td>
                 <td className='px-8 py-4'>{item.claimed ? 'Claimed' : !item.claimable ? 'Reward Revoked' : 'Unclaimed'}</td>

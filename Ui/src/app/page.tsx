@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { useHashConnectContext } from "./context/useHashConnect";
 import Modals from "./components/Modals";
 import { getPlayerData, getBlackPassBalance } from "./service/HederaServices";
-import CryptoJS from 'crypto-js';
+import * as crypto from 'crypto';
 import OAuth from 'oauth-1.0a';
 import ConnectWalletButton from "./components/ConnectWalletButton";
 
@@ -57,29 +57,92 @@ export default function Home() {
     closeModal()
   };
 
+  // twitter test
 
-  const TWITTER_API_KEY = 'PdsgGBkiP90VqoCsR6EhqQTby';
-  const TWITTER_API_SECRET = 'IGUwRbrG4RMnSHNWiymhyFeXVKSsBUJU5rIDpLSZyU6zn0oK9R';
-  const oauth = new OAuth({
-    consumer: {
-      key: TWITTER_API_KEY,
-      secret: TWITTER_API_SECRET,
-    },
-    signature_method: 'HMAC-SHA1',
-    hash_function(base_string, key) {
-      return CryptoJS.HmacSHA1(base_string, key).toString(CryptoJS.enc.Base64);
-    },
-  });
+  function generateOAuthTimestamp() {
+    return Math.floor(Date.now() / 1000).toString();
+  }
+  function generateOAuthNonce() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let nonce = '';
+    for (let i = 0; i < 32; i++) {
+      nonce += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return nonce;
+  }
 
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await fetch('/api/twitter-proxy'); // Use the proxy API route
-  //     const result = await response.text();
-  //     console.log("ini result", result);
-  //   } catch (error) {
-  //     console.log('error', error);
-  //   }
-  // };
+  function generateOAuthSignature(method: any, url: any, params: any, consumerSecret: any, tokenSecret: any) {
+    const baseString = generateSignatureBaseString(method, url, params);
+    const signingKey = generateSigningKey(consumerSecret, tokenSecret);
+    const signature = signBaseString(baseString, signingKey);
+    return encodeURIComponent(signature);
+  }
+
+  function generateSignatureBaseString(method: any, url: any, params: any) {
+    const encodedParams = Object.keys(params)
+      .sort()
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+      .join('&');
+
+    return `${method.toUpperCase()}&${encodeURIComponent(url)}&${encodeURIComponent(encodedParams)}`;
+  }
+
+  function generateSigningKey(consumerSecret: any, tokenSecret: any) {
+    return `${encodeURIComponent(consumerSecret)}&${encodeURIComponent(tokenSecret)}`;
+  }
+
+  function signBaseString(baseString: any, signingKey: any) {
+    return crypto
+      .createHmac('sha1', signingKey)
+      .update(baseString)
+      .digest('base64');
+  }
+
+  const consumerSecret = 'IGUwRbrG4RMnSHNWiymhyFeXVKSsBUJU5rIDpLSZyU6zn0oK9R';
+  const tokenSecret = 'BnHMbInUuhlJNdYRHjP9pA59G1PaWBq9hdhMYCryK5eSN';
+
+  const oauthSignature = generateOAuthSignature(
+    'POST',
+    'https://api.twitter.com/oauth/request_token',
+    {
+      oauth_consumer_key: 'PdsgGBkiP90VqoCsR6EhqQTby',
+      oauth_token: '187175573-fgyG0AfIEa0GO3kXuGIRcCQgjU0GkOaRTfi707j1',
+      oauth_signature_method: 'HMAC-SHA1',
+      oauth_timestamp: generateOAuthTimestamp(),
+      oauth_nonce: generateOAuthNonce(),
+      oauth_version: '1.0'
+    },
+    consumerSecret,
+    tokenSecret
+  );
+
+  async function getRequestToken() {
+    const oauthConsumerKey = 'PdsgGBkiP90VqoCsR6EhqQTby';
+    const oauthToken = '187175573-fgyG0AfIEa0GO3kXuGIRcCQgjU0GkOaRTfi707j1';
+    const oauthSignatureMethod = 'HMAC-SHA1';
+    const oauthVersion = '1.0';
+
+    const oauthTimestamp = generateOAuthTimestamp();
+    const oauthNonce = generateOAuthNonce();
+
+
+    const url = `https://api.twitter.com/oauth/request_token?oauth_consumer_key=${oauthConsumerKey}&oauth_token=${oauthToken}&oauth_signature_method=${oauthSignatureMethod}&oauth_timestamp=${oauthTimestamp}&oauth_nonce=${oauthNonce}&oauth_version=${oauthVersion}&oauth_signature=${oauthSignature}`;
+
+    const requestOptions: any = {
+      method: 'POST',
+      redirect: 'follow',
+      mode: 'no-cors'
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const result = await response.text();
+      console.log("ini result request", result);
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+
 
   const getData = async () => {
     try {
@@ -96,6 +159,7 @@ export default function Home() {
     try {
       const getDataBalance = await getBlackPassBalance(accountId)
       setPlayerBalance(getDataBalance)
+      console.log("player balance", getDataBalance)
     } catch (error) {
       console.log(error)
     }
@@ -125,7 +189,7 @@ export default function Home() {
             hasClaimed={playerData?.reedemed}
             playerBalance={playerBalance}
           />
-          {/* <ConnectWalletButton btnTitle="twitter test" handleClick={fetchData} /> */}
+          {/* <ConnectWalletButton btnTitle="twitter test" handleClick={getRequestToken} /> */}
         </div>
       ) : (
         <LoginCard handleConnect={openModal} />

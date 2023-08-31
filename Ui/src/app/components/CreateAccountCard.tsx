@@ -194,7 +194,7 @@ const CreateAccountCard = ({ accountId, userClient }: any) => {
               Connect Socials <span className="font-thin">(optional)</span>
             </p>
             <div className="flex justify-between">
-              <button onClick={() => setShowTwitter(!showTwitter)} className="bg-blue-500 hover:bg-blue-700 text-white text-[10px] md:text-[15px] md:py-4 md:px-10 py-2 px-5  rounded">
+              <button onClick={() => console.warn("API request reached max!")} className="bg-blue-500 hover:bg-blue-700 text-white text-[10px] md:text-[15px] md:py-4 md:px-10 py-2 px-5  rounded">
                 Twitter
               </button>
               <button onClick={handleDiscordLogin} className={` ${discordCallback ? "bg-[#10c4b3] hover:bg-[#10c4b3]" : "bg-blue-500 hover:bg-blue-700"}  text-white text-[10px] md:text-[15px] md:py-4 md:px-10 py-2 px-5 rounded`}>
@@ -203,7 +203,7 @@ const CreateAccountCard = ({ accountId, userClient }: any) => {
               <button
                 // onClick={() => setShowTelegram(!showTelegram)} 
                 className="bg-blue-500 hover:bg-blue-700 text-white text-[10px] md:text-[15px] md:py-4 md:px-10 py-2 px-5  rounded">
-                <Link href='https://t.me/astranovaofficial' >
+                <Link href='https://t.me/astranovaofficial' rel="noopener noreferrer" target="_blank" >
                   Telegram
                 </Link>
               </button>

@@ -38,6 +38,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
   const playerRewardData = async () => {
     try {
       const playerReward = await getPlayerRewards(accountId)
+      console.log(playerReward)
       const playerRewardArray = Object.values(playerReward)[0];
       setPlayerReward(playerRewardArray)
 
@@ -56,7 +57,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
   }, [accountId, admin, refetch, refetchDataPlayer]
   )
 
-  // console.log("player reward", playerReward)
+  console.log("player reward", playerReward)
   // console.log("this is refetch", refetch)
 
   const reedemBlackPass = async () => {

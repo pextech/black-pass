@@ -88,7 +88,7 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
   const [hashAccountId, setHashAccountId] = useState('')
 
   const [refetchDataPlayer, setRefetchDataPlayer] = useState(false)
-  const adminAccountId = '0.0.1119875'
+  const adminAccountId = '0.0.1140756'
   // const adminAccountId = '0.0.618236'
 
 
