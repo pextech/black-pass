@@ -1,15 +1,17 @@
 
 
-
 interface modalProps {
     closeModal: Function,
     handleSubmit: any,
     handleFormChange: any,
     walletAddress: string,
     rewardAmount: number,
+    tier1?: number,
+    tier2?: number
+    tier?: any
 }
 
-const AddRewardModal = ({ closeModal, handleSubmit, handleFormChange, walletAddress, rewardAmount }: modalProps) => {
+const AddRewardModal = ({ closeModal, handleSubmit, handleFormChange, walletAddress, rewardAmount, tier1, tier2, tier }: modalProps) => {
 
 
 
@@ -48,14 +50,14 @@ const AddRewardModal = ({ closeModal, handleSubmit, handleFormChange, walletAddr
                                 <input name="walletAddress" value={walletAddress} onChange={handleFormChange} className="bg-[#272728] px-4 py-3 rounded-lg" type="text" placeholder="0xF4607Ba...Ba3e77" />
                             </div>
 
-                            {/* <div className="flex flex-col">
+                            <div className="flex flex-col">
                                 <label className="mb-3">Black Tier Pass</label>
-                                <select className="bg-[#272728] px-4 py-3 rounded-lg">
+                                <select name="tier" onChange={handleFormChange} value={tier} className="bg-[#272728] px-4 py-3 rounded-lg">
                                     <option selected>Tier Reward</option>
-                                    <option value="tier1">Tier 1</option>
-                                    <option value="tier2">Tier 2</option>
+                                    <option value={tier1}>Tier 1</option>
+                                    <option value={tier2}>Tier 2</option>
                                 </select>
-                            </div> */}
+                            </div>
 
                             <div className="flex flex-col">
                                 <label className="mb-3">Total Rewards Amount</label>

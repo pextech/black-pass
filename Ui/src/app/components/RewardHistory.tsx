@@ -10,11 +10,11 @@ const RewardHistory = ({ data, accountId, userClient }: any) => {
 
   const handleClaimReward = async (rewardId: any) => {
     const rewardChoosen = data.find((reward: any) => reward.id === rewardId);
-
+    console.log("ini id nya", rewardChoosen)
     if (rewardChoosen) {
       try {
         toast("Claiming your reward...", { className: 'toast-loading', pauseOnHover: false });
-        await claimReward(Number(rewardId), accountId, userClient);
+        await claimReward(Number(rewardChoosen.id), accountId, userClient);
       } catch (error) {
         console.log(error);
       } finally {
@@ -35,6 +35,7 @@ const RewardHistory = ({ data, accountId, userClient }: any) => {
           <thead className='bg-[#0E0E10] px-4 rounded'>
             <tr className=''>
               <th className='px-8 py-4'>Rewards Amount</th>
+              <th className='px-8 py-4'>Tier</th>
               <th className='px-8 py-4'>Status</th>
               <th className='px-8 py-4'>
                 Action
@@ -46,6 +47,7 @@ const RewardHistory = ({ data, accountId, userClient }: any) => {
             {data.filter((item: any) => Number(item.id) !== 0).slice().reverse().map((item: any) => (
               <tr key={item.id} className='border-b border-gray-600'>
                 <td className='px-8 py-4'>{Number(item.amount)}</td>
+                <td className='px-8 py-4'>{item.tier === "tier-2" ? "Tier 2" : "Tier 1"}</td>
                 <td className='px-8 py-4'>{item.claimed ? 'Claimed' : !item.claimable ? 'Reward Revoked' : 'Unclaimed'}</td>
                 <td className='px-8 py-4'>
                   {!item.claimed ? (

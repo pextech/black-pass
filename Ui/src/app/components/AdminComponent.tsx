@@ -5,7 +5,7 @@ import { BiSearch } from 'react-icons/bi'
 import { AiFillCopy } from 'react-icons/ai'
 import { toast } from 'react-toastify';
 import AddRewardModal from "./addRewardModal";
-import { addReward, revokeReward, getAllAdminRewards } from '../service/HederaServices';
+import { addReward, revokeReward, getAllAdminRewards, getAllTiers } from '../service/HederaServices';
 import EditRewardModal from './EditRewardModal';
 
 
@@ -20,47 +20,79 @@ const AdminComponent = ({ accountId }: AddReward) => {
   const [adminAddRewardModal, setAdminAddRewardModal] = useState(false)
   const [adminReward, setAdminReward] = useState<any>([]);
   const [adminEditModal, setAdminEditModal] = useState(false)
-  const [btnEditClicked, setBtnEditClicked] = useState(false)
   const [choosenReward, setChoosenReward] = useState()
   const [refetch, setRefetch] = useState(false)
+  const [tier1, setTier1] = useState()
+  const [tier2, setTier2] = useState()
+
 
   const [addRewardData, setAddRewardData] = useState({
     walletAddress: '',
-    rewardAmount: 0
+    rewardAmount: 0,
+    tier: 0
   })
 
   const [editRewardData, setEditRewardData] = useState({
     walletAddress: '',
-    rewardAmount: 0
+    rewardAmount: 0,
+    tier: 0
   })
 
-  useEffect(() => {
-    const getAdminData = async () => {
+
+  const allTiers = async () => {
+
+    const tierId: any = await getAllTiers()
+    const tierId2 = tierId[0][0]
+    const tierId1 = tierId[0][1]
+
+    setTier1(tierId1.id)
+    setTier2(tierId2.id)
+  }
+
+  // useEffect(() => {
+  //   allTiers()
+  // }, [])
+
+  const getAdminData = async () => {
+    try {
       const adminReward = await getAllAdminRewards()
       const adminRewardArray = Object.values(adminReward)[0];
       setAdminReward(adminRewardArray)
+    } catch (error) {
+      console.log(error)
     }
-    getAdminData()
-  }, [accountId, refetch])
+  }
+
+  // useEffect(() => {
+
+  //   getAdminData()
+  // }, [accountId, refetch])
+
 
   function shortenWalletAddress(address: any) {
-    const firstThreeChars = address.slice(0, 4);
-    const lastThreeChars = address.slice(-4);
+    const firstThreeChars = address?.slice(0, 4);
+    const lastThreeChars = address?.slice(-4);
 
     return `${firstThreeChars}...${lastThreeChars}`;
   }
 
-  console.log("refetch admin", refetch)
+  // console.log("refetch admin", refetch)
 
   const revokePlayerReward = (dataId: any) => {
-    const dataChoosen = adminReward.find((data: any) => {
-      if (data.id === dataId) {
-        revokeReward(Number(dataId))
-        console.log(dataId)
-        toast("Revoking the player reward...", { className: 'toast-loading', pauseOnHover: false })
-      }
-    })
-    console.log(dataChoosen)
+    try {
+      const dataChoosen = adminReward.find((data: any) => {
+        if (data.id === dataId) {
+          revokeReward(Number(dataId))
+          console.log(dataId)
+          toast("Revoking the player reward...", { className: 'toast-loading', pauseOnHover: false })
+        }
+      })
+      console.log(dataChoosen)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setRefetch(!refetch)
+    }
   }
 
   const copyToClipboard = (walletAddress: string) => {
@@ -80,14 +112,20 @@ const AdminComponent = ({ accountId }: AddReward) => {
     try {
       e.preventDefault()
       toast("adding reward...", { className: 'toast-loading', pauseOnHover: false })
-      console.log(addRewardData)
-      await addReward(addRewardData.walletAddress, addRewardData.rewardAmount)
+      console.log("add reward data", addRewardData)
+      await addReward(Number(addRewardData.tier), addRewardData.walletAddress, addRewardData.rewardAmount)
       setAdminAddRewardModal(false)
+      setAddRewardData({
+        walletAddress: '',
+        rewardAmount: 0,
+        tier: 0
+      })
     } catch (error) {
       console.log(error)
+      toast.error("Failed adding reward")
     } finally {
       setRefetch(!refetch)
-      toast.success("Successfully add Reward")
+
     }
   }
 
@@ -96,7 +134,7 @@ const AdminComponent = ({ accountId }: AddReward) => {
       e.preventDefault()
       console.log(editRewardData)
       revokePlayerReward(rewardId)
-      await addReward(editRewardData.walletAddress, editRewardData.rewardAmount)
+      await addReward(Number(editRewardData.tier), editRewardData.walletAddress, editRewardData.rewardAmount)
       toast("adding new reward...", { className: 'toast-loading', pauseOnHover: false })
       setAdminEditModal(false)
       toast.success('Successfully update new reward')
@@ -118,6 +156,7 @@ const AdminComponent = ({ accountId }: AddReward) => {
       [name]: value,
     }))
   }
+  // console.log("tier nih", addRewardData.tier)
 
   const handleEditRewardFormChange = (event: any) => {
     const { name, value } = event.target;
@@ -127,7 +166,7 @@ const AdminComponent = ({ accountId }: AddReward) => {
     }))
   }
 
-  console.log('admin reward list', adminReward)
+  // console.log('admin reward list', adminReward)
 
   return (
     <div className='w-full mx-12'>
@@ -183,7 +222,7 @@ const AdminComponent = ({ accountId }: AddReward) => {
                     <AiFillCopy className='text-xl active:text-sm' />
                   </button>
                 </td>
-                <td className='px-6 py-4'>Tier 1</td>
+                <td className='px-6 py-4'>{data.tier === "tier-2" ? "Tier 2" : "Tier 1"}</td>
                 <td className='px-6 py-4'>{data.claimed ? 'Claimed' : !data.claimable ? "Reward Revoked" : 'Unclaimed'}</td>
                 <td className='px-6 py-4'>{Number(data.amount)}</td>
                 <td className='px-6 py-4 flex gap-4 justify-center'>
@@ -211,6 +250,9 @@ const AdminComponent = ({ accountId }: AddReward) => {
           handleFormChange={handleFormChange}
           walletAddress={addRewardData.walletAddress}
           rewardAmount={addRewardData.rewardAmount}
+          tier={addRewardData.tier}
+          tier1={tier1}
+          tier2={tier2}
         />
       )}
 
@@ -222,6 +264,9 @@ const AdminComponent = ({ accountId }: AddReward) => {
             rewardAmount={editRewardData.rewardAmount}
             handleEditFormChange={handleEditRewardFormChange}
             handleEditSubmit={(e: any) => handleSubmitEditReward(choosenReward, e)}
+            tier={editRewardData.tier}
+            tier1={tier1}
+            tier2={tier2}
           />
         )
       }

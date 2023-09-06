@@ -6,7 +6,7 @@ import CreateAccountCard from "./components/CreateAccountCard";
 import { useState, useEffect } from "react";
 import { useHashConnectContext } from "./context/useHashConnect";
 import Modals from "./components/Modals";
-import { getPlayerData, getBlackPassBalance } from "./service/HederaServices";
+import { getPlayerData, getBlackPassBalance, getAllTiers } from "./service/HederaServices";
 import * as crypto from 'crypto';
 import OAuth from 'oauth-1.0a';
 import ConnectWalletButton from "./components/ConnectWalletButton";
@@ -155,22 +155,25 @@ export default function Home() {
     }
   }
 
+
+
   const getPlayerBalance = async () => {
     try {
       const getDataBalance = await getBlackPassBalance(accountId)
       setPlayerBalance(getDataBalance)
-      console.log("player balance", getDataBalance)
+      // console.log("player balance", getDataBalance)
     } catch (error) {
       console.log(error)
     }
   }
 
+
   useEffect(() => {
     getData()
-    getPlayerBalance()
-  }, [accountId, refetchDataPlayer])
+    // getPlayerBalance()
+    // console.log("player data", playerData)
+  }, [playerData, refetchDataPlayer, accountId])
 
-  // console.log("player data", playerData)
 
 
   return (
@@ -181,7 +184,7 @@ export default function Home() {
         <div>
           <LandingPageCard
             username={playerData?.username}
-            accountId={accountId || bladeAccountId}
+            accountId={accountId}
             userPlayerId={1}
             userClient={userClient || bladeSigner}
             disableHandle={playerData?.reedemed ? true : false}

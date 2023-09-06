@@ -231,6 +231,11 @@
 				"internalType": "uint256",
 				"name": "timestamp",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "tier",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -238,6 +243,35 @@
 	},
 	{
 		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "_tiers",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tier",
+				"type": "uint256"
+			},
 			{
 				"internalType": "address",
 				"name": "playerAddress",
@@ -282,9 +316,45 @@
 						"internalType": "uint256",
 						"name": "timestamp",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "tier",
+						"type": "string"
 					}
 				],
 				"internalType": "struct IReward.Reward",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			}
+		],
+		"name": "addTier",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					}
+				],
+				"internalType": "struct IReward.Tiers",
 				"name": "",
 				"type": "tuple"
 			}
@@ -327,9 +397,39 @@
 						"internalType": "uint256",
 						"name": "timestamp",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "tier",
+						"type": "string"
 					}
 				],
 				"internalType": "struct IReward.Reward[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "allTiers",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					}
+				],
+				"internalType": "struct IReward.Tiers[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -435,6 +535,11 @@
 						"internalType": "uint256",
 						"name": "timestamp",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "tier",
+						"type": "string"
 					}
 				],
 				"internalType": "struct IReward.Reward",
@@ -469,34 +574,6 @@
 			}
 		],
 		"name": "createBlackPassCollection",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "symbol",
-				"type": "string"
-			},
-			{
-				"internalType": "int64",
-				"name": "initialTotalSupply",
-				"type": "int64"
-			},
-			{
-				"internalType": "int32",
-				"name": "decimals",
-				"type": "int32"
-			}
-		],
-		"name": "generateRVV",
 		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"
@@ -602,6 +679,11 @@
 						"internalType": "uint256",
 						"name": "timestamp",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "tier",
+						"type": "string"
 					}
 				],
 				"internalType": "struct IReward.Reward[]",
@@ -765,6 +847,19 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "tiersCount",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -810,6 +905,11 @@
 						"internalType": "uint256",
 						"name": "timestamp",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "tier",
+						"type": "string"
 					}
 				],
 				"internalType": "struct IReward.Reward",
@@ -990,6 +1090,128 @@
 					}
 				],
 				"internalType": "struct IPlayer.Player",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "int64",
+				"name": "amount",
+				"type": "int64"
+			}
+		],
+		"name": "updateRewardAmount",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "int64",
+						"name": "amount",
+						"type": "int64"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimable",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimed",
+						"type": "bool"
+					},
+					{
+						"internalType": "address",
+						"name": "playerAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "tier",
+						"type": "string"
+					}
+				],
+				"internalType": "struct IReward.Reward",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tier",
+				"type": "uint256"
+			}
+		],
+		"name": "updateRewardTier",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "int64",
+						"name": "amount",
+						"type": "int64"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimable",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "claimed",
+						"type": "bool"
+					},
+					{
+						"internalType": "address",
+						"name": "playerAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "tier",
+						"type": "string"
+					}
+				],
+				"internalType": "struct IReward.Reward",
 				"name": "",
 				"type": "tuple"
 			}

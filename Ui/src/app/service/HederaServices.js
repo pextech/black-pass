@@ -109,16 +109,6 @@ export const playerCreator = async (userAccount, userClient, username, email, tw
     const playerId = await getSetting('playersCount', []);
     console.log(playerId['0'].toString())
 
-    const isAssociated = await getAccountAssociationStatus(userAccount, process.env.NEXT_PUBLIC_RVV_TOKEN)
-
-      console.log(isAssociated)
-  
-      console.log('=============================================')
-    
-      if (!isAssociated) {
-        await associateToken(userAccount, userClient, process.env.NEXT_PUBLIC_RVV_TOKEN)
-      }
-
     toast.success('Successfully created an account', {className: 'toast-loading'});
     return +playerId['0'].toString();
   } catch (err) {
@@ -178,6 +168,82 @@ export const playerUpdate = async (userAccount, username, email, twitter, discor
   }
 };
 
+export const updateRewardTier = async (rewardId, tierId) => {
+  try {
+
+    const contractRevokeRewards = await new ContractExecuteTransaction()
+      .setContractId(contractId)
+      .setGas(3000000)
+      .setFunction(
+        'updateRewardTier',
+        new ContractFunctionParameters().addUint256(rewardId).addUint256(tierId),
+      )
+
+    const contractRevokeExecute = await contractRevokeRewards.execute(client)
+    const contractRevokeReceipt = await contractRevokeExecute.getReceipt(
+      client,
+    );
+    console.log(
+      'Contract update tier reward was ',
+      contractRevokeReceipt.status.toString(),
+    );
+
+    toast.success('Successfully updated a reward Tier', {className: 'toast-loading'});
+  } catch (err) {
+    console.log(err);
+    toast.error('Updating a Reward failed', {className: 'toast-loading'});
+    if (err instanceof ReceiptStatusError) {
+
+      console.log(
+        'Error updating Reward',
+        JSON.stringify(err, null, 2),
+      );
+    } else {
+      console.log(
+        err.message
+      );
+    }
+  }
+};
+
+export const updateRewardAmount = async (rewardId, amount) => {
+  try {
+
+    const contractRevokeRewards = await new ContractExecuteTransaction()
+      .setContractId(contractId)
+      .setGas(3000000)
+      .setFunction(
+        'updateRewardAmount',
+        new ContractFunctionParameters().addUint256(rewardId).addInt64(int64),
+      )
+
+    const contractRevokeExecute = await contractRevokeRewards.execute(client)
+    const contractRevokeReceipt = await contractRevokeExecute.getReceipt(
+      client,
+    );
+    console.log(
+      'Contract update amount reward was ',
+      contractRevokeReceipt.status.toString(),
+    );
+
+    toast.success('Successfully updated a reward amount', {className: 'toast-loading'});
+  } catch (err) {
+    console.log(err);
+    toast.error('Updating a Reward failed', {className: 'toast-loading'});
+    if (err instanceof ReceiptStatusError) {
+
+      console.log(
+        'Error updating Reward',
+        JSON.stringify(err, null, 2),
+      );
+    } else {
+      console.log(
+        err.message
+      );
+    }
+  }
+};
+
 export const revokeReward = async (rewardId) => {
   try {
 
@@ -224,6 +290,7 @@ export const redeemBlackPass = async(playerHederaId, userClient) => {
       const isAssociated = await getAccountAssociationStatus(playerHederaId, process.env.NEXT_PUBLIC_BLACKPASS_TOKEN)
 
       console.log(isAssociated)
+      console.log(process.env.NEXT_PUBLIC_BLACKPASS_TOKEN)
   
       console.log('=============================================')
     
@@ -265,7 +332,7 @@ export const redeemBlackPass = async(playerHederaId, userClient) => {
   }
 };
 
-export const addReward = async (playerHederaId, amount) => {
+export const addReward = async (tier, playerHederaId, amount) => {
   try {
 
     console.log('=============================================')
@@ -275,7 +342,7 @@ export const addReward = async (playerHederaId, amount) => {
       .setGas(3000000)
       .setFunction(
         'addReward',
-        new ContractFunctionParameters().addAddress(AccountId.fromString(playerHederaId).toSolidityAddress()).addInt64(amount),
+        new ContractFunctionParameters().addUint256(tier).addAddress(AccountId.fromString(playerHederaId).toSolidityAddress()).addInt64(amount),
       )
 
     const contractAddRewardExecute = await contractAddReward.execute(client)
@@ -286,7 +353,7 @@ export const addReward = async (playerHederaId, amount) => {
       'Contract add Reward was a ',
       contractAddRewardReceipt,
     );
-    
+    toast.success("Successfully add Reward")
   } catch (err) {
     console.log(err);
     toast.error()
@@ -305,9 +372,49 @@ export const addReward = async (playerHederaId, amount) => {
   }
 };
 
+export const addTier = async (name) => {
+  try {
+
+    console.log('=============================================')
+
+    const contractAddTier = await new ContractExecuteTransaction()
+      .setContractId(contractId)
+      .setGas(3000000)
+      .setFunction(
+        'addTier',
+        new ContractFunctionParameters().addString(name),
+      )
+
+    const contractAddTierExecute = await contractAddTier.execute(client)
+    const contractAddTierReceipt = await contractAddTierExecute.getReceipt(
+      client,
+    );
+    console.log(
+      'Contract add Tier was a ',
+      contractAddTierReceipt,
+    );
+    
+  } catch (err) {
+    console.log(err);
+    toast.error()
+    if (err instanceof ReceiptStatusError) {
+      console.log(
+        'Error adding Tier',
+        JSON.stringify(err, null, 2),
+      );
+      toast.error()
+    } else {
+      console.log(
+        err.message
+      );
+      toast.error()
+    }
+  }
+};
+
 export async function getBlackPassBalance(playerHederaId) {
   const balance = await getSetting('_nfts', [AccountId.fromString(playerHederaId).toSolidityAddress()]);
-
+  console.log("black pass balance", AccountId.fromString(playerHederaId).toSolidityAddress())
   return parseInt(balance['balance'].toString())
 }
 
@@ -324,18 +431,22 @@ export async function getBlackPassNftId(playerHederaId) {
   return parseInt(serialId['serialId'].toString())
 }
 
-export async function getRewardAmount(rewardId) {
-  const amount = await getSetting('_rewards', [rewardId]);
+export async function getReward(rewardId) {
+  const reward = await getSetting('_rewards', [rewardId]);
 
-  return parseInt(amount['amount'].toString())
+  return {amount: parseInt(reward['amount'].toString()), tier: reward['tier'].toString()}
 }
-
-
 
 export async function getPlayerRewards(playerHederaId) {
   const allRewards = await getSetting('playerRewards', [AccountId.fromString(playerHederaId).toSolidityAddress()]);
 
   return allRewards
+}
+
+export async function getAllTiers() {
+  const allTiers = await getSetting('allTiers', []);
+
+  return allTiers
 }
 
 export async function getAllAdminRewards() {
@@ -345,7 +456,7 @@ export async function getAllAdminRewards() {
 }
 
 
-function constructNewNft(rewardAmount, currentAmount) {
+function constructNewNft(rewardAmount, currentAmount, tier) {
   const metadata = {
     "name": "Black Pass Card",
     "description": "Astra Nova is web3's first true metaRPG. Black Pass is Astra Nova's identity and loyalty program to reward community members.",
@@ -362,7 +473,7 @@ function constructNewNft(rewardAmount, currentAmount) {
         },
         {
         "trait_type": "Tier",
-        "value": "Infinite"
+        "value": tier
         }
     ]
   }
@@ -383,11 +494,11 @@ const pintoJSON = async (metadata) =>
 async function uploadMetadataToIPFS(playerHederaId, rewardId) {
   try {
     const playerBalance = await getBlackPassBalance(playerHederaId)
-    const rewardAmount = await getRewardAmount(rewardId)
+    const {amount, tier} = await getReward(rewardId)
 
-    console.log(rewardAmount, playerBalance)
+    console.log(amount, playerBalance, tier)
 
-    const metadata = constructNewNft(rewardAmount, playerBalance)
+    const metadata = constructNewNft(amount, playerBalance, tier)
     
     const data = await pintoJSON(metadata)
     
@@ -418,16 +529,6 @@ export const claimReward = async (rewardId, playerHederaId, userClient) => {
   try {
 
     console.log('=============================================')
-
-    const isAssociated = await getAccountAssociationStatus(playerHederaId, process.env.NEXT_PUBLIC_RVV_TOKEN)
-
-    console.log(isAssociated)
-  
-    console.log('=============================================')
-    
-    if (!isAssociated) {
-      await associateToken(playerHederaId, userClient, process.env.NEXT_PUBLIC_RVV_TOKEN)
-    }
 
     const serialId = await getBlackPassNftId(playerHederaId)
 
