@@ -42,16 +42,16 @@ const AdminComponent = ({ accountId }: AddReward) => {
   const allTiers = async () => {
 
     const tierId: any = await getAllTiers()
-    const tierId2 = tierId[0][0]
-    const tierId1 = tierId[0][1]
+    const tierId2 = tierId[0][1]
+    const tierId1 = tierId[0][0]
 
     setTier1(tierId1.id)
     setTier2(tierId2.id)
   }
 
-  // useEffect(() => {
-  //   allTiers()
-  // }, [])
+  useEffect(() => {
+    allTiers()
+  }, [])
 
   const getAdminData = async () => {
     try {
@@ -63,10 +63,10 @@ const AdminComponent = ({ accountId }: AddReward) => {
     }
   }
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   getAdminData()
-  // }, [accountId, refetch])
+    getAdminData()
+  }, [accountId, refetch])
 
 
   function shortenWalletAddress(address: any) {

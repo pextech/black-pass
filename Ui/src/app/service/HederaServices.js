@@ -30,7 +30,7 @@ const axios = require('axios');
 
 export const operatorId = AccountId.fromString(process.env.NEXT_PUBLIC_ACCOUNT_ID || '')
 const operatorKey = PrivateKey.fromString(process.env.NEXT_PUBLIC_PRIVATE_KEY || '')
-export const client = Client.forTestnet().setOperator(operatorId, operatorKey)
+export const client = Client.forMainnet().setOperator(operatorId, operatorKey)
 const contractId = ContractId.fromString(process.env.NEXT_PUBLIC_BLACK_PASS_ID || '');
 const maxTransactionFee = new Hbar(20);
 
@@ -414,7 +414,7 @@ export const addTier = async (name) => {
 
 export async function getBlackPassBalance(playerHederaId) {
   const balance = await getSetting('_nfts', [AccountId.fromString(playerHederaId).toSolidityAddress()]);
-  console.log("black pass balance", AccountId.fromString(playerHederaId).toSolidityAddress())
+  // console.log("black pass balance", AccountId.fromString(playerHederaId).toSolidityAddress())
   return parseInt(balance['balance'].toString())
 }
 
