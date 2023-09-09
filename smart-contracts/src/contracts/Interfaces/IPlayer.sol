@@ -9,12 +9,16 @@ interface IPlayer {
         address playerAddress;
         string name;
         bool active;
-        bool claimed;
+        bool reedemed;
+        string username;
+        string email;
+        string twitter;
+        string discord;
+        string telegram;
     }
 
-    function allPlayers() external view returns (Player[] memory);
-    function setPlayer(string memory _name, address playerAddress) external returns (Player memory);
-    function updatePlayer(uint256 _id, string memory _name, address playerAddress, bool status, bool claimed) external returns(Player memory);
+    function setPlayer(string memory _name, address playerAddress, string memory username, string memory email, string memory twitter, string memory discord, string memory telegram) external returns (Player memory);
+    function updatePlayer(address playerAddress, string memory username, string memory email, string memory twitter, string memory discord, string memory telegram) external returns(Player memory);
 
 
 }
