@@ -1,11 +1,9 @@
 import React from 'react'
-import { BiLogoBitcoin } from "react-icons/bi";
 import RewardHistory from './RewardHistory';
 import Image from 'next/image';
 import BlackpassTier from '../assets/blackpass-tier.png'
 import RewardBalance from '../assets/reward-balance.png'
 import Stakingreward from '../assets/staking-rewards.png'
-import ConnectWalletButton from './ConnectWalletButton';
 
 interface StakingComponent {
     playerBalance: number | undefined,

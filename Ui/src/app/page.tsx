@@ -6,7 +6,7 @@ import CreateAccountCard from "./components/CreateAccountCard";
 import { useState, useEffect } from "react";
 import { useHashConnectContext } from "./context/useHashConnect";
 import Modals from "./components/Modals";
-import { getPlayerData, getBlackPassBalance } from "./service/HederaServices";
+import { getPlayerData } from "./service/HederaServices";
 import ConnectWalletButton from "./components/ConnectWalletButton";
 
 
@@ -25,10 +25,12 @@ interface PlayerData {
 
 export default function Home() {
 
-  const [playerBalance, setPlayerBalance] = useState(0);
+
   const [playerData, setPlayerData] = useState<PlayerData>()
   const [userId, setUserId] = useState()
   const [refetch, setRefetch] = useState(false)
+  const [isConnect, setIsConnect] = useState(false)
+  const [isPlayerActive, setIsPlayerActive] = useState(false)
 
 
 
@@ -44,16 +46,33 @@ export default function Home() {
     bladeSigner,
     hashAccountId,
     bladeConnectStatus,
-    refetchDataPlayer
+    refetchDataPlayer,
+    admin
   } = useHashConnectContext();
   const accountId = hashAccountId || bladeAccountId;
 
 
 
   const connectWallet = async () => {
-    await connectToExtension();
-    closeModal()
+    try {
+      await connectToExtension();
+      closeModal()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsConnect(!isConnect)
+    }
   };
+
+  const handleConnectBlade = async () => {
+    try {
+      connectBlade()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsConnect(!isConnect)
+    }
+  }
 
   // twitter test
 
@@ -62,6 +81,7 @@ export default function Home() {
     try {
       const getData: any = await getPlayerData(accountId)
       setPlayerData(getData)
+      setIsPlayerActive(getData.active)
     } catch (error) {
       console.log(error)
     } finally {
@@ -71,22 +91,13 @@ export default function Home() {
 
 
 
-  const getPlayerBalance = async () => {
-    try {
-      const getDataBalance = await getBlackPassBalance(accountId)
-      setPlayerBalance(getDataBalance)
-      // console.log("player balance", getDataBalance)
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
 
   useEffect(() => {
     getData()
-    getPlayerBalance()
+
     // console.log("player data", playerData)
-  }, [playerData, refetchDataPlayer, accountId])
+  }, [refetchDataPlayer, accountId, admin])
 
 
 
@@ -104,14 +115,13 @@ export default function Home() {
             disableHandle={playerData?.reedemed ? true : false}
             id={userId}
             hasClaimed={playerData?.reedemed}
-            playerBalance={playerBalance}
           />
           {/* <ConnectWalletButton btnTitle="twitter test" handleClick={getRequestToken} /> */}
         </div>
       ) : (
         <LoginCard handleConnect={openModal} />
       )}
-      {modal && <Modals closeModal={closeModal} connectHash={connectWallet} connectBlade={connectBlade} />}
+      {modal && <Modals closeModal={closeModal} connectHash={connectWallet} connectBlade={handleConnectBlade} />}
 
 
 

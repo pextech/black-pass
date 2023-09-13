@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import AddRewardModal from "./addRewardModal";
 import { addReward, revokeReward, getAllAdminRewards, getAllTiers } from '../service/HederaServices';
 import EditRewardModal from './EditRewardModal';
-
+import { useHashConnectContext } from "../context/useHashConnect";
 
 
 interface AddReward {
@@ -38,6 +38,8 @@ const AdminComponent = ({ accountId }: AddReward) => {
     tier: 0
   })
 
+  const { admin } = useHashConnectContext();
+
 
   const allTiers = async () => {
 
@@ -51,6 +53,7 @@ const AdminComponent = ({ accountId }: AddReward) => {
 
   useEffect(() => {
     allTiers()
+    getAdminData()
   }, [])
 
   const getAdminData = async () => {
@@ -66,7 +69,7 @@ const AdminComponent = ({ accountId }: AddReward) => {
   useEffect(() => {
 
     getAdminData()
-  }, [accountId, refetch])
+  }, [refetch])
 
 
   function shortenWalletAddress(address: any) {

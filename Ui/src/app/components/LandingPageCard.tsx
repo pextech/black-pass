@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import ConnectWalletButton from "./ConnectWalletButton";
 import BlackPassImg from '../assets/black-pass-image.png'
-import { redeemBlackPass, getPlayerRewards, claimReward } from "../service/HederaServices";
+import { redeemBlackPass, getPlayerRewards, getBlackPassBalance } from "../service/HederaServices";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useHashConnectContext } from "../context/useHashConnect";
@@ -20,19 +20,28 @@ interface landingPageProps {
   disableHandle?: any,
   id: any,
   hasClaimed?: boolean,
-  playerBalance?: number,
 }
 
-const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle, hasClaimed, playerBalance }: landingPageProps) => {
+const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disableHandle, hasClaimed }: landingPageProps) => {
 
 
 
   const [isLoading, setIsLoading] = useState(false)
   const [playerReward, setPlayerReward] = useState<any>([]);
+  const [playerBalance, setPlayerBalance] = useState(0);
 
   const { state, admin, refetchDataPlayer, handleRefetch } = useHashConnectContext();
 
 
+  const getPlayerBalance = async () => {
+    try {
+      const getDataBalance = await getBlackPassBalance(accountId)
+      setPlayerBalance(getDataBalance)
+      // console.log("player balance", getDataBalance)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const playerRewardData = async () => {
     try {
@@ -50,20 +59,21 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
 
   useEffect(() => {
     playerRewardData()
-  }, [accountId, admin, refetchDataPlayer]
-  )
+    getPlayerBalance()
+  }, [admin, refetchDataPlayer])
+
+
 
   // console.log("player reward", playerReward)
 
   const reedemBlackPass = async () => {
     try {
-      if (userPlayerId) {
-        console.log('started')
-        setIsLoading(true)
-        toast("redeeming Black Pass...", { className: 'toast-loading', pauseOnHover: false })
-        await redeemBlackPass(accountId, userClient)
-        setIsLoading(false)
-      }
+      console.log('started')
+      setIsLoading(true)
+      toast("redeeming Black Pass...", { className: 'toast-loading', pauseOnHover: false })
+      await redeemBlackPass(accountId, userClient)
+      setIsLoading(false)
+
     } catch (error) {
       console.log(error, "redeem error")
       setIsLoading(false)
@@ -96,7 +106,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
               <Image className="w-[50%]" src={BlackPassImg} width={350} height={350} alt="NFT" priority />
 
               <div className="my-6">
-                <ConnectWalletButton disableHandle={disableHandle} btnTitle="Redeem Black Pass" handleClick={() => { reedemBlackPass() }} />
+                <ConnectWalletButton disableHandle={disableHandle} btnTitle="Redeem Black Pass" handleClick={reedemBlackPass} />
               </div>
             </div>
 

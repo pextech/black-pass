@@ -53,7 +53,7 @@ const AddRewardModal = ({ closeModal, handleSubmit, handleFormChange, walletAddr
                             <div className="flex flex-col">
                                 <label className="mb-3">Black Tier Pass</label>
                                 <select name="tier" onChange={handleFormChange} value={tier} className="bg-[#272728] px-4 py-3 rounded-lg">
-                                    <option selected>Tier Reward</option>
+                                    <option value="tier-reward" selected>Tier Reward</option>
                                     <option value={tier1}>Tier 1</option>
                                     <option value={tier2}>Tier 2</option>
                                 </select>

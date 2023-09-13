@@ -11,15 +11,13 @@ const RewardHistory = ({ data, accountId, userClient }: any) => {
   const handleClaimReward = async (rewardId: any) => {
     const rewardChoosen = data.find((reward: any) => reward.id === rewardId);
     console.log("ini id nya", rewardChoosen)
-    if (rewardChoosen) {
-      try {
-        toast("Claiming your reward...", { className: 'toast-loading', pauseOnHover: false });
-        await claimReward(Number(rewardChoosen.id), accountId, userClient);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        handleRefetch();
-      }
+    try {
+      toast("Claiming your reward...", { className: 'toast-loading', pauseOnHover: false });
+      await claimReward(Number(rewardChoosen.id), accountId, userClient);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      handleRefetch();
     }
   };
 
