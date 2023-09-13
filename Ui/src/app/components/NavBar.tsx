@@ -78,7 +78,7 @@ const NavBar = () => {
           <Link href="/blog">Blog</Link>
         </div>
         <div className="flex items-center">
-          {adminAccountId === bladeAccountId && <button onClick={handleAdmin} className="mr-8">Admin</button>}
+          {adminAccountId === (state.pairingData?.accountIds[0] || bladeAccountId) && <button onClick={handleAdmin} className="mr-8">Admin</button>}
           <ConnectWalletButton btnTitle={bladeConnectStatus ? "Disconnect" : status === "Paired" ? state.pairingData?.accountIds[0] ? 'Disconnect' : 'Connecting' : "Connect Wallet"} accountId={state.pairingData?.accountIds[0] || bladeAccountId} handleClick={connectWallet}   />
         </div>
         

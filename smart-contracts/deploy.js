@@ -20,7 +20,7 @@ const Web3 = require('web3');
 const operatorKey = PrivateKey.fromString(process.env.PRIVATE_KEY);
 const operatorId = AccountId.fromString(process.env.ACCOUNT_ID);
 
-const client = Client.forTestnet().setOperator(operatorId, operatorKey);
+const client = Client.forMainnet().setOperator(operatorId, operatorKey);
 
 const abi = require('./blackPass.json');
 
