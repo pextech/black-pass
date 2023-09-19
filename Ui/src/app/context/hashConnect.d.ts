@@ -39,4 +39,5 @@ export type HashConnectContent = {
     hashAccountId: string,
     refetchDataPlayer: boolean
     handleRefetch: Function
+    setRefetchDataPlayer: any
 }

@@ -44,7 +44,8 @@ const HashConnectContext = createContext<HashConnectContent>({
   adminAccountId: '',
   hashAccountId: '',
   refetchDataPlayer: false,
-  handleRefetch: () => { }
+  handleRefetch: () => { },
+  setRefetchDataPlayer: () => { }
 });
 
 const hashconnect = new HashConnect(true);
@@ -258,7 +259,8 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     adminAccountId,
     hashAccountId,
     refetchDataPlayer,
-    handleRefetch
+    handleRefetch,
+    setRefetchDataPlayer
   }}>
     {children}
   </HashConnectContext.Provider>

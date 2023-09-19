@@ -6,7 +6,7 @@ import { useHashConnectContext } from '../context/useHashConnect';
 
 const RewardHistory = ({ data, accountId, userClient }: any) => {
 
-  const { handleRefetch } = useHashConnectContext()
+  const { handleRefetch, setRefetchDataPlayer, refetchDataPlayer } = useHashConnectContext()
 
   const handleClaimReward = async (rewardId: any) => {
     const rewardChoosen = data.find((reward: any) => reward.id === rewardId);
@@ -17,7 +17,7 @@ const RewardHistory = ({ data, accountId, userClient }: any) => {
     } catch (error) {
       console.log(error);
     } finally {
-      handleRefetch();
+      setRefetchDataPlayer(!refetchDataPlayer)
     }
   };
 

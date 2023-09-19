@@ -52,8 +52,6 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
 
     } catch (error) {
       console.log(error)
-    } finally {
-      handleRefetch()
     }
   }
 
@@ -64,7 +62,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
 
 
 
-  // console.log("player reward", playerReward)
+  console.log("player reward", refetchDataPlayer)
 
   const reedemBlackPass = async () => {
     try {

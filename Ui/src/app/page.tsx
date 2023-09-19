@@ -84,8 +84,6 @@ export default function Home() {
       setIsPlayerActive(getData.active)
     } catch (error) {
       console.log(error)
-    } finally {
-      setRefetch(!refetch)
     }
   }
 
@@ -97,7 +95,7 @@ export default function Home() {
     getData()
 
     // console.log("player data", playerData)
-  }, [refetchDataPlayer, accountId, admin])
+  }, [accountId, admin])
 
 
 
