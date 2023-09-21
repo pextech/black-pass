@@ -30,7 +30,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
   const [playerReward, setPlayerReward] = useState<any>([]);
   const [playerBalance, setPlayerBalance] = useState(0);
 
-  const { state, admin, refetchDataPlayer, handleRefetch } = useHashConnectContext();
+  const { state, admin, refetchDataPlayer, handleRefetch, isConnect, setIsConnect, tempAccountId } = useHashConnectContext();
 
 
   const getPlayerBalance = async () => {
@@ -54,15 +54,27 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
       console.log(error)
     }
   }
+  useEffect(() => {
+    setTimeout(() => {
+      const dataLocalStorage = {
+        accountId: state.pairingData?.accountIds[0] || tempAccountId,
+        isConnect: true,
+        expiration: new Date().getTime() + 10 * 60 * 1000, // Expiration time in milliseconds (10 minutes)
+      };
+
+      localStorage.setItem('myData', JSON.stringify(dataLocalStorage));
+
+      setIsConnect(true)
+    }, 3000);
+  }, [])
 
   useEffect(() => {
     playerRewardData()
     getPlayerBalance()
+
   }, [admin, refetchDataPlayer])
 
 
-
-  console.log("player reward", refetchDataPlayer)
 
   const reedemBlackPass = async () => {
     try {
@@ -92,7 +104,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
           </h1>
 
 
-          {hasClaimed ? (
+          {hasClaimed && isConnect ? (
             <StakingComponent playerBalance={playerBalance} data={playerReward} accountId={accountId} userClient={userClient} />
           ) : (
             <div className="flex flex-col items-center justify-center">

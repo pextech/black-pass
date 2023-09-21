@@ -28,8 +28,7 @@ export default function Home() {
 
   const [playerData, setPlayerData] = useState<PlayerData>()
   const [userId, setUserId] = useState()
-  const [refetch, setRefetch] = useState(false)
-  const [isConnect, setIsConnect] = useState(false)
+
   const [isPlayerActive, setIsPlayerActive] = useState(false)
 
 
@@ -46,10 +45,14 @@ export default function Home() {
     bladeSigner,
     hashAccountId,
     bladeConnectStatus,
-    refetchDataPlayer,
-    admin
+    isConnect,
+    setIsConnect,
+    admin,
+    tempAccountId,
+    setTempAccountId,
+    setHashAccountId
   } = useHashConnectContext();
-  const accountId = hashAccountId || bladeAccountId;
+  const accountId = state.pairingData?.accountIds[0] || bladeAccountId || tempAccountId;
 
 
 
@@ -59,8 +62,6 @@ export default function Home() {
       closeModal()
     } catch (error) {
       console.log(error)
-    } finally {
-      setIsConnect(!isConnect)
     }
   };
 
@@ -69,19 +70,44 @@ export default function Home() {
       connectBlade()
     } catch (error) {
       console.log(error)
-    } finally {
-      setIsConnect(!isConnect)
     }
   }
 
-  // twitter test
+
+  useEffect(() => {
+    checkLoggedInStatus();
+    // console.log(playerData)
+  }, []);
+
+  const checkLoggedInStatus = () => {
+    setTimeout(() => {
+      const storedData = localStorage.getItem('myData');
+
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
+        const currentTime = new Date().getTime();
+
+        if (parsedData.expiration > currentTime) {
+          const isConnectData = parsedData.isConnect;
+          const accountIdTemp = parsedData.accountId
+          console.log("data dari myData", isConnectData)
+          setTempAccountId(accountIdTemp)
+          setIsConnect(isConnectData);
+        } else {
+          localStorage.removeItem('myData');
+        }
+      }
+    }, 1000);
+  };
 
 
   const getData = async () => {
     try {
-      const getData: any = await getPlayerData(accountId)
-      setPlayerData(getData)
-      setIsPlayerActive(getData.active)
+      if (accountId) {
+        const getData: any = await getPlayerData(accountId)
+        setPlayerData(getData)
+        setIsPlayerActive(getData.active)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -101,9 +127,9 @@ export default function Home() {
 
   return (
     <main className="h-screen text-white">
-      {bladeConnectStatus && playerData?.active === false || state.state === "Paired" && playerData?.active === false ? (
+      {bladeConnectStatus && isConnect && playerData?.active === false || state.state === "Paired" && playerData?.active === false || playerData?.active === false && isConnect ? (
         <CreateAccountCard accountId={accountId || bladeAccountId} refetchDataPlayer={getData} />
-      ) : playerData?.active === true ? (
+      ) : playerData?.active && isConnect ? (
         <div>
           <LandingPageCard
             username={playerData?.username}

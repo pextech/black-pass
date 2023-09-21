@@ -419,7 +419,7 @@ export async function getBlackPassBalance(playerHederaId) {
 }
 
 export async function getPlayerData(playerHederaId) {
-  const player = await getSetting('_players', [AccountId?.fromString(playerHederaId).toSolidityAddress()]);
+  const player = await getSetting('_players', [AccountId?.fromString(playerHederaId)?.toSolidityAddress()]);
 
   return player
 }

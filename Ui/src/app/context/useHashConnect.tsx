@@ -43,9 +43,14 @@ const HashConnectContext = createContext<HashConnectContent>({
   setAdmin: () => { },
   adminAccountId: '',
   hashAccountId: '',
+  setHashAccountId: () => { },
   refetchDataPlayer: false,
   handleRefetch: () => { },
-  setRefetchDataPlayer: () => { }
+  setRefetchDataPlayer: () => { },
+  isConnect: false,
+  setIsConnect: () => { },
+  tempAccountId: '',
+  setTempAccountId: () => { },
 });
 
 const hashconnect = new HashConnect(true);
@@ -89,6 +94,9 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
   const [hashAccountId, setHashAccountId] = useState('')
 
   const [refetchDataPlayer, setRefetchDataPlayer] = useState(false)
+  const [isConnect, setIsConnect] = useState(false)
+  const [tempAccountId, setTempAccountId] = useState('')
+
   const adminAccountId = '0.0.618236'
   // const adminAccountId = '0.0.3724217'
 
@@ -166,6 +174,17 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     let saveData = initData
     setSavedData(saveData)
     setHashAccountId(saveData.savedPairings[0]?.accountIds[0])
+
+    // const dataLocalStorage = {
+    //   accountId: saveData.savedPairings[0]?.accountIds[0],
+    //   isConnect: true,
+    //   expiration: new Date().getTime() + 1 * 60 * 1000, // Expiration time in milliseconds (10 minutes)
+    // };
+
+    // localStorage.setItem('myData', JSON.stringify(dataLocalStorage));
+
+    // setIsConnect(true)
+
     return saveData;
   }
 
@@ -188,9 +207,19 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
       setBladeConnectStatus(true)
       closeModal()
       setBladeAccountId(walletDate[0])
-      console.log("wallet connected", walletDate[0])
+      console.log("wallet connected", walletDate)
       const signerParam = bladeConnector.getSigner()
       setBladeSigner(signerParam)
+
+      const data = {
+        accountId: walletDate[0],
+        isConnect: true,
+        expiration: new Date().getTime() + 10 * 60 * 1000, // Expiration time in milliseconds (10 minutes)
+      };
+
+      localStorage.setItem('myData', JSON.stringify(data));
+
+      setIsConnect(true)
     } catch (error) {
       console.log(error)
     }
@@ -258,9 +287,14 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     setAdmin,
     adminAccountId,
     hashAccountId,
+    setHashAccountId,
     refetchDataPlayer,
     handleRefetch,
-    setRefetchDataPlayer
+    setRefetchDataPlayer,
+    isConnect,
+    setIsConnect,
+    tempAccountId,
+    setTempAccountId
   }}>
     {children}
   </HashConnectContext.Provider>

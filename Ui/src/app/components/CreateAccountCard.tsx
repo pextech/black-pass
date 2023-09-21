@@ -25,7 +25,7 @@ const CreateAccountCard = ({ accountId, userClient }: any) => {
   const [discordAccessToken, setDiscordAccessToken] = useState()
   const [discordCallback, setDiscordCallback] = useState(false)
 
-  const { handleRefetch } = useHashConnectContext()
+  const { handleRefetch, state, setIsConnect, tempAccountId } = useHashConnectContext()
 
   const clientId = '1142403829745336412';
   const clientSecret = 'kKvcB5YptG7Tpq1rOeZlQBmgWdjo5wv_'
@@ -44,13 +44,26 @@ const CreateAccountCard = ({ accountId, userClient }: any) => {
   };
 
   useEffect(() => {
+    setTimeout(() => {
+      const dataLocalStorage = {
+        accountId: state.pairingData?.accountIds[0] || tempAccountId,
+        isConnect: true,
+        expiration: new Date().getTime() + 10 * 60 * 1000, // Expiration time in milliseconds (10 minutes)
+      };
+
+      localStorage.setItem('myData', JSON.stringify(dataLocalStorage));
+
+      setIsConnect(true)
+    }, 3000);
+  }, [])
+
+  useEffect(() => {
     handleCallback()
     fetchUserInfo()
   }, [discordCallback])
 
 
-  // console.log("discord callback", discordCallback)
-  // console.log("discord akun", discordAccount)
+
 
   const handleCallback = async () => {
     const params = new URLSearchParams(window.location.search);

@@ -11,23 +11,26 @@ import Modals from "./Modals";
 const NavBar = () => {
 
   const [isActiveDrawer, setActiveDrawer] = useState(false);
-  const { 
-    connectToExtension, 
-    status, 
-    disconnect, 
-    clearPairings, 
-    state, 
-    modal, 
-    closeModal, 
-    openModal, 
-    bladeConnectStatus, 
-    disconnectBlade, 
-    bladeAccountId, 
-    connectBlade, 
+  const {
+    connectToExtension,
+    status,
+    disconnect,
+    clearPairings,
+    state,
+    modal,
+    closeModal,
+    openModal,
+    bladeConnectStatus,
+    disconnectBlade,
+    bladeAccountId,
+    connectBlade,
     admin,
     setAdmin,
-    adminAccountId, 
-    hashAccountId
+    adminAccountId,
+    hashAccountId,
+    setIsConnect,
+    isConnect,
+    tempAccountId
   } = useHashConnectContext();
 
   const accountId = bladeAccountId || hashAccountId
@@ -37,14 +40,17 @@ const NavBar = () => {
   };
 
   const connectWallet = () => {
-    if(status === "Paired"){
+    if (status === "Paired" || isConnect) {
       disconnect()
       clearPairings()
+      localStorage.removeItem('myData');
       location.reload()
-    } if(bladeConnectStatus) {
+    } if (bladeConnectStatus) {
       disconnectBlade()
+      localStorage.removeItem('myData');
+      setIsConnect(false)
       location.reload()
-    }else{
+    } else {
       openModal()
     }
   }
@@ -78,10 +84,10 @@ const NavBar = () => {
           <Link href="/blog">Blog</Link>
         </div>
         <div className="flex items-center">
-          {adminAccountId === bladeAccountId && <button onClick={handleAdmin} className="mr-8">Admin</button>}
-          <ConnectWalletButton btnTitle={bladeConnectStatus ? "Disconnect" : status === "Paired" ? state.pairingData?.accountIds[0] ? 'Disconnect' : 'Connecting' : "Connect Wallet"} accountId={state.pairingData?.accountIds[0] || bladeAccountId} handleClick={connectWallet}   />
+          {adminAccountId === bladeAccountId || tempAccountId && <button onClick={handleAdmin} className="mr-8">Admin</button>}
+          <ConnectWalletButton btnTitle={bladeConnectStatus ? "Disconnect" : isConnect ? "Disconnect" : status === "Paired" ? state.pairingData?.accountIds[0] ? 'Disconnect' : 'Connecting' : "Connect Wallet"} accountId={state.pairingData?.accountIds[0] || bladeAccountId || tempAccountId} handleClick={connectWallet} />
         </div>
-        
+
       </div>
       {modal && <Modals closeModal={closeModal} connectHash={connectToExtension} connectBlade={connectBlade} />}
       {/* mobile Navbar */}
@@ -104,7 +110,7 @@ const NavBar = () => {
           <button onClick={handleToggle}>
             <RxHamburgerMenu className='text-[30px] cursor-pointer' />
           </button>
-          
+
           <div className={`${isActiveDrawer ? "showDrawer" : ""} duration-500 md:static absolute bg-[#010101] md:min-h-fit min-h-[40vh] left-0 top-[-100%] md:w-auto  w-full flex items-center px-5`}>
             <div className="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8 p-4">
               <Link className="active:text-red-600" href="/">

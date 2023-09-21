@@ -37,7 +37,12 @@ export type HashConnectContent = {
     setAdmin: Function,
     adminAccountId: string,
     hashAccountId: string,
+    setHashAccountId: any,
     refetchDataPlayer: boolean
     handleRefetch: Function
-    setRefetchDataPlayer: any
+    setRefetchDataPlayer: any,
+    isConnect: boolean,
+    setIsConnect: any,
+    tempAccountId: string,
+    setTempAccountId: any
 }
