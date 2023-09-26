@@ -97,7 +97,7 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
   const [isConnect, setIsConnect] = useState(false)
   const [tempAccountId, setTempAccountId] = useState('')
 
-  const adminAccountId = '0.0.618236'
+  const adminAccountId = '0.0.1180972'
   // const adminAccountId = '0.0.3724217'
 
 
