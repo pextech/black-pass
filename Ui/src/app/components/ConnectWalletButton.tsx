@@ -11,7 +11,7 @@ import React from "react";
 
 const ConnectWalletButton = ({ btnTitle, handleClick, accountId, disableHandle }: buttonProps) => {
   return (
-    <div className="flex flex-row justify-between">
+    <div className="">
       <button
         onClick={handleClick}
         disabled={disableHandle}

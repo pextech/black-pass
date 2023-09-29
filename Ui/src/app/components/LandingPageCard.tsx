@@ -30,7 +30,7 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
   const [playerReward, setPlayerReward] = useState<any>([]);
   const [playerBalance, setPlayerBalance] = useState(0);
 
-  const { state, admin, refetchDataPlayer, handleRefetch, isConnect, setIsConnect, tempAccountId } = useHashConnectContext();
+  const { state, admin, refetchDataPlayer, handleRefetch, isConnect, setIsConnect, tempAccountId, bladeAccountId } = useHashConnectContext();
 
 
   const getPlayerBalance = async () => {
@@ -56,15 +56,17 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
   }
   useEffect(() => {
     setTimeout(() => {
-      const dataLocalStorage = {
-        accountId: state.pairingData?.accountIds[0] || tempAccountId,
-        isConnect: true,
-        expiration: new Date().getTime() + 10 * 60 * 1000, // Expiration time in milliseconds (10 minutes)
-      };
+      if (state.pairingData?.accountIds[0]) {
+        const dataLocalStorage = {
+          accountId: state.pairingData?.accountIds[0],
+          isConnect: true,
+          expiration: new Date().getTime() + 10 * 60 * 1000, // Expiration time in milliseconds (10 minutes)
+        };
 
-      localStorage.setItem('myData', JSON.stringify(dataLocalStorage));
+        localStorage.setItem('myData', JSON.stringify(dataLocalStorage));
 
-      setIsConnect(true)
+        setIsConnect(true)
+      }
     }, 3000);
   }, [])
 
@@ -104,18 +106,18 @@ const LandingPageCard = ({ username, userPlayerId, accountId, userClient, disabl
           </h1>
 
 
-          {hasClaimed && isConnect ? (
+          {hasClaimed ? (
             <StakingComponent playerBalance={playerBalance} data={playerReward} accountId={accountId} userClient={userClient} />
           ) : (
             <div className="flex flex-col items-center justify-center">
-              <p>
+              <p className="text-sm md:text-xl mb-8">
                 Welcome to the Astra Nova Black Pass portal. Thank you for creating
                 your account. You now have the exciting opportunity to redeem a free
                 Black Pass NFT card.
               </p>
-              <Image className="w-[50%]" src={BlackPassImg} width={350} height={350} alt="NFT" priority />
+              <Image className="md:w-[50%] w-[75%]" src={BlackPassImg} width={350} height={350} alt="NFT" priority />
 
-              <div className="my-6">
+              <div className="my-6 flex items-center">
                 <ConnectWalletButton disableHandle={disableHandle} btnTitle="Redeem Black Pass" handleClick={reedemBlackPass} />
               </div>
             </div>

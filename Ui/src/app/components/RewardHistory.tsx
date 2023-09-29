@@ -23,12 +23,12 @@ const RewardHistory = ({ data, accountId, userClient }: any) => {
 
 
   return (
-    <div className='w-full mt-12 '>
+    <div className='md:w-full mt-12 '>
       <div className='text-left font-medium text-2xl  border-neutral-500 pb-2'>
         <h3 className=''>All Rewards</h3>
       </div>
 
-      <div className=''>
+      <div className='md:w-full w-[350px] overflow-x-auto'>
         <table className='w-full text-left'>
           <thead className='bg-[#0E0E10] px-4 rounded'>
             <tr className=''>

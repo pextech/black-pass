@@ -1,19 +1,18 @@
 import Image from 'next/image'
 import React from 'react'
-// import { PropagateLoader } from 'react-spinner'
+import imageBg from '../assets/bg-image.png'
 
-function Loading() {
+const LoadingCard = () => {
 
 
   return (
-    <div className="bg-[#bde0fe] h-screen flex flex-col items-center justify-center">
-      <div className='flex items-center space-x-6 mb-10'>
-        <Image className='rounded-full h-20 w-20' src="https://rahhaus.id/wp-content/uploads/2022/12/logo-lottery.png" alt="" />
-        <h1 className='text-gray-600 font-bold text-lg'>Loading The LETSDRAW LOTTERY</h1>
+    <div className="flex justify-center items-center w-full">
+      {/* <Image src={imageBg} alt="image-bg" className="image-bg" /> */}
+      <div className="flex justify-center h-screen" >
+        {/* <h1 className='font-bold text-2xl'>Black Pass Astra Nova</h1> */}
       </div>
-      {/* <PropagateLoader color={"#4B5563"} size={30} /> */}
     </div>
   )
 }
 
-export default Loading
+export default LoadingCard

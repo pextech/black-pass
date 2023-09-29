@@ -175,16 +175,6 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
     setSavedData(saveData)
     setHashAccountId(saveData.savedPairings[0]?.accountIds[0])
 
-    // const dataLocalStorage = {
-    //   accountId: saveData.savedPairings[0]?.accountIds[0],
-    //   isConnect: true,
-    //   expiration: new Date().getTime() + 1 * 60 * 1000, // Expiration time in milliseconds (10 minutes)
-    // };
-
-    // localStorage.setItem('myData', JSON.stringify(dataLocalStorage));
-
-    // setIsConnect(true)
-
     return saveData;
   }
 
@@ -208,7 +198,7 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
       closeModal()
       setBladeAccountId(walletDate[0])
       console.log("wallet connected", walletDate)
-      const signerParam = bladeConnector.getSigner()
+      const signerParam: any = bladeConnector.getSigner()
       setBladeSigner(signerParam)
 
       const data = {
