@@ -172,8 +172,8 @@ const AdminComponent = ({ accountId }: AddReward) => {
   // console.log('admin reward list', adminReward)
 
   return (
-    <div className='w-full mx-12'>
-      <div className='border-b border-gray-600 w-full'>
+    <div className='md:w-full mx-12'>
+      <div className='border-b border-gray-600 md:w-full'>
         <ul className=' flex gap-10 flex-wrap -mb-px'>
           <li className='text-xl '>
             <h3 className='inline-flex items-center justify-center border-b-4 pb-5 border-green-700 pr-4 rounded-t-lg active'>Send Rewards</h3>
@@ -182,9 +182,9 @@ const AdminComponent = ({ accountId }: AddReward) => {
         </ul>
       </div>
 
-      <p className='mt-4'>Select the wallet address to receive the $RVV token rewards.</p>
+      <p className='mt-4 text-sm md:text-base'>Select the wallet address to receive the $RVV token rewards.</p>
 
-      <div className='flex justify-between w-full'>
+      <div className='flex flex-col md:flex-row justify-between w-[350px] md:w-full'>
         <div className='flex items-center border border-gray-700 rounded  w-80 my-4 px-2 py-1 focus-within:border-white'>
           <BiSearch className='text-2xl' />
           <input
@@ -195,14 +195,14 @@ const AdminComponent = ({ accountId }: AddReward) => {
           />
         </div>
 
-        <div className='flex items-center'>
-          <button onClick={() => setAdminAddRewardModal(true)} className="bg-[#163331] text-[#16B2A4] py-3 md:px-8 px-3 rounded-full text-[15px] md:text-[16px] hover:bg-[#10c4b3] hover:text-black cursor-pointer disabled:bg-gray-600 disabled:text-[#c4c4c4] disabled:cursor-not-allowed">
+        <div className='flex items-center mb-4 md:mb-0'>
+          <button onClick={() => setAdminAddRewardModal(true)} className="bg-[#163331] text-[#16B2A4] py-3 md:px-8 px-8 rounded-full text-[15px] md:text-[16px] hover:bg-[#10c4b3] hover:text-black cursor-pointer disabled:bg-gray-600 disabled:text-[#c4c4c4] disabled:cursor-not-allowed">
             Add Reward
           </button>
         </div>
       </div>
 
-      <div className='mb-20'>
+      <div className='mb-20 md:w-full w-[350px] overflow-x-auto'>
         <table className='w-full text-center'>
           <thead className='bg-[#0E0E10] px-4'>
             <tr className=''>

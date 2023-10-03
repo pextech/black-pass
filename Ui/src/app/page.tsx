@@ -64,7 +64,7 @@ export default function Home() {
 
   useEffect(() => {
     getData()
-    console.log('ini player data', playerData)
+    // console.log('ini player data', playerData)
   }, [accountId, admin, refetchDataPlayer])
 
 
@@ -123,7 +123,7 @@ export default function Home() {
     const sessionDataUserBlade = bladeSessionData[0] || null
     if (sessionDataUserBlade) {
       console.log('ini blade session', bladeSessionData[0].expiry)
-      const bladeSessionExpiry = bladeSessionData[0].expiry
+      // const bladeSessionExpiry = bladeSessionData[0].expiry
 
 
       if (parsedData?.expiration > currentTime) {
@@ -171,7 +171,6 @@ export default function Home() {
             id={userId}
             hasClaimed={playerData?.reedemed}
           />
-          {/* <ConnectWalletButton btnTitle="twitter test" handleClick={getRequestToken} /> */}
         </div>
       ) : !bladeConnectStatus && !isConnect || state.state === "Disconnected" && !isConnect ? (
         <LoginCard handleConnect={openModal} />

@@ -26,10 +26,6 @@
 body {
   color: #fff;
   background-color: #010101;
-  background-size: "cover";
-  background-repeat: "no-repeat";
-  background-position: "center";
-  position: "absolute";
 }
 .image-bg {
   background-size: cover;
@@ -41,9 +37,7 @@ body {
   z-index: -1;
   height: -webkit-fill-available;
 }
-.showDrawer {
-  top: 9%;
-}
+
 .toast-loading{
   background: #191919 !important;
   color: #fff !important;
