@@ -8,8 +8,8 @@ const LoadingCard = () => {
   return (
     <div className="flex justify-center items-center w-full">
       {/* <Image src={imageBg} alt="image-bg" className="image-bg" /> */}
-      <div className="flex justify-center h-screen" >
-        {/* <h1 className='font-bold text-2xl'>Black Pass Astra Nova</h1> */}
+      <div className="flex justify-center items-center h-screen" >
+        <h1 className=' text-4xl'>Connecting...</h1>
       </div>
     </div>
   )

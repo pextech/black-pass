@@ -100,10 +100,12 @@ export default function Home() {
     if (hashconnectData) {
       const parsedHashconnectData = hashconnectData ? JSON.parse(hashconnectData) : null
 
-      const provider = hashconnect.getProvider(parsedHashconnectData?.pairingData[0].network, parsedHashconnectData.pairingData[0].topic, parsedHashconnectData.pairingData[0].accountIds[0])
+
+      const provider = hashconnect.getProvider(parsedHashconnectData?.pairingData[0]?.network, parsedHashconnectData.pairingData[0]?.topic, parsedHashconnectData.pairingData[0]?.accountIds[0])
       setUserClientTemp(hashconnect.getSigner(provider))
 
-      const lastUsed = parsedHashconnectData?.pairingData[0].lastUsed + 10 * 60 * 1000 || 0 // Expiration time in milliseconds (10 minutes)
+      const lastUsed = parsedHashconnectData?.pairingData[0]?.lastUsed + 5 * 60 * 1000 || 0 // Expiration time in milliseconds (10 minutes)
+
 
       if (lastUsed > currentTime) {
         const isConnectData = parsedData?.isConnect;
@@ -120,9 +122,9 @@ export default function Home() {
 
     // blade session
     const bladeSessionData = JSON.parse(bladeSession)
-    const sessionDataUserBlade = bladeSessionData[0] || null
-    if (sessionDataUserBlade) {
-      console.log('ini blade session', bladeSessionData[0].expiry)
+    const sessionDataUserBlade = bladeSession ? bladeSessionData[0] : null
+    if (sessionDataUserBlade && storedData) {
+      // console.log('ini blade session', bladeSessionData[0].expiry)
       // const bladeSessionExpiry = bladeSessionData[0].expiry
 
 
@@ -136,6 +138,9 @@ export default function Home() {
         localStorage.removeItem('myData');
       }
     }
+    // if (!sessionDataUserBlade) {
+    //   localStorage.removeItem('myData');
+    // }
     // else {
     //   localStorage.removeItem('myData');
     // }

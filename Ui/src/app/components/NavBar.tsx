@@ -84,7 +84,7 @@ const NavBar = () => {
           <Link href="/blog">Blog</Link>
         </div>
         <div className="flex items-center">
-          {adminAccountId === bladeAccountId || tempAccountId && <button onClick={handleAdmin} className="">Admin</button>}
+          {adminAccountId === bladeAccountId && <button onClick={handleAdmin} className="">Admin</button>}
           <p className="mx-8 text-[#16B2A4]">{state.pairingData?.accountIds[0] || bladeAccountId || tempAccountId}</p>
           <ConnectWalletButton btnTitle={bladeConnectStatus ? "Disconnect" : isConnect ? "Disconnect" : status === "Paired" ? state.pairingData?.accountIds[0] ? 'Disconnect' : 'Connecting' : "Connect Wallet"} handleClick={connectWallet} />
         </div>
