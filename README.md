@@ -18,6 +18,7 @@ This is a project Black Pass program, which involves Soulbound Hedera NFTs with 
 
 ### Some of Smart Contract Functions
 
+
 1. `tokenAssociate(address sender, address tokenAddress) external`: Associates a token with a specific address. [Documentation](https://docs.hedera.com/hedera/sdks-and-apis/deprecated/sdks/tokens/associate-tokens-to-an-account)
 
 2. `setPlayer(string memory _name, address playerAddress) public onlyDefaultCaller override returns (Player memory)`: Sets player details and creates a new player object. 
