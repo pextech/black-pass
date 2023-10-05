@@ -68,7 +68,7 @@ const bladeConnector = new BladeConnector(
 
 // params are optional, and Mainnet is used as a default
 const params = {
-  network: HederaNetwork.Testnet,
+  network: HederaNetwork.Mainnet,
   dAppCode: "SomeAwesomeDApp" // optional while testing, request specific one by contacting us
 }
 
@@ -162,7 +162,7 @@ export default function HashConnectProvider({ children }: PropsWithChildren) {
       icon: "https://www.hashpack.app/img/logo.svg"
     }
 
-    let initData = await hashconnect.init(appMetadata, "testnet", false);
+    let initData = await hashconnect.init(appMetadata, "mainnet", false);
 
     hashconnect.foundExtensionEvent.once((walletMetadata) => {
       hashconnect.connectToLocalWallet();
